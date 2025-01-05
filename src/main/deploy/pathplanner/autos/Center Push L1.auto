@@ -3,7 +3,32 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": []
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Push"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Push 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Push 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Place L1"
+          }
+        }
+      ]
     }
   },
   "resetOdom": true,
