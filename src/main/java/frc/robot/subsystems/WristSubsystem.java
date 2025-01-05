@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class WristSubsystem extends SubsystemBase {
   //motor
   //pid (f term)
+  private double k_p = 0;
+  private double k_i = 0;
+  private double k_d = 0;
   private double k_f = 0;
   /** Creates a new WristSubsystem. */
   public WristSubsystem() {}
