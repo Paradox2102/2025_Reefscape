@@ -4,21 +4,32 @@
 
 package frc.robot.subsystems;
 
-// import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RollerSubsystem extends SubsystemBase {
-  //motor
-  // private SparkFlex motor = new SparkFlex(0, MotorType.kBrushless);
-  //pid
+  // motor
+  private SparkFlex m_rollerMotor = new SparkFlex(0, MotorType.kBrushless);
+  // pid
   private double k_p = 0;
   private double k_i = 0;
   private double k_d = 0;
   private double k_f = 0;
+
+  private double m_power = 0;
+
   /** Creates a new RollerSubsystem. */
-  public RollerSubsystem() {}
-  
-  public void setPower(double power) {}
+  public RollerSubsystem() {
+  }
+
+  public void setBrakeMode(boolean brake) {
+  }
+
+  public void setPower(double power) {
+    m_rollerMotor.set(power);
+  }
 
   @Override
   public void periodic() {
