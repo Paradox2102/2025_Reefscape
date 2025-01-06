@@ -6,11 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -35,7 +33,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.MotorConfigs;
 import frc.robot.ParadoxField;
 import frc.robot.PositionTrackerPose;
 import frc.utils.SwerveUtils;
@@ -48,25 +45,21 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 public class DriveSubsystem extends SubsystemBase {
   private final Field2d m_field = new Field2d();
   // Create MaxSwerveModules
-  private final MaxSwerveModule m_frontLeft =
-      new MaxSwerveModule(Constants.DriveConstants.k_FLDriveMotor,
-                          Constants.DriveConstants.k_FLTurningMotor,
-                          Constants.DriveConstants.k_FLOffset);
+  private final MaxSwerveModule m_frontLeft = new MaxSwerveModule(Constants.DriveConstants.k_FLDriveMotor,
+      Constants.DriveConstants.k_FLTurningMotor,
+      Constants.DriveConstants.k_FLOffset);
 
-  private final MaxSwerveModule m_frontRight =
-      new MaxSwerveModule(Constants.DriveConstants.k_FRDriveMotor,
-                          Constants.DriveConstants.k_FRTurningMotor,
-                          Constants.DriveConstants.k_FROffset);
+  private final MaxSwerveModule m_frontRight = new MaxSwerveModule(Constants.DriveConstants.k_FRDriveMotor,
+      Constants.DriveConstants.k_FRTurningMotor,
+      Constants.DriveConstants.k_FROffset);
 
-  private final MaxSwerveModule m_backLeft =
-      new MaxSwerveModule(Constants.DriveConstants.k_BLDriveMotor,
-                          Constants.DriveConstants.k_BLTurningMotor,
-                          Constants.DriveConstants.k_BLOffset);
+  private final MaxSwerveModule m_backLeft = new MaxSwerveModule(Constants.DriveConstants.k_BLDriveMotor,
+      Constants.DriveConstants.k_BLTurningMotor,
+      Constants.DriveConstants.k_BLOffset);
 
-  private final MaxSwerveModule m_backRight =
-      new MaxSwerveModule(Constants.DriveConstants.k_BRDriveMotor,
-                          Constants.DriveConstants.k_BRTurningMotor,
-                          Constants.DriveConstants.k_BROffset);
+  private final MaxSwerveModule m_backRight = new MaxSwerveModule(Constants.DriveConstants.k_BRDriveMotor,
+      Constants.DriveConstants.k_BRTurningMotor,
+      Constants.DriveConstants.k_BROffset);
 
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(0);
@@ -80,16 +73,11 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
-  private SlewRateLimiter m_magLimiter =
-      new SlewRateLimiter(Constants.DriveConstants.k_magnitudeSlewRate);
-  private SlewRateLimiter m_rotLimiter =
-      new SlewRateLimiter(Constants.DriveConstants.k_rotationalSlewRate);
+  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(Constants.DriveConstants.k_magnitudeSlewRate);
+  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(Constants.DriveConstants.k_rotationalSlewRate);
   private double m_prevTime = 0;
 
   private Pose2d m_futurePos = new Pose2d();
-
-  private int m_sourceLocation = 1;
-  private static final double k_fieldXMeters = 16.54;
 
   private final SwerveDriveKinematics m_swerve = new SwerveDriveKinematics(
       new Translation2d(.298, .298), new Translation2d(.298, -.298),
@@ -115,38 +103,49 @@ public class DriveSubsystem extends SubsystemBase {
     m_orientPID.enableContinuousInput(-180, 180);
     m_orientPID.setIZone(Constants.DriveConstants.k_rotateIZone);
 
-    // AutoBuilder.configureHolonomic(
-    //     this::getPose, 
-    //     this::resetOdometry, 
-    //     this::getChassisSpeeds,
-    //     this::driveWithChassisSpeedRobotRelative,
-    //     new HolonomicPathFollowerConfig(
-    //         new PIDConstants(1, 0, 0), new PIDConstants(1, 0, 0),
-    //         Constants.DriveConstants.k_maxSpeedMetersPerSecond, .475953574,
-    //         new ReplanningConfig()),
-    //     ()
-    //         -> {
-    //       var alliance = DriverStation.getAlliance();
-    //       if (alliance.isPresent()) {
-    //         return alliance.get() == DriverStation.Alliance.Red;
-    //       }
-    //       return false;
-    //     },
-    //     this
-    // );
+    AutoBuilder.configure(
+        this::getPose, // Robot pose supplier
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, feedforwards) -> driveWithChassisSpeedRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE
+                                                              // ChassisSpeeds. Also optionally outputs individual
+                                                              // module feedforwards
+        new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
+                                        // drive trains
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+        ),
+        Constants.DriveConstants.k_pathConfig, // The robot configuration
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    // PathPlannerLogging.setLogActivePathCallback((poses) ->
-    // m_field.getObject("path").setPoses(poses));
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+
+    PathPlannerLogging.setLogActivePathCallback((poses) -> m_field.getObject("path").setPoses(poses));
   }
 
-  public SwerveDriveKinematics getSwerve() { return m_swerve; }
+  public SwerveDriveKinematics getSwerve() {
+    return m_swerve;
+  }
 
-  public void setTracker(PositionTrackerPose tracker) { m_tracker = tracker; }
+  public void setTracker(PositionTrackerPose tracker) {
+    m_tracker = tracker;
+  }
 
   public SwerveModulePosition[] getModulePosition() {
     return new SwerveModulePosition[] {
         m_frontLeft.getPosition(), m_frontRight.getPosition(),
-        m_backLeft.getPosition(), m_backRight.getPosition()};
+        m_backLeft.getPosition(), m_backRight.getPosition() };
   }
 
   // Any interface that takes or receives an angle should be using Rotation2d.
@@ -154,44 +153,31 @@ public class DriveSubsystem extends SubsystemBase {
   public double orientPID(double setpoint) {
     double heading = getHeadingInDegrees();
     double rot = m_orientPID.calculate(heading, setpoint);
-    
+
     // rot += (Constants.DriveConstants.k_rotateF * Math.signum(rot));
     // return Math.abs(heading) < Constants.DriveConstants.k_rotateDeadzone ? 0
     // : rot;
-    rot = Math.abs(rot) > Constants.DriveConstants.k_maxRotInput ? Constants.DriveConstants.k_maxRotInput * Math.signum(rot) : rot;
+    rot = Math.abs(rot) > Constants.DriveConstants.k_maxRotInput
+        ? Constants.DriveConstants.k_maxRotInput * Math.signum(rot)
+        : rot;
     return rot;
   }
 
-  public Pose2d getEstimatedFuturePos() { return m_futurePos; }
-
-  // public FollowPathCommand geFollowPathCommandToWarmUp() {
-  //   FollowPathCommand followPathCommand = new FollowPathCommand(
-  //     PathPlannerPath.fromPathFile("speaker to wing 3"), 
-  //     this::getPose, 
-  //     this::getChassisSpeeds, 
-  //     this::driveWithChassisSpeedRobotRelative, 
-  //     new PPHolonomicDriveController(
-  //       new PIDConstants(1, 0, 0), 
-  //       new PIDConstants(1, 0, 0), 
-  //       Constants.DriveConstants.k_maxSpeedMetersPerSecond, 
-  //       .475953574),
-  //     new ReplanningConfig(), 
-  //     () -> false,
-  //     this
-  //   );
-  //   return followPathCommand;
-  // }
+  public Pose2d getEstimatedFuturePos() {
+    return m_futurePos;
+  }
 
   public static boolean m_setGyroZero = true;
   public static double m_gyroZero = 0;
 
   @Override
   public void periodic() {
-    
-    // SmartDashboard.putNumber("Rotate Error", getRotationDistanceFromTargetError());
+
+    // SmartDashboard.putNumber("Rotate Error",
+    // getRotationDistanceFromTargetError());
     // // Update the odometry in the periodic block
     SmartDashboard.putNumber("Turn FR Radians",
-                             m_frontRight.getPosition().angle.getRadians()); /// Math.PI);
+        m_frontRight.getPosition().angle.getRadians()); /// Math.PI);
     SmartDashboard.putNumber(
         "Turn FL Radians",
         m_frontLeft.getPosition().angle.getRadians()); // - (Math.PI / 2)) / Math.PI);
@@ -211,8 +197,9 @@ public class DriveSubsystem extends SubsystemBase {
     // getGyroRotation2d().getDegrees());
     // Dashboard.putNumber("Tracker
     // Rotation2D", m_tracker.getPose2d().getRotation().getDegrees());
-    SmartDashboard.putNumber("Gyro Angle", ParadoxField.normalizeAngle(-m_gyro.getYaw().getValueAsDouble())); 
-    // spin robot very fast for many rotations eventually back to the original angle, look at the gyro angle and see the offset
+    SmartDashboard.putNumber("Gyro Angle", ParadoxField.normalizeAngle(-m_gyro.getYaw().getValueAsDouble()));
+    // spin robot very fast for many rotations eventually back to the original
+    // angle, look at the gyro angle and see the offset
 
     // SmartDashboard.putNumber("Speaker X",
     // getSpeakerLocationMeters().m_xMeters); SmartDashboard.putNumber("Speaker
@@ -221,12 +208,17 @@ public class DriveSubsystem extends SubsystemBase {
     // Constants.States.m_faceSpeaker); SmartDashboard.putBoolean("Shoot
     // Front/Back", Constants.States.m_shootIntakeSide);
     // SmartDashboard.putBoolean("Aim On", Constants.States.m_autoRotateAim);
-    // SmartDashboard.putNumber("FL Encoder Diff", m_frontLeft.getMagEncoderPosRadians() - m_frontLeft.getMotorPosRadians());
-    // SmartDashboard.putNumber("FR Encoder Diff", m_frontRight.getMagEncoderPosRadians() - m_frontRight.getMotorPosRadians());
-    // SmartDashboard.putNumber("BL Encoder Diff", m_backLeft.getMagEncoderPosRadians() - m_backLeft.getMotorPosRadians());
-    // SmartDashboard.putNumber("BR Encoder Diff", m_backRight.getMagEncoderPosRadians() - m_backRight.getMotorPosRadians());
- 
-    // For efficiency. we could pass in the module states here, to avoid calling it twice.  Maybe also currentPos.  - Gavin
+    // SmartDashboard.putNumber("FL Encoder Diff",
+    // m_frontLeft.getMagEncoderPosRadians() - m_frontLeft.getMotorPosRadians());
+    // SmartDashboard.putNumber("FR Encoder Diff",
+    // m_frontRight.getMagEncoderPosRadians() - m_frontRight.getMotorPosRadians());
+    // SmartDashboard.putNumber("BL Encoder Diff",
+    // m_backLeft.getMagEncoderPosRadians() - m_backLeft.getMotorPosRadians());
+    // SmartDashboard.putNumber("BR Encoder Diff",
+    // m_backRight.getMagEncoderPosRadians() - m_backRight.getMotorPosRadians());
+
+    // For efficiency. we could pass in the module states here, to avoid calling it
+    // twice. Maybe also currentPos. - Gavin
 
     // Estimate future position of robot
     // *****************************************
@@ -237,13 +229,12 @@ public class DriveSubsystem extends SubsystemBase {
       m_gyroZero = ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw);
       m_setGyroZero = false;
     }
-    SmartDashboard.putNumber("Gyro offset", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw - m_gyroZero));
+    SmartDashboard.putNumber("Gyro offset",
+        ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw - m_gyroZero));
     SmartDashboard.putNumber("Gyro Zero", m_gyroZero);
     SmartDashboard.putNumber("Gyro", yaw);
     SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw));
     SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
-    
-
 
     double currentY = currentPos.getY();
     double currentX = currentPos.getX();
@@ -255,17 +246,14 @@ public class DriveSubsystem extends SubsystemBase {
     double xVelocity = chassisSpeed.vxMetersPerSecond;
     double angularVelocity = chassisSpeed.omegaRadiansPerSecond;
 
-    double futureY =
-        currentY + yVelocity * Constants.DriveConstants.k_lookAheadTimeSeconds;
-    double futureX =
-        currentX + xVelocity * Constants.DriveConstants.k_lookAheadTimeSeconds;
+    double futureY = currentY + yVelocity * Constants.DriveConstants.k_lookAheadTimeSeconds;
+    double futureX = currentX + xVelocity * Constants.DriveConstants.k_lookAheadTimeSeconds;
     double futureAngle = ParadoxField.normalizeAngle(
         currentAngle.getDegrees() +
-        Math.toDegrees(angularVelocity) *
-            Constants.DriveConstants.k_lookAheadTimeSeconds);
+            Math.toDegrees(angularVelocity) *
+                Constants.DriveConstants.k_lookAheadTimeSeconds);
 
-    m_futurePos =
-        new Pose2d(futureX, futureY, Rotation2d.fromDegrees(futureAngle));
+    m_futurePos = new Pose2d(futureX, futureY, Rotation2d.fromDegrees(futureAngle));
     // *********************************************************
 
     // m_field.setRobotPose(m_tracker.getPose2dFRC().getTranslation().getX(),
@@ -278,14 +266,18 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return The pose.
    */
-  public Pose2d getPose() { return m_tracker.getPose2d(); }
+  public Pose2d getPose() {
+    return m_tracker.getPose2d();
+  }
 
-  public Field2d getField() { return m_field; }
+  public Field2d getField() {
+    return m_field;
+  }
 
   public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = {
         m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
-        m_backRight.getState()};
+        m_backRight.getState() };
     return states;
   }
 
@@ -322,13 +314,13 @@ public class DriveSubsystem extends SubsystemBase {
    * @param ySpeed        Speed of the robot in the y direction (sideways).
    * @param rot           Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to
-   *     the
+   *                      the
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
   public void drive(double xSpeed, double ySpeed, double rot,
-                    boolean fieldRelative, boolean rateLimit,
-                    Translation2d rotatePoint) {
+      boolean fieldRelative, boolean rateLimit,
+      Translation2d rotatePoint) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -336,16 +328,14 @@ public class DriveSubsystem extends SubsystemBase {
     if (rateLimit) {
       // Convert XY to polar for rate limiting
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
-      double inputTranslationMag =
-          Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
+      double inputTranslationMag = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2));
 
       // Calculate the direction slew rate based on an estimate of the lateral
       // acceleration
       double directionSlewRate;
       if (m_currentTranslationMag != 0.0) {
-        directionSlewRate =
-            Math.abs(Constants.DriveConstants.k_directionSlewRate /
-                     m_currentTranslationMag);
+        directionSlewRate = Math.abs(Constants.DriveConstants.k_directionSlewRate /
+            m_currentTranslationMag);
       } else {
         directionSlewRate = 500.0; // some high number that means the slew rate
                                    // is effectively instantaneous
@@ -354,21 +344,19 @@ public class DriveSubsystem extends SubsystemBase {
       double currentTime = WPIUtilJNI.now() * 1e-6;
       double elapsedTime = currentTime - m_prevTime;
       double angleDif = SwerveUtils.AngleDifference(inputTranslationDir,
-                                                    m_currentTranslationDir);
+          m_currentTranslationDir);
       if (angleDif < 0.45 * Math.PI) {
         m_currentTranslationDir = SwerveUtils.StepTowardsCircular(
             m_currentTranslationDir, inputTranslationDir,
             directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
       } else if (angleDif > 0.85 * Math.PI) {
-        if (m_currentTranslationMag >
-            1e-4) { // some small number to avoid floating-point errors with
-                    // equality checking
+        if (m_currentTranslationMag > 1e-4) { // some small number to avoid floating-point errors with
+                                              // equality checking
           // keep currentTranslationDir unchanged
           m_currentTranslationMag = m_magLimiter.calculate(0.0);
         } else {
-          m_currentTranslationDir =
-              SwerveUtils.WrapAngle(m_currentTranslationDir + Math.PI);
+          m_currentTranslationDir = SwerveUtils.WrapAngle(m_currentTranslationDir + Math.PI);
           m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
         }
       } else {
@@ -379,10 +367,8 @@ public class DriveSubsystem extends SubsystemBase {
       }
       m_prevTime = currentTime;
 
-      xSpeedCommanded =
-          m_currentTranslationMag * Math.cos(m_currentTranslationDir);
-      ySpeedCommanded =
-          m_currentTranslationMag * Math.sin(m_currentTranslationDir);
+      xSpeedCommanded = m_currentTranslationMag * Math.cos(m_currentTranslationDir);
+      ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
       m_currentRotation = m_rotLimiter.calculate(rot);
 
     } else {
@@ -392,12 +378,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered =
-        xSpeedCommanded * Constants.DriveConstants.k_maxSpeedMetersPerSecond;
-    double ySpeedDelivered =
-        ySpeedCommanded * Constants.DriveConstants.k_maxSpeedMetersPerSecond;
-    double rotDelivered =
-        m_currentRotation * (rotatePoint.equals(new Translation2d(0, 0)) ? Constants.DriveConstants.k_maxAngularSpeed : 2 * Constants.DriveConstants.k_maxAngularSpeed);
+    double xSpeedDelivered = xSpeedCommanded * Constants.DriveConstants.k_maxSpeedMetersPerSecond;
+    double ySpeedDelivered = ySpeedCommanded * Constants.DriveConstants.k_maxSpeedMetersPerSecond;
+    double rotDelivered = m_currentRotation
+        * (rotatePoint.equals(new Translation2d(0, 0)) ? Constants.DriveConstants.k_maxAngularSpeed
+            : 2 * Constants.DriveConstants.k_maxAngularSpeed);
 
     BooleanSupplier allianceRed = () -> {
       var alliance = DriverStation.getAlliance();
@@ -410,11 +395,11 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = m_swerve.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                  xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                  Rotation2d.fromDegrees(getPose().getRotation().getDegrees() +
-                                         (allianceRed.getAsBoolean() ? 180 : 0)))
+                xSpeedDelivered, ySpeedDelivered, rotDelivered,
+                Rotation2d.fromDegrees(getPose().getRotation().getDegrees() +
+                    (allianceRed.getAsBoolean() ? 180 : 0)))
             : new ChassisSpeeds(-xSpeedDelivered, -ySpeedDelivered,
-                                rotDelivered),
+                rotDelivered),
         rotatePoint);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.DriveConstants.k_maxSpeedMetersPerSecond);
@@ -427,16 +412,20 @@ public class DriveSubsystem extends SubsystemBase {
   public Rotation2d getGyroRotation2d() {
     return m_gyro.getRotation2d();
   }
-  
+
   public double getRotationRateDegreesPerSecond() {
     // getRate returns degrees per second clockwise, so we negate it to get
     // degrees per second counterclockwise.
     return m_gyro.getAngularVelocityZWorld().getValueAsDouble();
   }
 
-  public Pigeon2 getGyro() { return m_gyro; }
+  public Pigeon2 getGyro() {
+    return m_gyro;
+  }
 
-  public PositionTrackerPose getTracker() { return m_tracker; }
+  public PositionTrackerPose getTracker() {
+    return m_tracker;
+  }
 
   public void setBrakeMode(boolean brake) {
     m_frontLeft.setBrakeMode(brake);
@@ -459,7 +448,7 @@ public class DriveSubsystem extends SubsystemBase {
         new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
 
-  public void spinAllModules(){
+  public void spinAllModules() {
     m_frontLeft.spin();
     m_frontRight.spin();
     m_backLeft.spin();
@@ -481,7 +470,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void setModuleStatesWithSpeed(SwerveModuleState[] desiredStates,
-                                       double speed) {
+      double speed) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         desiredStates, Constants.DriveConstants.k_maxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]);
@@ -501,7 +490,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void setHeading(double angle) {
     m_tracker.setXYAngle(m_tracker.getPose2d().getX(),
-                         m_tracker.getPose2d().getY(), angle);
+        m_tracker.getPose2d().getY(), angle);
   }
 
   /**
