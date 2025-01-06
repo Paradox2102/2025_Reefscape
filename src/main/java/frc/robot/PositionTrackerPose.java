@@ -1,10 +1,18 @@
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +24,11 @@ import frc.robot.subsystems.DriveSubsystem;
 public class PositionTrackerPose {
   private SwerveDrivePoseEstimator m_poseEstimator;
   private DriveSubsystem m_driveSubsystem;
+  private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField); //TODO: Change to k2025Reefscape when added
+  private PhotonCamera m_camera1 = new PhotonCamera("camera1"); //TODO: add camera names, transforms, and more once we figure out camera layouts
+  private PhotonCamera m_camera2 = new PhotonCamera("camera2");
+  private PhotonPoseEstimator m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
+  private PhotonPoseEstimator m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
 
@@ -76,6 +89,17 @@ public class PositionTrackerPose {
   private boolean m_front = true;
 
   public void update() {
-    //photon stuff to go here!!!!
+    PhotonPipelineResult camera1Result = m_camera1.getLatestResult();
+    PhotonPipelineResult camera2Result = m_camera2.getLatestResult();
+    if(camera1Result.hasTargets()){
+      m_poseEstimator.addVisionMeasurement(
+        m_photon1.update(camera1Result).get().estimatedPose.toPose2d(), 
+        camera1Result.getTimestampSeconds());
+    }
+    if(camera2Result.hasTargets()){
+      m_poseEstimator.addVisionMeasurement(
+        m_photon2.update(camera1Result).get().estimatedPose.toPose2d(), 
+        camera1Result.getTimestampSeconds());
+    }
   }
 }

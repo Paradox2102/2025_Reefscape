@@ -97,16 +97,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   PositionTrackerPose m_tracker;
 
-  // Photon Vision Stuff
-  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-
-  //Forward Camera
-  PhotonCamera cam = new PhotonCamera("testCamera");
-  Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-
-  // Construct PhotonPoseEstimator
-  PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, robotToCam);
-
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     m_gyro.reset();
@@ -271,6 +261,7 @@ public class DriveSubsystem extends SubsystemBase {
     // m_field.setRobotPose(m_tracker.getPose2dFRC().getTranslation().getX(),
     // m_tracker.getPose2dFRC().getTranslation().getY(),
     // m_tracker.getPose2dFRC().getRotation());
+    m_tracker.update();
   }
 
   /**
