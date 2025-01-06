@@ -12,6 +12,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.pathplanner.lib.util.PIDConstants;
 // import com.pathplanner.lib.util.ReplanningConfig;
@@ -19,7 +21,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -35,6 +40,10 @@ import frc.robot.ParadoxField;
 import frc.robot.PositionTrackerPose;
 import frc.utils.SwerveUtils;
 import java.util.function.BooleanSupplier;
+
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class DriveSubsystem extends SubsystemBase {
   private final Field2d m_field = new Field2d();
@@ -87,6 +96,16 @@ public class DriveSubsystem extends SubsystemBase {
       new Translation2d(-.298, .298), new Translation2d(-.298, -.298));
 
   PositionTrackerPose m_tracker;
+
+  // Photon Vision Stuff
+  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+
+  //Forward Camera
+  PhotonCamera cam = new PhotonCamera("testCamera");
+  Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+
+  // Construct PhotonPoseEstimator
+  PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, robotToCam);
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
