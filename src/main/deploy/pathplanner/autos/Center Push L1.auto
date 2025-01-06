@@ -27,6 +27,12 @@
           "data": {
             "name": "Place L1"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Remove Algae"
+          }
         }
       ]
     }

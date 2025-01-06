@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.702481915509258,
-        "y": 4.032861328125
+        "x": 3.929694120762712,
+        "y": 2.7888369802701267
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.919348054108798,
-        "y": 4.815995189525464
+        "x": 3.384879952840579,
+        "y": 2.3896995601505644
       },
-      "isLocked": true,
-      "linkedName": null
+      "isLocked": false,
+      "linkedName": "Right Good 3 end"
     },
     {
       "anchor": {
-        "x": 6.827545211226851,
-        "y": 4.847993706597221
+        "x": 1.6104541843220337,
+        "y": 0.7243048199152543
       },
       "prevControl": {
-        "x": 7.743186125578703,
-        "y": 4.087250072337962
+        "x": 2.742227513631505,
+        "y": 1.7966865358413777
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Push 1 end"
+      "linkedName": "Right Pick Up"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -41.636444967822634
+    "rotation": -36.41829059654045
   },
   "reversed": false,
-  "folder": "Push Auto Paths",
+  "folder": "Good Right Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -41.03689945637589
+    "rotation": -118.68960318602159
   },
   "useDefaultConstraints": true
 }
