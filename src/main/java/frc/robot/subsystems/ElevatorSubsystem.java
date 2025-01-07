@@ -6,11 +6,13 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.sim.SparkFlexSim;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ElevatorSubsystem extends SubsystemBase {
+public class ElevatorSubsystem extends SubsystemBase implements AutoCloseable {
   // motor (neo vortex according to co-engineering pres?)
   private SparkFlex m_elevatorMotor = new SparkFlex(0, MotorType.kBrushless);
   // pid
@@ -39,5 +41,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public SparkFlexSim getSimMotor() {
+    return new SparkFlexSim(m_elevatorMotor,
+      DCMotor.getNeoVortex(1));
+  }
+
+  @Override
+  public void close() {
+    m_elevatorMotor.close();
   }
 }
