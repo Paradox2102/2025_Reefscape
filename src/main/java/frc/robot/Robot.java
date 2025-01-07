@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -60,6 +61,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    try {
+      Constants.m_alliance = DriverStation.getAlliance().get();
+    }
+    catch (Exception ex) {}
   }
 
   /** This function is called periodically during autonomous. */
@@ -75,6 +81,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    try {
+      Constants.m_alliance = DriverStation.getAlliance().get();
+    }
+    catch (Exception ex) {}
   }
 
   /** This function is called periodically during operator control. */

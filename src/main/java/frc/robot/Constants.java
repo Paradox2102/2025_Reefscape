@@ -10,6 +10,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 
 
 /**
@@ -28,6 +29,8 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int k_DriverControllerPort = 0;
   }
+
+    public static DriverStation.Alliance m_alliance = DriverStation.Alliance.Blue;
 
     public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -56,6 +59,8 @@ public final class Constants {
     public static final int k_FLDriveMotor = 1;
     public static final int k_BRDriveMotor = 5;
     public static final int k_BLDriveMotor = 7;
+
+    public static final double k_driveDeadband = 0.1;
 
     public static final double k_rotateF = 0;
     public static final double k_rotateP = .016;
