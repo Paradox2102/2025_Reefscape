@@ -20,7 +20,7 @@
         "y": 0.7243048199152543
       },
       "prevControl": {
-        "x": 3.1227241128177963,
+        "x": 3.1227241128177967,
         "y": 1.6014271881620763
       },
       "nextControl": null,
@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.54867910044795
+    "rotation": -126.49564590233375
   },
   "reversed": false,
   "folder": "Good Right Auto Paths",

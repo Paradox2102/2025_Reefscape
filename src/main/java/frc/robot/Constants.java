@@ -51,15 +51,15 @@ public final class Constants {
     public static double k_BROffset = 0 + k_BRChassisAngularOffset;
 
     // SPARK MAX CAN IDs
-    public static final int k_FRTurningMotor = 4;
-    public static final int k_FLTurningMotor = 2;
-    public static final int k_BRTurningMotor = 6;
-    public static final int k_BLTurningMotor = 8;
+    public static final int k_FRTurningMotor = 16;
+    public static final int k_FLTurningMotor = 10;
+    public static final int k_BRTurningMotor = 18;
+    public static final int k_BLTurningMotor = 12;
 
-    public static final int k_FRDriveMotor = 3;
-    public static final int k_FLDriveMotor = 1;
-    public static final int k_BRDriveMotor = 5;
-    public static final int k_BLDriveMotor = 7;
+    public static final int k_FRDriveMotor = 17;
+    public static final int k_FLDriveMotor = 11;
+    public static final int k_BRDriveMotor = 19;
+    public static final int k_BLDriveMotor = 13;
 
     public static final double k_driveDeadband = 0.1;
 
