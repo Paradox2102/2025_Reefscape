@@ -4,13 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.sim.SparkRelativeEncoderSim;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
