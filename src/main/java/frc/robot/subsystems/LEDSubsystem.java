@@ -2,13 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.led.subsystems;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.apriltagsCamera.Logger;
 
 public class LEDSubsystem extends SubsystemBase {
   // These fields are static because shared between all virtual strings
@@ -51,10 +50,6 @@ public class LEDSubsystem extends SubsystemBase {
       m_led.setLength(m_currentMaxLength);
     }
 
-    Logger.log("LEDSubsystem", 4,
-        String.format("start=%d, size=%d, width=%d, height=%d",
-            m_startIdx, m_size, m_width, m_height));
-
     start();
   }
 
@@ -95,11 +90,10 @@ public class LEDSubsystem extends SubsystemBase {
    * Sets the color of a single LED on the string
    */
   public void setLED(int idx, Color color) {
-    if (m_invert)
-    {
+    if (m_invert) {
       idx = m_size - idx - 1;
     }
-    
+
     if ((idx >= 0) && (idx < m_size)) {
       // m_ledBuffer is shared so convert from relative index to absolute index
       m_ledBuffer.setLED(idx + m_startIdx, color);
@@ -170,7 +164,6 @@ public class LEDSubsystem extends SubsystemBase {
     limit = Math.min(limit, m_size);
     double maxDistance = Math.floor((length - 1) / 2);
     double middle = start + (length - 1) / 2;
-    Logger.log("LEDSubsystem", 0, String.format("setLEDs: %s [%d,%d) %s", getName(), start, limit, color.toString()));
     for (int i = start; i < limit; ++i) {
       double distance = Math.floor(Math.abs(middle - i));
       double scale2 = 1 - (1 - scale) * distance / maxDistance;
