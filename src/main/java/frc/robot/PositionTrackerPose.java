@@ -25,18 +25,21 @@ public class PositionTrackerPose {
   private SwerveDrivePoseEstimator m_poseEstimator;
   private DriveSubsystem m_driveSubsystem;
   private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField); //TODO: Change to k2025Reefscape when added
-  private PhotonCamera m_camera1 = new PhotonCamera("camera1"); //TODO: add camera names, transforms, and more once we figure out camera layouts
-  private PhotonCamera m_camera2 = new PhotonCamera("camera2");
-  private PhotonPoseEstimator m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
-  private PhotonPoseEstimator m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
+  private PhotonCamera m_camera1; //TODO: add camera names, transforms, and more once we figure out camera layouts
+  private PhotonCamera m_camera2;
+  private PhotonPoseEstimator m_photon1;
+  private PhotonPoseEstimator m_photon2;
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
 
   public PositionTrackerPose(double x, double y,
-                             DriveSubsystem driveSubsystem) {
+                             DriveSubsystem driveSubsystem, PhotonCamera camera1, PhotonCamera camera2) {
     super();
     m_driveSubsystem = driveSubsystem;
-
+    m_camera1 = camera1;
+    m_camera2 = camera2;
+    m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
+    m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
     // For the extended constructor, the default values are:
     // VecBuilder.fill(0.02, 0.02, 0.01) - SD of internal state
     // VecBuilder.fill(0.1, 0.1, 0.1)) - SD of vision pose measurment
