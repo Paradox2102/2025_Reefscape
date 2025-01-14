@@ -13,6 +13,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PivotSubsystem extends SubsystemBase {
@@ -25,7 +26,7 @@ public class PivotSubsystem extends SubsystemBase {
   private static double k_f = 0;
   private PIDController m_PID = new PIDController(k_p, k_i, k_d);
 
-  private static double k_deadzone = 0;
+  // private static double k_deadzone = 0;
 
   //set relative w/ absolute -> depend on relative
 
@@ -47,7 +48,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public double getAngleInDegrees() {
-    return 0;
+    return m_rEncoder.getPosition();
   }
 
   public void setPositonInDegrees(double degrees) {
@@ -56,6 +57,9 @@ public class PivotSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    //Show the data on SmartDashBoard
+    SmartDashboard.putNumber("Pivot Raw Position", getAngleInDegrees());
+
     // This method will be called once per scheduler run
     double FF;
     double angle = getAngleInDegrees();

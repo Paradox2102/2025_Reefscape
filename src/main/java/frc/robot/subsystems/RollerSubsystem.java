@@ -4,19 +4,22 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RollerSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_rollerMotor = new SparkFlex(0, MotorType.kBrushless);
   // pid
-  private double k_p = 0;
-  private double k_i = 0;
-  private double k_d = 0;
-  private double k_f = 0;
+  private static double k_p = 0;
+  private static double k_i = 0;
+  private static double k_d = 0;
+  private static double k_f = 0;
+  private PIDController m_PID = new PIDController(k_p, k_i, k_d);
 
   private double m_power = 0;
 

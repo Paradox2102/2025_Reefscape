@@ -4,19 +4,25 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class WristSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_wristMotor = new SparkFlex(0, MotorType.kBrushless);
   // pid (f term)
-  private double k_p = 0;
-  private double k_i = 0;
-  private double k_d = 0;
-  private double k_f = 0;
+  private static double k_p = 0;
+  private static double k_i = 0;
+  private static double k_d = 0;
+  private static double k_f = 0;
+  private PIDController m_PID = new PIDController(k_p, k_i, k_d);
+
+  private RelativeEncoder m_wristEncoder = m_wristMotor.getEncoder();
 
   private double m_power;
 
@@ -29,8 +35,14 @@ public class WristSubsystem extends SubsystemBase {
   public void setBrakeMode(boolean brake) {
   }
 
+  public double getPosition() {
+    return m_wristEncoder.getPosition();
+  }
+
   @Override
   public void periodic() {
+    //Shows data on SmartDashboard
+    SmartDashboard.putNumber("Wrist Raw Position", getPosition());
     // This method will be called once per scheduler run
   }
 }
