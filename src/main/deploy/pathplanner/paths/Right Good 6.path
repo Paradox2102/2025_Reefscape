@@ -42,7 +42,11 @@
   },
   "goalEndState": {
     "velocity": 0,
+<<<<<<< Updated upstream
     "rotation": -126.17297874250103
+=======
+    "rotation": -127.15813826918041
+>>>>>>> Stashed changes
   },
   "reversed": false,
   "folder": "Good Right Auto Paths",
