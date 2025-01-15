@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.drive.ApriltagAimCommand;
+import frc.robot.commands.drive.DriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 
@@ -39,6 +40,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    m_driveSubsystem.setTracker(m_tracker);
   }
 
   /**
@@ -51,8 +53,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_driveSubsystem.setDefaultCommand(new DriveCommand(
+      m_driveSubsystem, m_driverController::getLeftX, 
+      m_driverController::getLeftY, 
+      m_driverController::getRightX, 
+      m_driverController.leftBumper()));
     m_driverController.y().whileTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));
-
   }
 
   /**
