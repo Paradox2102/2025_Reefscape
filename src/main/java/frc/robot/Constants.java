@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.config.RobotConfig;
+// import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -92,13 +92,13 @@ public final class Constants {
 
     public static final boolean k_GyroReversed = false;
 
-    public static RobotConfig k_pathConfig;{
-    try {
-      k_pathConfig = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      // Handle exception as needed
-      e.printStackTrace();
-    }}
+    // public static RobotConfig k_pathConfig;{
+    // try {
+    //   k_pathConfig = RobotConfig.fromGUISettings();
+    // } catch (Exception e) {
+    //   // Handle exception as needed
+    //   e.printStackTrace();
+    // }}
   }
 
   public static final class ModuleConstants {
