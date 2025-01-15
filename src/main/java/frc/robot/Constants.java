@@ -117,12 +117,39 @@ public final class Constants {
         / k_DrivingMotorReduction;
   }
 
+  public static final class PivotConstants {
+    public static final int k_pivotMotor = 0;
+  }
+  
+  public static final class RollerConstants {
+    public static final int k_rollerMotor = 0;
+  }
+
+  public static final class ElevatorConstants {
+    public static final int k_elevatorMotor = 0;
+  }
+
+  public static final class WristConstants {
+    public static final int k_wristMotor = 0;
+  }
+
+
+
   public final class MotorConfigs {
     public static final class SwerveModule {
       public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
       public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
+      public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
+      public static final SparkMaxConfig rollerConfig = new SparkMaxConfig();
+      public static final SparkMaxConfig wristConfig = new SparkMaxConfig();
+      public static final SparkMaxConfig elevatorConfig = new SparkMaxConfig();
+
       public static SparkMaxConfig coastDriveConfig = new SparkMaxConfig();
       public static SparkMaxConfig coastTurnConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastPivotConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastRollerConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastWristConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastElevatorConfig = new SparkMaxConfig();
 
       static {
         // Use module constants to calculate conversion factors and feed forward gain.
@@ -162,6 +189,25 @@ public final class Constants {
             .positionWrappingInputRange(0, turningFactor);
         coastDriveConfig = drivingConfig;
         coastTurnConfig = turningConfig;
+
+
+        //briselda's doing
+        pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        pivotConfig.absoluteEncoder
+            .positionConversionFactor(0)
+            .velocityConversionFactor(0);
+        // pivotConfig.closedLoop
+        //     .feedbackSensor(the encoder);
+        coastPivotConfig = pivotConfig;
+
+        rollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        rollerConfig.absoluteEncoder
+            .positionConversionFactor(0)
+            .velocityConversionFactor(0);
+        // pivotConfig.closedLoop
+        //     .feedbackSensor(the encoder);
+        coastRollerConfig = rollerConfig;
+      
         
         coastDriveConfig.idleMode(IdleMode.kCoast);
         coastTurnConfig.idleMode(IdleMode.kCoast);
