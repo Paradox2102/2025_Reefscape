@@ -5,12 +5,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.MotorConfigs;
 
 public class ElevatorSubsystem extends SubsystemBase {
   // motor (neo vortex according to co-engineering pres?)
@@ -28,6 +31,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
+    m_elevatorMotor.configure(MotorConfigs.Elevator.elevatorConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
+  }
+
+  public void setBrakeMode(boolean brake) {
+    m_elevatorMotor.configure((brake ? MotorConfigs.Elevator.elevatorConfig : MotorConfigs.Elevator.coastElevatorConfig), ResetMode.kResetSafeParameters,
+    PersistMode.kPersistParameters);
   }
 
 
@@ -47,6 +57,5 @@ public class ElevatorSubsystem extends SubsystemBase {
     //Shows data on SmartDashBoard
     SmartDashboard.putNumber("Elevator Raw Position", getPosition());
     // This method will be called once per scheduler run
-
   }
 }

@@ -122,7 +122,10 @@ public final class Constants {
   }
   
   public static final class RollerConstants {
-    public static final int k_rollerMotor = 0;
+    public static final int k_LcoralMotor = 0;
+    public static final int k_RcoralMotor = 0;
+
+    public static final int k_algaeMotor = 0;
   }
 
   public static final class ElevatorConstants {
@@ -139,17 +142,9 @@ public final class Constants {
     public static final class SwerveModule {
       public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
       public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
-      public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
-      public static final SparkMaxConfig rollerConfig = new SparkMaxConfig();
-      public static final SparkMaxConfig wristConfig = new SparkMaxConfig();
-      public static final SparkMaxConfig elevatorConfig = new SparkMaxConfig();
 
       public static SparkMaxConfig coastDriveConfig = new SparkMaxConfig();
       public static SparkMaxConfig coastTurnConfig = new SparkMaxConfig();
-      public static SparkMaxConfig coastPivotConfig = new SparkMaxConfig();
-      public static SparkMaxConfig coastRollerConfig = new SparkMaxConfig();
-      public static SparkMaxConfig coastWristConfig = new SparkMaxConfig();
-      public static SparkMaxConfig coastElevatorConfig = new SparkMaxConfig();
 
       static {
         // Use module constants to calculate conversion factors and feed forward gain.
@@ -189,29 +184,115 @@ public final class Constants {
             .positionWrappingInputRange(0, turningFactor);
         coastDriveConfig = drivingConfig;
         coastTurnConfig = turningConfig;
-
-
-        //briselda's doing
-        pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-        pivotConfig.absoluteEncoder
-            .positionConversionFactor(0)
-            .velocityConversionFactor(0);
-        // pivotConfig.closedLoop
-        //     .feedbackSensor(the encoder);
-        coastPivotConfig = pivotConfig;
-
-        rollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-        rollerConfig.absoluteEncoder
-            .positionConversionFactor(0)
-            .velocityConversionFactor(0);
-        // pivotConfig.closedLoop
-        //     .feedbackSensor(the encoder);
-        coastRollerConfig = rollerConfig;
-      
         
         coastDriveConfig.idleMode(IdleMode.kCoast);
         coastTurnConfig.idleMode(IdleMode.kCoast);
       }
+    }
+
+    public static final class Pivot {
+      public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
+
+      public static SparkMaxConfig coastPivotConfig = new SparkMaxConfig();
+
+      static {
+
+        pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+          pivotConfig.absoluteEncoder
+              .positionConversionFactor(0)
+              .velocityConversionFactor(0);
+        coastPivotConfig = pivotConfig;
+
+        coastPivotConfig.idleMode(IdleMode.kCoast);
+      }
+    }
+
+    public static final class Elevator {
+      public static final SparkMaxConfig elevatorConfig = new SparkMaxConfig();
+
+      public static SparkMaxConfig coastElevatorConfig = new SparkMaxConfig();
+
+      static {
+        elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        elevatorConfig.absoluteEncoder
+            .positionConversionFactor(1)
+            .velocityConversionFactor(1);
+        elevatorConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .pid(0, 0, 0)
+            .outputRange(0, 0);
+        coastElevatorConfig = elevatorConfig;
+
+        coastElevatorConfig.idleMode(IdleMode.kCoast);
+      }
+
+    }
+
+    public static final class Wrist {
+      public static final SparkMaxConfig wristConfig = new SparkMaxConfig();
+
+      public static SparkMaxConfig coastWristConfig = new SparkMaxConfig();
+
+      static {
+        wristConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        wristConfig.absoluteEncoder
+            .positionConversionFactor(1)
+            .velocityConversionFactor(1);
+        coastWristConfig = wristConfig;
+
+        coastWristConfig.idleMode(IdleMode.kCoast);
+      }
+    }
+    
+    public static final class Roller {
+      public static final SparkMaxConfig algaeConfig = new SparkMaxConfig();
+      public static final SparkMaxConfig LCoralConfig = new SparkMaxConfig();
+      public static final SparkMaxConfig RCoralConfig = new SparkMaxConfig();
+
+      public static SparkMaxConfig coastAlgaeConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastLCoralConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastRCoralConfig = new SparkMaxConfig();
+
+      static {
+        algaeConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        algaeConfig.absoluteEncoder
+            .positionConversionFactor(1)
+            .velocityConversionFactor(1);
+        algaeConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .pid(0, 0, 0)
+            .outputRange(0, 0);
+        coastAlgaeConfig = algaeConfig;
+
+        coastAlgaeConfig.idleMode(IdleMode.kCoast);
+
+
+        LCoralConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        LCoralConfig.absoluteEncoder
+            .positionConversionFactor(1)
+            .velocityConversionFactor(1);
+        LCoralConfig.closedLoop
+             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+             .pid(0, 0, 0)
+             .outputRange(0, 0);
+        coastLCoralConfig = LCoralConfig;
+  
+        coastLCoralConfig.idleMode(IdleMode.kCoast);
+      
+      
+        RCoralConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        RCoralConfig.absoluteEncoder
+            .positionConversionFactor(1)
+            .velocityConversionFactor(1);
+        RCoralConfig.closedLoop
+             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+             .pid(0, 0, 0)
+             .outputRange(0, 0);
+        coastRCoralConfig = RCoralConfig;
+  
+        coastRCoralConfig.idleMode(IdleMode.kCoast);
+      }
+
     }
   }
 }

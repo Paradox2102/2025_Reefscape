@@ -5,11 +5,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.MotorConfigs;
 
 public class PivotSubsystem extends SubsystemBase {
   // motor
@@ -31,11 +35,14 @@ public class PivotSubsystem extends SubsystemBase {
 
   /** Creates a new PivotSubsystem. */
   public PivotSubsystem() {
-    // setBrakeMode(true);
+    m_pivotMotor.configure(MotorConfigs.SwerveModule.drivingConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
   }
 
   public void setBrakeMode(boolean brake) {
     // m_pivotMotor.setIdleMode(brake? IdleMode.kBrake : IdleMode.kCoast);
+    m_pivotMotor.configure((brake ? MotorConfigs.Pivot.pivotConfig : MotorConfigs.Pivot.coastPivotConfig), ResetMode.kResetSafeParameters,
+    PersistMode.kPersistParameters);
   }
 
   public void setPower(double power) {
@@ -43,7 +50,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public double getAngleInDegrees() {
-    return 0;
+    return m_rEncoder.getPosition();
   }
 
   public void setPositonInDegrees(double degrees) {
@@ -52,6 +59,7 @@ public class PivotSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Raw Pivot Position", getAngleInDegrees());
     // This method will be called once per scheduler run
     double FF;
     double angle = getAngleInDegrees();
