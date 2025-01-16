@@ -28,9 +28,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private PhotonCamera m_camera1 = new PhotonCamera("camera1");
-  private PhotonCamera m_camera2 = new PhotonCamera("camera2");
-  private PhotonCamera m_alignCamera = new PhotonCamera("align");
-  public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, m_camera1, m_camera2);
+  //private PhotonCamera m_camera2 = new PhotonCamera("camera2");
+  //private PhotonCamera m_alignCamera = new PhotonCamera("align");
+  public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, m_camera1);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -58,7 +58,7 @@ public class RobotContainer {
       m_driverController::getLeftY, 
       m_driverController::getRightX, 
       m_driverController.leftBumper()));
-    m_driverController.y().whileTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));
+    // m_driverController.y().whileTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));
   }
 
   /**

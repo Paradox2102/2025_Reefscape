@@ -13,7 +13,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -24,22 +23,25 @@ import frc.robot.subsystems.DriveSubsystem;
 public class PositionTrackerPose {
   private SwerveDrivePoseEstimator m_poseEstimator;
   private DriveSubsystem m_driveSubsystem;
-  private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField); //TODO: Change to k2025Reefscape when added
+  private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo); //TODO: Change to k2025Reefscape when added
   private PhotonCamera m_camera1; //TODO: add camera names, transforms, and more once we figure out camera layouts
-  private PhotonCamera m_camera2;
+  //private PhotonCamera m_camera2;
   private PhotonPoseEstimator m_photon1;
-  private PhotonPoseEstimator m_photon2;
+  private double m_timestamp1 = 0;
+  //private double m_timestamp2 = 0;
+  //private PhotonPoseEstimator m_photon2;
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
 
   public PositionTrackerPose(double x, double y,
-                             DriveSubsystem driveSubsystem, PhotonCamera camera1, PhotonCamera camera2) {
+                             DriveSubsystem driveSubsystem, PhotonCamera camera1) {
     super();
     m_driveSubsystem = driveSubsystem;
     m_camera1 = camera1;
-    m_camera2 = camera2;
+    //m_camera2 = camera2;
     m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
-    m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
+    m_photon1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    //m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
     // For the extended constructor, the default values are:
     // VecBuilder.fill(0.02, 0.02, 0.01) - SD of internal state
     // VecBuilder.fill(0.1, 0.1, 0.1)) - SD of vision pose measurment
@@ -89,20 +91,23 @@ public class PositionTrackerPose {
     }
   }
 
-  private boolean m_front = true;
+  //private boolean m_front = true;
 
   public void update() {
+    m_photon1.setReferencePose(getPose2d());
     PhotonPipelineResult camera1Result = m_camera1.getLatestResult();
-    PhotonPipelineResult camera2Result = m_camera2.getLatestResult();
-    if(camera1Result.hasTargets()){
+    //PhotonPipelineResult camera2Result = m_camera2.getLatestResult();
+    if(camera1Result.hasTargets() && camera1Result.getTimestampSeconds() != m_timestamp1){
+      //System.out.println(m_photon1.update(camera1Result).isPresent());
       m_poseEstimator.addVisionMeasurement(
         m_photon1.update(camera1Result).get().estimatedPose.toPose2d(), 
         camera1Result.getTimestampSeconds());
     }
-    if(camera2Result.hasTargets()){
-      m_poseEstimator.addVisionMeasurement(
-        m_photon2.update(camera1Result).get().estimatedPose.toPose2d(), 
-        camera1Result.getTimestampSeconds());
-    }
+    // if(camera2Result.hasTargets()){
+    //   m_poseEstimator.addVisionMeasurement(
+    //     m_photon2.update(camera1Result).get().estimatedPose.toPose2d(), 
+    //     camera1Result.getTimestampSeconds());
+    // }
+    m_timestamp1 = camera1Result.getTimestampSeconds();
   }
 }
