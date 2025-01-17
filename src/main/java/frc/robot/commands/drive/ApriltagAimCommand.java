@@ -51,7 +51,7 @@ public class ApriltagAimCommand extends Command {
     }
     SmartDashboard.putNumber("tag x", x);
     SmartDashboard.putNumber("tag x dist", horizDist);
-    m_subsystem.drive(0, horizDist/2, 0, false, false, new Translation2d(0,0));
+    m_subsystem.drive(0, horizDist/2, 0, false, false);
   }
 
   // Called once the command ends or is interrupted.

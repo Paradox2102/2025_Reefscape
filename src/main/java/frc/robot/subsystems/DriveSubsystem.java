@@ -34,11 +34,39 @@ import frc.robot.PositionTrackerPose;
 import frc.utils.SwerveUtils;
 import java.util.function.BooleanSupplier;
 
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-
 public class DriveSubsystem extends SubsystemBase {
+
+  private FieldPosition m_reefPosition = FieldPosition.ONE;
+  private FieldPosition m_source = FieldPosition.SOURCE_RED;
+
+  private enum FieldPosition {
+    // blue alliance
+    ONE(new Pose2d(new Translation2d(5.81, 3.86), Rotation2d.fromDegrees(180))),
+    TWO(new Pose2d(new Translation2d(5.27, 2.98), Rotation2d.fromDegrees(120))),
+    THREE(new Pose2d(new Translation2d(5.01, 2.82), Rotation2d.fromDegrees(120))),
+    FOUR(new Pose2d(new Translation2d(3.96, 2.82), new Rotation2d(60))),
+    FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(60))),
+    SIX(new Pose2d(new Translation2d(3.17, 3.86), Rotation2d.fromDegrees(0))),
+    SEVEN(new Pose2d(new Translation2d(3.17, 4.17), Rotation2d.fromDegrees(0))),
+    EIGHT(new Pose2d(new Translation2d(3.69, 5.09), Rotation2d.fromDegrees(-60))),
+    NINE(new Pose2d(new Translation2d(3.96, 5.23), Rotation2d.fromDegrees(-60))),
+    TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120))),
+    ELEVEN(new Pose2d(new Translation2d(5.27, 5.09), Rotation2d.fromDegrees(-120))),
+    TWELVE(new Pose2d(new Translation2d(5.81, 4.17), Rotation2d.fromDegrees(180))),
+    SOURCE_RED(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(127.5))),
+    SOURCE_BLUE(new Pose2d(new Translation2d(1.7, .65), new Rotation2d(-127.5)));
+
+    private Pose2d m_targetPos;
+
+    FieldPosition(Pose2d pose) {
+      m_targetPos = pose;
+    }
+
+    public Pose2d targetPose() {
+      return m_targetPos;
+    }
+  }
+
   private final Field2d m_field = new Field2d();
   // Create MaxSwerveModules
   private final MaxSwerveModule m_frontLeft = new MaxSwerveModule(Constants.DriveConstants.k_FLDriveMotor,
@@ -118,6 +146,22 @@ public class DriveSubsystem extends SubsystemBase {
     // );
 
     // PathPlannerLogging.setLogActivePathCallback((poses) -> m_field.getObject("path").setPoses(poses));
+  }
+
+  public void setReefPosition(FieldPosition position) {
+    m_reefPosition = position;
+  }
+
+  public void setSource(FieldPosition source) {
+    m_source = source;
+  }
+
+  public Pose2d getReefPosition() {
+    return m_reefPosition.targetPose();
+  }
+
+  public Pose2d getSourcePosition() {
+    return m_source.targetPose();
   }
 
   public SwerveDriveKinematics getSwerve() {
@@ -306,8 +350,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
   public void drive(double xSpeed, double ySpeed, double rot,
-      boolean fieldRelative, boolean rateLimit,
-      Translation2d rotatePoint) {
+      boolean fieldRelative, boolean rateLimit) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -368,8 +411,7 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedDelivered = xSpeedCommanded * Constants.DriveConstants.k_maxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeedCommanded * Constants.DriveConstants.k_maxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation
-        * (rotatePoint.equals(new Translation2d(0, 0)) ? Constants.DriveConstants.k_maxAngularSpeed
-            : 2 * Constants.DriveConstants.k_maxAngularSpeed);
+        * Constants.DriveConstants.k_maxAngularSpeed;
 
     BooleanSupplier allianceRed = () -> {
       var alliance = DriverStation.getAlliance();
@@ -387,7 +429,7 @@ public class DriveSubsystem extends SubsystemBase {
                     (allianceRed.getAsBoolean() ? 180 : 0)))
             : new ChassisSpeeds(-xSpeedDelivered, -ySpeedDelivered,
                 rotDelivered),
-        rotatePoint);
+        new Translation2d(0, 0));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, Constants.DriveConstants.k_maxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
