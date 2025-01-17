@@ -39,6 +39,34 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class DriveSubsystem extends SubsystemBase {
+
+  private ReefPosition m_reefPosition = ReefPosition.ONE;
+
+  private enum ReefPosition {
+    ONE(new Pose2d()),
+    TWO(new Pose2d()),
+    THREE(new Pose2d()),
+    FOUR(new Pose2d()),
+    FIVE(new Pose2d()),
+    SIX(new Pose2d()),
+    SEVEN(new Pose2d()),
+    EIGHT(new Pose2d()),
+    NINE(new Pose2d()),
+    TEN(new Pose2d()),
+    ELEVEN(new Pose2d()),
+    TWELVE(new Pose2d());
+
+    private Pose2d m_targetPos;
+
+    ReefPosition(Pose2d pose) {
+      m_targetPos = pose;
+    }
+
+    public Pose2d targetPose() {
+      return m_targetPos;
+    }
+  }
+
   private final Field2d m_field = new Field2d();
   // Create MaxSwerveModules
   private final MaxSwerveModule m_frontLeft = new MaxSwerveModule(Constants.DriveConstants.k_FLDriveMotor,
