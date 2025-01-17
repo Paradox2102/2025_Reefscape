@@ -20,7 +20,7 @@ public class DriveToPosition extends Command {
   DriveSubsystem m_subsystem;
   double m_xPos;
   double m_yPos;
-  double m_rotationDegrees;
+  double m_rotationDegrees = 0;
   PositionTrackerPose m_tracker;
 
   double m_currentX = 0;
@@ -36,13 +36,11 @@ public class DriveToPosition extends Command {
   PIDController m_xPID = new PIDController(k_p, k_i, k_d);
   PIDController m_yPID = new PIDController(k_p, k_i, k_d);
   double m_rot = 0;
+  boolean m_goToReef = true;
 
-  public DriveToPosition(DriveSubsystem driveSubsystem, Supplier<Pose2d> poseSupplier) {
+  public DriveToPosition(DriveSubsystem driveSubsystem, boolean goToReef) {
     m_subsystem = driveSubsystem;
-    Pose2d pose = poseSupplier.get();
-    m_xPos = pose.getX();
-    m_yPos = pose.getY();
-    m_rotationDegrees = pose.getRotation().getDegrees();
+    m_goToReef = goToReef;
     m_tracker = m_subsystem.getTracker();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -51,11 +49,10 @@ public class DriveToPosition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_xPID.setSetpoint(m_xPos);
-    m_yPID.setSetpoint(m_yPos);
-    System.out.print(m_xPos);
-    System.out.print(" ");
-    System.out.print(m_yPos);
+    Pose2d pose = m_goToReef ? m_subsystem.getReefPosition() : m_subsystem.getSourcePosition();
+    m_xPID.setSetpoint(pose.getX());
+    m_yPID.setSetpoint(pose.getY());
+    m_rotationDegrees = pose.getRotation().getDegrees();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -80,13 +77,13 @@ public class DriveToPosition extends Command {
     boolean red = Constants.m_alliance == DriverStation.Alliance.Red;
     // yVelocity *= red ? -1 : 1;
 
-    m_subsystem.drive(xVelocity, yVelocity, rotVelocity, true, true, new Translation2d(0, 0));
+    m_subsystem.drive(xVelocity, yVelocity, rotVelocity, true, true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.drive(0, 0, 0, true, false, new Translation2d(0, 0));
+    m_subsystem.drive(0, 0, 0, true, false);
   }
 
   // Returns true when the command should end.

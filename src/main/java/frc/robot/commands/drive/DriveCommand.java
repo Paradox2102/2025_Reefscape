@@ -55,8 +55,7 @@ public class DriveCommand extends Command {
       x, 
       rot, 
       true, 
-      true,
-      new Translation2d(0,0)
+      true
       );
 
     
