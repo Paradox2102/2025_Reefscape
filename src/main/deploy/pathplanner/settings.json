@@ -5,7 +5,9 @@
   "pathFolders": [
     "Center Auto Paths",
     "Good Right Auto Paths",
-    "Push Auto Paths"
+    "Push Blue Paths",
+    "Push Auto Paths",
+    "Push Red Paths"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.92,
