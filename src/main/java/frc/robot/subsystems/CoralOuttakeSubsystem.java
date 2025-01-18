@@ -19,28 +19,22 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_coralLeftMotor = new SparkFlex(0, MotorType.kBrushless);
   private SparkFlex m_coralRightMotor = new SparkFlex(0, MotorType.kBrushless);
-  // pid
-  private double k_p = 0;
-  private double k_i = 0;
-  private double k_d = 0;
-  private double k_f = 0;
-  private PIDController m_PID = new PIDController(k_p, k_i, k_d);
 
   private RelativeEncoder m_LCoralEncoder = m_coralLeftMotor.getEncoder();
   private RelativeEncoder m_RCoralEncoder = m_coralRightMotor.getEncoder();
 
   /** Creates a new RollerSubsystem. */
   public CoralOuttakeSubsystem() {
-    m_coralLeftMotor.configure(MotorConfigs.Roller.LCoralConfig, ResetMode.kResetSafeParameters,
+    m_coralLeftMotor.configure(MotorConfigs.CoralOuttake.leftConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
-    m_coralRightMotor.configure(MotorConfigs.Roller.RCoralConfig, ResetMode.kResetSafeParameters,
+    m_coralRightMotor.configure(MotorConfigs.CoralOuttake.rightConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
 
   public void setBrakeMode(boolean brake) {
-    m_coralLeftMotor.configure((brake ? MotorConfigs.Roller.LCoralConfig : MotorConfigs.Roller.coastLCoralConfig), ResetMode.kResetSafeParameters,
+    m_coralLeftMotor.configure((brake ? MotorConfigs.CoralOuttake.leftConfig : MotorConfigs.CoralOuttake.coastLeftConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
-    m_coralRightMotor.configure((brake ? MotorConfigs.Roller.RCoralConfig : MotorConfigs.Roller.coastRCoralConfig), ResetMode.kResetSafeParameters,
+    m_coralRightMotor.configure((brake ? MotorConfigs.CoralOuttake.rightConfig : MotorConfigs.CoralOuttake.coastRightConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
   }
 

@@ -17,29 +17,24 @@ import frc.robot.Constants.MotorConfigs;
 
 public class AlgaeSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_algaeMotor = new SparkFlex(0, MotorType.kBrushless);
-  // pid
-  private double k_p = 0;
-  private double k_i = 0;
-  private double k_d = 0;
-  private double k_f = 0;
-  private PIDController m_PID = new PIDController(k_p, k_i, k_d);
+  private SparkFlex m_pivotMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_rollerMotor = new SparkFlex(0, MotorType.kBrushless);
 
-  private RelativeEncoder m_algaeEncoder = m_algaeMotor.getEncoder();
+  private RelativeEncoder m_algaeEncoder = m_pivotMotor.getEncoder();
 
   /** Creates a new RollerSubsystem. */
   public AlgaeSubsystem() {
-    m_algaeMotor.configure(MotorConfigs.Roller.algaeConfig, ResetMode.kResetSafeParameters,
+    m_pivotMotor.configure(MotorConfigs.Algae.pivotConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
 
   public void setBrakeMode(boolean brake) {
-    m_algaeMotor.configure((brake ? MotorConfigs.Roller.algaeConfig : MotorConfigs.Roller.coastAlgaeConfig), ResetMode.kResetSafeParameters,
+    m_pivotMotor.configure((brake ? MotorConfigs.Algae.pivotConfig : MotorConfigs.Algae.coastAlgaeConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
   }
 
   public void setPower(double power) {
-    m_algaeMotor.set(power);
+    m_pivotMotor.set(power);
   }
 
   public double getAlgaePosition() {

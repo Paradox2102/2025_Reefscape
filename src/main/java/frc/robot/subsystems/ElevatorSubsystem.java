@@ -5,12 +5,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorConfigs;
@@ -19,11 +20,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   // motor (neo vortex according to co-engineering pres?)
   private SparkFlex m_elevatorMotor = new SparkFlex(1, MotorType.kBrushless);
   // pid
-  private static double k_p = 0;
-  private static double k_i = 0;
-  private static double k_d = 0;
-  private static double k_f = 0;
-  private PIDController m_PID = new PIDController(k_p, k_i, k_d);
+  private SparkClosedLoopController m_PID;
 
   private RelativeEncoder m_elevatorEncoder = m_elevatorMotor.getEncoder();
 
@@ -33,6 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public ElevatorSubsystem() {
     m_elevatorMotor.configure(MotorConfigs.Elevator.elevatorConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+    m_PID = m_elevatorMotor.getClosedLoopController();
   }
 
   public void setBrakeMode(boolean brake) {
@@ -46,6 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setPosition(double position) {
+    m_PID.setReference(position, ControlType.kPosition);
   }
 
   public double getPosition() {

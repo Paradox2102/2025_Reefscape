@@ -239,53 +239,38 @@ public final class Constants {
       }
     }
     
-    public static final class Roller {
-      public static final SparkMaxConfig algaeConfig = new SparkMaxConfig();
-      public static final SparkMaxConfig LCoralConfig = new SparkMaxConfig();
-      public static final SparkMaxConfig RCoralConfig = new SparkMaxConfig();
+    public static final class Algae {
+      public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
+      public static final SparkMaxConfig rollerConfig = new SparkMaxConfig();
 
       public static SparkMaxConfig coastAlgaeConfig = new SparkMaxConfig();
-      public static SparkMaxConfig coastLCoralConfig = new SparkMaxConfig();
-      public static SparkMaxConfig coastRCoralConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastRoller = new SparkMaxConfig();
 
       static {
-        algaeConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-        algaeConfig.absoluteEncoder
+        pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        pivotConfig.absoluteEncoder
             .positionConversionFactor(1)
             .velocityConversionFactor(1);
-        algaeConfig.closedLoop
+        pivotConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
             .pid(0, 0, 0)
             .outputRange(0, 0);
-        coastAlgaeConfig = algaeConfig;
+        coastAlgaeConfig = pivotConfig;
 
         coastAlgaeConfig.idleMode(IdleMode.kCoast);
 
 
-        LCoralConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-        LCoralConfig.absoluteEncoder
+        rollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        rollerConfig.absoluteEncoder
             .positionConversionFactor(1)
             .velocityConversionFactor(1);
-        LCoralConfig.closedLoop
+        rollerConfig.closedLoop
              .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
              .pid(0, 0, 0)
              .outputRange(0, 0);
-        coastLCoralConfig = LCoralConfig;
+        coastRoller = rollerConfig;
   
-        coastLCoralConfig.idleMode(IdleMode.kCoast);
-      
-      
-        RCoralConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-        RCoralConfig.absoluteEncoder
-            .positionConversionFactor(1)
-            .velocityConversionFactor(1);
-        RCoralConfig.closedLoop
-             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-             .pid(0, 0, 0)
-             .outputRange(0, 0);
-        coastRCoralConfig = RCoralConfig;
-  
-        coastRCoralConfig.idleMode(IdleMode.kCoast);
+        coastRoller.idleMode(IdleMode.kCoast);
       }
 
     }
