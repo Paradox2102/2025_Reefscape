@@ -4,56 +4,75 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.MotorConfigs;
 
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_coralLeftMotor = new SparkFlex(0, MotorType.kBrushless);
-  private SparkFlex m_coralRightMotor = new SparkFlex(0, MotorType.kBrushless);
 
-  private RelativeEncoder m_LCoralEncoder = m_coralLeftMotor.getEncoder();
-  private RelativeEncoder m_RCoralEncoder = m_coralRightMotor.getEncoder();
+  private static final double k_ejectedCurrent = 20;
+  private static final double k_intakeCurrent = 20;
+
+  private static final double k_intakePower = .5;
+  private static final double k_outtakePower = -.5;
+
+  public final Trigger ejectedCoral = new Trigger(
+    () -> getCurrentDraw() < k_ejectedCurrent)
+    .debounce(.1, DebounceType.kRising);
+
+  public final Trigger hasCoral = new Trigger(
+    () -> getCurrentDraw() > k_intakeCurrent)
+    .debounce(.1, DebounceType.kRising);
 
   /** Creates a new RollerSubsystem. */
   public CoralOuttakeSubsystem() {
     m_coralLeftMotor.configure(MotorConfigs.CoralOuttake.leftConfig, ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
-    m_coralRightMotor.configure(MotorConfigs.CoralOuttake.rightConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
 
   public void setBrakeMode(boolean brake) {
     m_coralLeftMotor.configure((brake ? MotorConfigs.CoralOuttake.leftConfig : MotorConfigs.CoralOuttake.coastLeftConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
-    m_coralRightMotor.configure((brake ? MotorConfigs.CoralOuttake.rightConfig : MotorConfigs.CoralOuttake.coastRightConfig), ResetMode.kResetSafeParameters,
-    PersistMode.kPersistParameters);
   }
 
   public void setPower(double power) {
     m_coralLeftMotor.set(power);
-    m_coralRightMotor.set(power);
   }
 
-  public double getLCoralPosition() {
-    return m_LCoralEncoder.getPosition();
+  public double getCurrentDraw() {
+    return m_coralLeftMotor.getOutputCurrent();
   }
 
-  public double getRCoralPosition() {
-    return m_RCoralEncoder.getPosition();
+  public Command ejectCoral() {
+    return Commands.run(() -> {
+      setPower(k_outtakePower);
+    }, this);
+  }
+
+  public Command intakeCoral() {
+    return Commands.run(() -> {
+      setPower(k_intakePower);
+    }, this);
+  }
+
+  public Command stop() {
+    return Commands.run(() -> {
+      setPower(0);
+    });
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Raw Left Motor Position", getLCoralPosition());
-    SmartDashboard.putNumber("Raw Right Motor Position", getRCoralPosition());
     // This method will be called once per scheduler run
   }
 }

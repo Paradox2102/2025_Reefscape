@@ -31,8 +31,6 @@ public class AlgaeSubsystem extends SubsystemBase {
   private static final double k_intakePositionDegrees = 0;
   private static final double k_outtakePositionDegrees = 0;
 
-  private double m_rollerPower = 0;
-
   private static final PIDController m_pivotPID = new PIDController(1, 0, 0);
 
   private RelativeEncoder m_algaeEncoder = m_pivotMotor.getEncoder();
@@ -58,21 +56,21 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   public Command intake() {
     return Commands.run(() -> {
-      m_rollerPower = k_intakePower;
+      m_rollerMotor.set(k_intakePower);
       m_pivotPID.setSetpoint(k_intakePositionDegrees);
     }, this);
   }
 
   public Command outtake() {
     return Commands.run(() -> {
-      m_rollerPower = k_outtakePower;
+      m_rollerMotor.set(k_outtakePower);
       m_pivotPID.setSetpoint(k_outtakePositionDegrees);
     }, this);
   }
 
   public Command reset() {
     return Commands.run(() -> {
-      m_rollerPower = k_holdAlgaePower;
+      m_rollerMotor.set(k_holdAlgaePower);
       m_pivotPID.setSetpoint(k_resetPositionDegrees);
     }, this);
   }
@@ -83,6 +81,5 @@ public class AlgaeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     double power = MathUtil.applyDeadband(m_pivotPID.calculate(getPivotPosition()), .1);
     m_pivotMotor.set(power);
-    m_rollerMotor.set(m_rollerPower);
   }
 }
