@@ -9,6 +9,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 
@@ -27,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
+  private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
+
   private PhotonCamera m_camera1 = new PhotonCamera("camera1");
   //private PhotonCamera m_camera2 = new PhotonCamera("camera2");
   //private PhotonCamera m_alignCamera = new PhotonCamera("align");
@@ -56,9 +59,11 @@ public class RobotContainer {
     m_driveSubsystem.setDefaultCommand(new DriveCommand(
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
-      m_driverController::getRightX, 
-      m_driverController.leftBumper()));
-    // m_driverController.y().whileTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));
+      m_driverController::getRightX));
+    m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
+
+    m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
+    m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
   }
 
   /**

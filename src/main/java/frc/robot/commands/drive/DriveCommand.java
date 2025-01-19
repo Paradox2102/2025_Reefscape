@@ -4,13 +4,10 @@
 
 package frc.robot.commands.drive;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -24,12 +21,11 @@ public class DriveCommand extends Command {
   private boolean m_slowmode;
 
   // ArcadeDrive is a means to control a differential drive, so this class is misnamed. -Gavin
-  public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot, Trigger slowmode) {
+  public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot) {
     m_subsystem = driveSubsystem;
     m_getX = getX;
     m_getY = getY;
     m_getRot = getRot;
-    m_slowmode = slowmode.getAsBoolean();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
