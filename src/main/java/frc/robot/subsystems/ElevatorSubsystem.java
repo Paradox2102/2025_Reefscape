@@ -77,13 +77,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public Command goToPosition() {
-    return Commands.run(() -> {
+    return Commands.runOnce(() -> {
       m_PID.setReference(m_position.heightInches(), ControlType.kPosition);
     }, this);
   }
 
   public Command resetPosition() {
-    return Commands.run(() -> {
+    return Commands.runOnce(() -> {
       m_PID.setReference(0, ControlType.kPosition);
     }, this);
   }

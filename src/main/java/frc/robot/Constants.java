@@ -11,7 +11,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 
@@ -186,20 +185,20 @@ public final class Constants {
       }
     }
 
-    public static final class Pivot {
-      public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
+    public static final class Climber {
+      public static final SparkMaxConfig config = new SparkMaxConfig();
 
-      public static SparkMaxConfig coastPivotConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastConfig = new SparkMaxConfig();
 
       static {
 
-        pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-          pivotConfig.absoluteEncoder
+        config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+          config.absoluteEncoder
               .positionConversionFactor(0)
               .velocityConversionFactor(0);
-        coastPivotConfig = pivotConfig;
+        coastConfig = config;
 
-        coastPivotConfig.idleMode(IdleMode.kCoast);
+        coastConfig.idleMode(IdleMode.kCoast);
       }
     }
 

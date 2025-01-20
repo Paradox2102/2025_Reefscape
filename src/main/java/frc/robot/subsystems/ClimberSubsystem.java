@@ -26,7 +26,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void setBrakeMode(boolean brake) {
     // m_pivotMotor.setIdleMode(brake? IdleMode.kBrake : IdleMode.kCoast);
-    m_pivotMotor.configure((brake ? MotorConfigs.Pivot.pivotConfig : MotorConfigs.Pivot.coastPivotConfig), ResetMode.kResetSafeParameters,
+    m_pivotMotor.configure((brake ? MotorConfigs.Climber.config : MotorConfigs.Climber.coastConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
   }
 

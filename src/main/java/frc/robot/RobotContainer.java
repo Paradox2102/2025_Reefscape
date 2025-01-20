@@ -65,11 +65,7 @@ public class RobotContainer {
       m_driverController::getLeftY, 
       m_driverController::getRightX));
     m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
-    m_coralOuttakeSubsystem.setDefaultCommand(
-      m_coralOuttakeSubsystem.intakeCoral()
-       .unless(m_coralOuttakeSubsystem.hasCoral)
-       .andThen(m_coralOuttakeSubsystem.stop())
-    );
+    m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
     m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
 
@@ -78,10 +74,7 @@ public class RobotContainer {
     m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
 
     // Coral
-    m_driverController.rightBumper().onTrue(
-      m_coralOuttakeSubsystem.ejectCoral()
-      .until(m_coralOuttakeSubsystem.gamePieceStowed.negate())
-    );
+    m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
     m_driverController.rightTrigger().toggleOnTrue(
       new DriveToPosition(m_driveSubsystem, false)
       .until(() -> false/* enter the has game piece condition */)
