@@ -13,7 +13,10 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.MotorConfigs;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -24,13 +27,39 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private RelativeEncoder m_elevatorEncoder = m_elevatorMotor.getEncoder();
 
-  //btw the positions are fixed 
+  private ElevatorPosition m_position = ElevatorPosition.L1;
+
+  private static final double k_deadzoneInches = 0;
+
+  public Trigger atPosition = new Trigger(
+    () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
+
+  private enum ElevatorPosition {
+    L4(0),
+    L3(0),
+    L2(0),
+    L1(0);
+
+    private double m_heightInches;
+    ElevatorPosition(double heightInches) {
+      m_heightInches = heightInches;
+    }
+
+    public double heightInches() {
+      return m_heightInches;
+    }
+
+  }
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     m_elevatorMotor.configure(MotorConfigs.Elevator.elevatorConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
     m_PID = m_elevatorMotor.getClosedLoopController();
+  }
+
+  public void setPosition(ElevatorPosition position) {
+    m_position = position;
   }
 
   public void setBrakeMode(boolean brake) {
@@ -43,13 +72,22 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.set(power);
   }
 
-  public void setPosition(double position) {
-    m_PID.setReference(position, ControlType.kPosition);
-  }
-
   public double getPosition() {
     return m_elevatorEncoder.getPosition();
   }
+
+  public Command goToPosition() {
+    return Commands.run(() -> {
+      m_PID.setReference(m_position.heightInches(), ControlType.kPosition);
+    }, this);
+  }
+
+  public Command resetPosition() {
+    return Commands.run(() -> {
+      m_PID.setReference(0, ControlType.kPosition);
+    }, this);
+  }
+
 
   @Override
   public void periodic() {

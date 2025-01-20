@@ -4,21 +4,32 @@
 
 package frc.robot.commands.driverCommands;
 
+import org.photonvision.PhotonCamera;
+
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveToPosition;
+import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoPlaceOnReef extends SequentialCommandGroup {
   /** Creates a new AutoPlaceOnReef. */
-  public AutoPlaceOnReef(DriveSubsystem driveSubsystem) {
+  public AutoPlaceOnReef(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, PhotonCamera camera) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveToPosition(driveSubsystem, true)
+      new DriveToPosition(driveSubsystem, true),
+      new ParallelCommandGroup(
+        new ApriltagAimCommand(camera, driveSubsystem),
+        elevatorSubsystem.goToPosition().until(elevatorSubsystem.atPosition)
+      ),
+      COSubsystem.ejectCoral().until(COSubsystem.ejectedCoral.negate()),
+      elevatorSubsystem.resetPosition()
     );
   }
 }

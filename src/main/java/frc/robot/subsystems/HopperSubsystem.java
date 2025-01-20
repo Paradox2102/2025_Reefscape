@@ -14,36 +14,27 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorConfigs;
 
-public class ClimberSubsystem extends SubsystemBase {
+public class HopperSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_pivotMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_motor = new SparkFlex(0, MotorType.kBrushless);
 
-  /** Creates a new PivotSubsystem. */
-  public ClimberSubsystem() {
-    m_pivotMotor.configure(MotorConfigs.SwerveModule.drivingConfig, ResetMode.kResetSafeParameters,
+  //absoulte encoder
+
+  /** Creates a new WristSubsystem. */
+  public HopperSubsystem() {
+    m_motor.configure(MotorConfigs.Hopper.config, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }
 
   public void setBrakeMode(boolean brake) {
-    // m_pivotMotor.setIdleMode(brake? IdleMode.kBrake : IdleMode.kCoast);
-    m_pivotMotor.configure((brake ? MotorConfigs.Pivot.pivotConfig : MotorConfigs.Pivot.coastPivotConfig), ResetMode.kResetSafeParameters,
+    m_motor.configure(MotorConfigs.Hopper.config, ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
   }
 
-  public void setPower(double power) {
-    m_pivotMotor.set(power);
-  }
-
-  public Command climb(boolean up) {
+  public Command runHopper() {
     return Commands.run(() -> {
-      setPower(up ? 1 : -1);
-    }, this);
-  }
-
-  public Command stop() {
-    return Commands.run(() -> {
-      setPower(0);
-    }, this);
+      m_motor.set(0.5);
+    });
   }
 
   @Override

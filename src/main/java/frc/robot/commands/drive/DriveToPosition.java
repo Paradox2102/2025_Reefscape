@@ -4,12 +4,9 @@
 
 package frc.robot.commands.drive;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.PositionTrackerPose;
@@ -74,8 +71,7 @@ public class DriveToPosition extends Command {
     xVelocity = Math.abs(m_currentX - m_xPos) < k_deadzoneMeters ? 0 : xVelocity;
     yVelocity = Math.abs(m_currentY - m_yPos) < k_deadzoneMeters ? 0 : yVelocity;
 
-    boolean red = Constants.m_alliance == DriverStation.Alliance.Red;
-    // yVelocity *= red ? -1 : 1;
+    yVelocity *= Constants.States.m_alliance == Alliance.Blue ? -1 : 1;
 
     m_subsystem.drive(xVelocity, yVelocity, rotVelocity, true, true);
   }

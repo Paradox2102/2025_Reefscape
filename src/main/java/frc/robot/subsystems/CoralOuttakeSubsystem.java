@@ -26,6 +26,8 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   private static final double k_intakePower = .5;
   private static final double k_outtakePower = -.5;
 
+  private boolean m_gamePieceStowed = false;
+
   public final Trigger ejectedCoral = new Trigger(
     () -> getCurrentDraw() < k_ejectedCurrent)
     .debounce(.1, DebounceType.kRising);
@@ -33,6 +35,11 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   public final Trigger hasCoral = new Trigger(
     () -> getCurrentDraw() > k_intakeCurrent)
     .debounce(.1, DebounceType.kRising);
+
+  public final Trigger gamePieceStowed = new Trigger(
+    () -> m_gamePieceStowed)
+    .debounce(.1, DebounceType.kRising
+  );
 
   /** Creates a new RollerSubsystem. */
   public CoralOuttakeSubsystem() {
@@ -56,12 +63,14 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   public Command ejectCoral() {
     return Commands.run(() -> {
       setPower(k_outtakePower);
+      m_gamePieceStowed = getCurrentDraw() < k_ejectedCurrent;
     }, this);
   }
 
   public Command intakeCoral() {
     return Commands.run(() -> {
       setPower(k_intakePower);
+      m_gamePieceStowed = getCurrentDraw() > k_intakeCurrent;
     }, this);
   }
 

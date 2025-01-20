@@ -7,13 +7,12 @@ package frc.robot;
 // import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 
 /**
@@ -29,11 +28,13 @@ import edu.wpi.first.wpilibj.DriverStation;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class States {
+    public static Alliance m_alliance = Alliance.Blue;
+  }
+  
   public static class OperatorConstants {
     public static final int k_DriverControllerPort = 0;
   }
-
-    public static DriverStation.Alliance m_alliance = DriverStation.Alliance.Blue;
 
     public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -223,23 +224,44 @@ public final class Constants {
 
     }
 
-    public static final class Wrist {
-      public static final SparkMaxConfig wristConfig = new SparkMaxConfig();
-
-      public static SparkMaxConfig coastWristConfig = new SparkMaxConfig();
+    public static final class Hopper {
+      public static final SparkMaxConfig config = new SparkMaxConfig();
 
       static {
-        wristConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-        wristConfig.absoluteEncoder
+        config.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        config.absoluteEncoder
             .positionConversionFactor(1)
             .velocityConversionFactor(1);
-        coastWristConfig = wristConfig;
-
-        coastWristConfig.idleMode(IdleMode.kCoast);
       }
     }
-    
-    public static final class Algae {
+
+    public static final class CoralOuttake {
+      public static final SparkMaxConfig leftConfig = new SparkMaxConfig();
+      public static final SparkMaxConfig rightConfig = new SparkMaxConfig();
+
+      public static SparkMaxConfig coastLeftConfig = new SparkMaxConfig();
+      public static SparkMaxConfig coastRightConfig = new SparkMaxConfig();
+
+      static {
+        leftConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        leftConfig.absoluteEncoder
+        .positionConversionFactor(1)
+        .velocityConversionFactor(1);
+        coastLeftConfig = leftConfig;
+
+        coastLeftConfig.idleMode(IdleMode.kCoast);
+
+        rightConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        rightConfig.absoluteEncoder
+        .positionConversionFactor(1)
+        .velocityConversionFactor(1);
+        coastRightConfig = rightConfig;
+
+        coastRightConfig.idleMode(IdleMode.kCoast);
+      }
+        }
+        
+        public static final class Algae {
       public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
       public static final SparkMaxConfig rollerConfig = new SparkMaxConfig();
 
