@@ -5,12 +5,20 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.PID.AlgaePIDCommand;
+import frc.robot.commands.PID.CoralPIDCommand;
+import frc.robot.commands.PID.ElevatorPIDCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
+import frc.robot.commands.test.TestAlgae;
+import frc.robot.commands.test.TestCoralOuttake;
+import frc.robot.commands.test.TestElevator;
+import frc.robot.commands.test.TestPivot;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 
 import org.photonvision.PhotonCamera;
@@ -32,6 +40,7 @@ public class RobotContainer {
   private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
   private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
+  private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private PhotonCamera m_camera1 = new PhotonCamera("camera1");
   //private PhotonCamera m_camera2 = new PhotonCamera("camera2");
@@ -64,11 +73,17 @@ public class RobotContainer {
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX));
-    m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
-    m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
+    m_algaeSubsystem.setDefaultCommand(new AlgaePIDCommand(m_algaeSubsystem));
+    m_coralOuttakeSubsystem.setDefaultCommand(new CoralPIDCommand(m_coralOuttakeSubsystem));
     m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
+    m_elevatorSubsystem.setDefaultCommand(new ElevatorPIDCommand(m_elevatorSubsystem));
 
+    //Test
+    m_driverController.a().whileTrue(new TestElevator(m_elevatorSubsystem, 0));
+    m_driverController.b().whileTrue(new TestCoralOuttake(m_coralOuttakeSubsystem, 0));
+    m_driverController.x().whileTrue(new TestPivot(m_algaeSubsystem, 0));
+    m_driverController.y().whileTrue(new TestAlgae(m_algaeSubsystem, 0));
     // Algae
     m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
     m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());

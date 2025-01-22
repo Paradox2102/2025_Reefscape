@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -15,10 +17,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.MotorConfigs;
+import frc.robot.Constants.MotorConfigs.CoralOuttake;
+import frc.robot.Constants.MotorConfigs.Elevator;
 
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_coralLeftMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkClosedLoopController m_PID;
 
   private static final double k_ejectedCurrent = 20;
   private static final double k_intakeCurrent = 20;
@@ -45,8 +50,20 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     PersistMode.kPersistParameters);
   }
 
+  public void configurePID(double F, double P, double I, double D){
+    CoralOuttake.p = P;
+    CoralOuttake.i = I;
+    CoralOuttake.d = D;
+    CoralOuttake.f = F;
+    m_coralLeftMotor.configure(Elevator.elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
   public void setPower(double power) {
     m_coralLeftMotor.set(power);
+  }
+
+  public void test(double speed) {
+    m_PID.setReference(speed, ControlType.kVelocity);
   }
 
   public double getCurrentDraw() {

@@ -207,6 +207,11 @@ public final class Constants {
 
       public static SparkMaxConfig coastElevatorConfig = new SparkMaxConfig();
 
+      public static double p = 0;
+      public static double i = 0;
+      public static double d = 0;
+      public static double f = 0;
+
       static {
         elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
         elevatorConfig.absoluteEncoder
@@ -214,8 +219,7 @@ public final class Constants {
             .velocityConversionFactor(1);
         elevatorConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .pid(0, 0, 0)
-            .outputRange(0, 0);
+            .pidf(p, i, d, f);
         coastElevatorConfig = elevatorConfig;
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
@@ -241,11 +245,18 @@ public final class Constants {
       public static SparkMaxConfig coastLeftConfig = new SparkMaxConfig();
       public static SparkMaxConfig coastRightConfig = new SparkMaxConfig();
 
+      public static double p = 0;
+      public static double i = 0;
+      public static double d = 0;
+      public static double f = 0;
+
       static {
         leftConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
         leftConfig.absoluteEncoder
         .positionConversionFactor(1)
         .velocityConversionFactor(1);
+        leftConfig.closedLoop.
+        pidf(p, i, d, f);
         coastLeftConfig = leftConfig;
 
         coastLeftConfig.idleMode(IdleMode.kCoast);
@@ -254,6 +265,7 @@ public final class Constants {
         rightConfig.absoluteEncoder
         .positionConversionFactor(1)
         .velocityConversionFactor(1);
+        rightConfig.closedLoop.pidf(p, i, d, f);
         coastRightConfig = rightConfig;
 
         coastRightConfig.idleMode(IdleMode.kCoast);
@@ -267,6 +279,11 @@ public final class Constants {
       public static SparkMaxConfig coastAlgaeConfig = new SparkMaxConfig();
       public static SparkMaxConfig coastRoller = new SparkMaxConfig();
 
+      public static double p = 0;
+      public static double i = 0;
+      public static double d = 0;
+      public static double f = 0;
+
       static {
         pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
         pivotConfig.absoluteEncoder
@@ -274,7 +291,6 @@ public final class Constants {
             .velocityConversionFactor(1);
         pivotConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .pid(0, 0, 0)
             .outputRange(0, 0);
         coastAlgaeConfig = pivotConfig;
 
@@ -287,7 +303,7 @@ public final class Constants {
             .velocityConversionFactor(1);
         rollerConfig.closedLoop
              .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-             .pid(0, 0, 0)
+             .pidf(p, i, d, f)
              .outputRange(0, 0);
         coastRoller = rollerConfig;
   

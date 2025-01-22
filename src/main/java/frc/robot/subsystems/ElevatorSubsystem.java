@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.MotorConfigs;
+import frc.robot.Constants.MotorConfigs.Elevator;;
 
 public class ElevatorSubsystem extends SubsystemBase {
   // motor (neo vortex according to co-engineering pres?)
@@ -34,7 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Trigger atPosition = new Trigger(
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
 
-  private enum ElevatorPosition {
+  public enum ElevatorPosition {
     L4(0),
     L3(0),
     L2(0),
@@ -53,7 +53,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
-    m_elevatorMotor.configure(MotorConfigs.Elevator.elevatorConfig, ResetMode.kResetSafeParameters,
+    m_elevatorMotor.configure(Elevator.elevatorConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
     m_PID = m_elevatorMotor.getClosedLoopController();
   }
@@ -63,8 +63,16 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setBrakeMode(boolean brake) {
-    m_elevatorMotor.configure((brake ? MotorConfigs.Elevator.elevatorConfig : MotorConfigs.Elevator.coastElevatorConfig), ResetMode.kResetSafeParameters,
+    m_elevatorMotor.configure((brake ? Elevator.elevatorConfig : Elevator.coastElevatorConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
+  }
+
+  public void configurePID(double F, double P, double I, double D){
+    Elevator.p = P;
+    Elevator.i = I;
+    Elevator.d = D;
+    Elevator.f = F;
+    m_elevatorMotor.configure(Elevator.elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
 
@@ -80,6 +88,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Commands.runOnce(() -> {
       m_PID.setReference(m_position.heightInches(), ControlType.kPosition);
     }, this);
+  }
+
+  public Command test(double height) {
+    return Commands.runOnce(() -> m_PID.setReference(height, ControlType.kPosition), this);
   }
 
   public Command resetPosition() {

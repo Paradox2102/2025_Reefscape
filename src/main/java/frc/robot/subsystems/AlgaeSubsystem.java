@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -16,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.MotorConfigs;
+import frc.robot.Constants.MotorConfigs.Algae;
 
 public class AlgaeSubsystem extends SubsystemBase {
   // motor
@@ -31,23 +33,36 @@ public class AlgaeSubsystem extends SubsystemBase {
   private static final double k_intakePositionDegrees = 0;
   private static final double k_outtakePositionDegrees = 0;
 
-  private static final PIDController m_pivotPID = new PIDController(1, 0, 0);
+  private double k_balanceAngle = 0;
+  private double k_f = 0;
+
+  private static final PIDController m_pivotPID = new PIDController(0, 0, 0);
+  private SparkClosedLoopController m_rollerPID;
 
   private RelativeEncoder m_algaeEncoder = m_pivotMotor.getEncoder();
 
   /** Creates a new RollerSubsystem. */
   public AlgaeSubsystem() {
-    m_pivotMotor.configure(MotorConfigs.Algae.pivotConfig, ResetMode.kResetSafeParameters,
+    m_pivotMotor.configure(Algae.pivotConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+    m_rollerPID = m_pivotMotor.getClosedLoopController();
   }
 
   public void setBrakeMode(boolean brake) {
-    m_pivotMotor.configure((brake ? MotorConfigs.Algae.pivotConfig : MotorConfigs.Algae.coastAlgaeConfig), ResetMode.kResetSafeParameters,
+    m_pivotMotor.configure((brake ? Algae.pivotConfig : Algae.coastAlgaeConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
   }
 
   public void setPower(double power) {
     m_pivotMotor.set(power);
+  }
+
+  public void testRoller(double speed){
+    m_rollerPID.setReference(speed, ControlType.kVelocity);
+  }
+
+  public void testPivot(double pos){
+    m_pivotPID.setSetpoint(pos);
   }
 
   public double getPivotPosition() {
@@ -75,11 +90,24 @@ public class AlgaeSubsystem extends SubsystemBase {
     }, this);
   }
 
+  public void configurePID(double rollerF, double rollerP, double rollerI, double rollerD, double pivotF, double pivotP, double pivotI, double pivotD){
+    Algae.p = rollerP;
+    Algae.i = rollerI;
+    Algae.d = rollerD;
+    Algae.f = rollerF;
+    m_pivotPID.setPID(pivotP, pivotI, pivotD);
+    k_f = pivotF;
+    m_rollerMotor.configure(Algae.rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Raw Algae Position", getPivotPosition());
     // This method will be called once per scheduler run
-    double power = MathUtil.applyDeadband(m_pivotPID.calculate(getPivotPosition()), .1);
-    m_pivotMotor.set(power);
+    double currentAngle = getPivotPosition();
+    double feedForward = Math.sin(Math.toRadians(currentAngle - k_balanceAngle)) * k_f;
+      // might fix floor slamming problem
+    feedForward += MathUtil.applyDeadband(m_pivotPID.calculate(currentAngle), .05);
+    m_pivotMotor.set(feedForward);
   }
 }
