@@ -34,7 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Trigger atPosition = new Trigger(
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
 
-  private enum ElevatorPosition {
+  public enum ElevatorPosition {
     L4(0),
     L3(0),
     L2(0),
