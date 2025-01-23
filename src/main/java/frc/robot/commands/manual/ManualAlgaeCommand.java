@@ -40,7 +40,7 @@ public class ManualAlgaeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setPoint(m_position.getAsDouble());
+    m_subsystem.setPoint(m_subsystem.getPivotPosition());
   }
 
   // Returns true when the command should end.
