@@ -50,6 +50,10 @@ public class AlgaeSubsystem extends SubsystemBase {
     m_pivotMotor.set(power);
   }
 
+  public void setPoint(double pos) {
+    m_pivotPID.setSetpoint(pos);
+  }
+
   public double getPivotPosition() {
     return m_algaeEncoder.getPosition();
   }

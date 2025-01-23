@@ -62,6 +62,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_position = position;
   }
 
+  public void setPoint(double pos) {
+    m_elevatorEncoder.setPosition(pos);
+    m_PID.setReference(pos, ControlType.kPosition);
+  }
+
   public void setBrakeMode(boolean brake) {
     m_elevatorMotor.configure((brake ? MotorConfigs.Elevator.elevatorConfig : MotorConfigs.Elevator.coastElevatorConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
