@@ -28,10 +28,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
-  private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
-  private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
-  private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
+  // private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
+  // private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
+  // private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  // private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
 
   private PhotonCamera m_camera1 = new PhotonCamera("camera1");
   //private PhotonCamera m_camera2 = new PhotonCamera("camera2");
@@ -64,25 +64,25 @@ public class RobotContainer {
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX));
-    m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
-    m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
-    m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
-    m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
+    // m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
+    // m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
+    // m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
+    // m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
 
     // Algae
-    m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
-    m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
+    // m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
+    // m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
 
     // Coral
-    m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
+    //m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
     m_driverController.rightTrigger().toggleOnTrue(
       new DriveToPosition(m_driveSubsystem, false)
       .until(() -> false/* enter the has game piece condition */)
     );
 
     // Climb
-    m_driverController.a().whileTrue(m_climberSubsystem.climb(false));
-    m_driverController.b().whileTrue(m_climberSubsystem.climb(true));
+    // m_driverController.a().whileTrue(m_climberSubsystem.climb(false));
+    // m_driverController.b().whileTrue(m_climberSubsystem.climb(true));
       
   }
 

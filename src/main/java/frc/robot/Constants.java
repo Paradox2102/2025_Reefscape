@@ -47,21 +47,21 @@ public final class Constants {
     public static final double k_BLChassisAngularOffset = Math.PI;
     public static final double k_BRChassisAngularOffset = Math.PI / 2;
 
-    public static double k_FLOffset = 0 + k_FLChassisAngularOffset;
-    public static double k_FROffset = 0 + k_FRChassisAngularOffset;
-    public static double k_BLOffset = 0 + k_BLChassisAngularOffset;
-    public static double k_BROffset = 0 + k_BRChassisAngularOffset;
+    public static double k_FLOffset = 4.309 + k_FLChassisAngularOffset;
+    public static double k_FROffset = 4.193 + k_FRChassisAngularOffset;
+    public static double k_BLOffset = 2.097 + k_BLChassisAngularOffset;
+    public static double k_BROffset = 6.239 + k_BRChassisAngularOffset;
 
     // SPARK MAX CAN IDs
-    public static final int k_FRTurningMotor = 16;
-    public static final int k_FLTurningMotor = 10;
-    public static final int k_BRTurningMotor = 18;
-    public static final int k_BLTurningMotor = 12;
+    public static final int k_FRTurningMotor = 2;
+    public static final int k_FLTurningMotor = 4;
+    public static final int k_BRTurningMotor = 6;
+    public static final int k_BLTurningMotor = 8;
 
-    public static final int k_FRDriveMotor = 17;
-    public static final int k_FLDriveMotor = 11;
-    public static final int k_BRDriveMotor = 19;
-    public static final int k_BLDriveMotor = 13;
+    public static final int k_FRDriveMotor = 1;
+    public static final int k_FLDriveMotor = 3;
+    public static final int k_BRDriveMotor = 5;
+    public static final int k_BLDriveMotor = 7;
 
     public static final double k_driveDeadband = 0.1;
 
@@ -99,7 +99,7 @@ public final class Constants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
     // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
     // more teeth will result in a robot that drives faster).
-    public static final int k_DrivingMotorPinionTeeth = 14;
+    public static final int k_DrivingMotorPinionTeeth = 12;
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double k_DrivingMotorFreeSpeedRps = 6784 / 60;
@@ -113,22 +113,22 @@ public final class Constants {
   }
 
   public static final class PivotConstants {
-    public static final int k_pivotMotor = 0;
+    public static final int k_pivotMotor = 9;
   }
   
   public static final class RollerConstants {
-    public static final int k_LcoralMotor = 0;
-    public static final int k_RcoralMotor = 0;
+    public static final int k_LcoralMotor = 12;
+    public static final int k_RcoralMotor = 13;
 
-    public static final int k_algaeMotor = 0;
+    public static final int k_algaeMotor = 10;
   }
 
   public static final class ElevatorConstants {
-    public static final int k_elevatorMotor = 0;
+    public static final int k_elevatorMotor = 11;
   }
 
   public static final class WristConstants {
-    public static final int k_wristMotor = 0;
+    public static final int k_wristMotor = 14;
   }
 
 
