@@ -32,9 +32,9 @@ import java.util.function.BooleanSupplier;
 public class DriveSubsystem extends SubsystemBase {
 
   private FieldPosition m_reefPosition = FieldPosition.ONE;
-  private FieldPosition m_source = FieldPosition.SOURCE_RED;
+  private FieldPosition m_source = FieldPosition.SOURCE_RIGHT;
 
-  private enum FieldPosition {
+  public enum FieldPosition {
     // blue alliance
     ONE(new Pose2d(new Translation2d(5.81, 3.86), Rotation2d.fromDegrees(180))),
     TWO(new Pose2d(new Translation2d(5.27, 2.98), Rotation2d.fromDegrees(120))),
@@ -48,8 +48,8 @@ public class DriveSubsystem extends SubsystemBase {
     TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120))),
     ELEVEN(new Pose2d(new Translation2d(5.27, 5.09), Rotation2d.fromDegrees(-120))),
     TWELVE(new Pose2d(new Translation2d(5.81, 4.17), Rotation2d.fromDegrees(180))),
-    SOURCE_RED(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(127.5))),
-    SOURCE_BLUE(new Pose2d(new Translation2d(1.7, .65), new Rotation2d(-127.5)));
+    SOURCE_RIGHT(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(127.5))),
+    SOURCE_LEFT(new Pose2d(new Translation2d(1.7, .65), new Rotation2d(-127.5)));
 
     private Pose2d m_targetPos;
 

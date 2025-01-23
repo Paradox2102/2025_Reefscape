@@ -7,15 +7,23 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
+import frc.robot.commands.operatorCommands.SetElevatorPos;
+import frc.robot.commands.operatorCommands.SetReefPos;
+import frc.robot.commands.operatorCommands.SetSourcePos;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.DriveSubsystem.FieldPosition;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
+import frc.robot.robotControl.RobotControl;
 
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -28,10 +36,36 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  // private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
-  // private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
-  // private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
-  // private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
+  private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
+  private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
+  private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
+  private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+
+  private final RobotControl m_robotControl = new RobotControl();
+  
+  private final Trigger m_L1 = new Trigger(()->m_robotControl.checkButton(1));
+  private final Trigger m_L2 = new Trigger(()->m_robotControl.checkButton(2));
+  private final Trigger m_L3 = new Trigger(()->m_robotControl.checkButton(3));
+  private final Trigger m_L4 = new Trigger(()->m_robotControl.checkButton(4));
+
+  private final Trigger m_reef1 = new Trigger(()->m_robotControl.checkButton(5));
+  private final Trigger m_reef2 = new Trigger(()->m_robotControl.checkButton(6));
+  private final Trigger m_reef3 = new Trigger(()->m_robotControl.checkButton(7));
+  private final Trigger m_reef4 = new Trigger(()->m_robotControl.checkButton(8));
+  private final Trigger m_reef5 = new Trigger(()->m_robotControl.checkButton(9));
+  private final Trigger m_reef6 = new Trigger(()->m_robotControl.checkButton(10));
+  private final Trigger m_reef7 = new Trigger(()->m_robotControl.checkButton(11));
+  private final Trigger m_reef8 = new Trigger(()->m_robotControl.checkButton(12));
+  private final Trigger m_reef9 = new Trigger(()->m_robotControl.checkButton(13));
+  private final Trigger m_reef10 = new Trigger(()->m_robotControl.checkButton(14));
+  private final Trigger m_reef11 = new Trigger(()->m_robotControl.checkButton(15));
+  private final Trigger m_reef12 = new Trigger(()->m_robotControl.checkButton(16));
+
+  private final Trigger m_leftSource = new Trigger(()->m_robotControl.checkButton(17));
+  private final Trigger m_rightSource = new Trigger(()->m_robotControl.checkButton(18));
+
+  private final Trigger m_win = new Trigger(()->m_robotControl.checkButton(19));
 
   private PhotonCamera m_camera1 = new PhotonCamera("camera1");
   //private PhotonCamera m_camera2 = new PhotonCamera("camera2");
@@ -81,9 +115,36 @@ public class RobotContainer {
     );
 
     // Climb
-    // m_driverController.a().whileTrue(m_climberSubsystem.climb(false));
-    // m_driverController.b().whileTrue(m_climberSubsystem.climb(true));
-      
+    m_driverController.a().whileTrue(m_climberSubsystem.climb(false));
+    m_driverController.b().whileTrue(m_climberSubsystem.climb(true));
+
+    // Operator UI Controls
+    // Elevator Position
+    m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
+    m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
+    m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
+    m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
+
+    // Reef Position
+    m_reef1.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.ONE));
+    m_reef2.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TWO));
+    m_reef3.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.THREE));
+    m_reef4.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.FOUR));
+    m_reef5.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.FIVE));
+    m_reef6.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.SIX));
+    m_reef7.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.SEVEN));
+    m_reef8.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.EIGHT));
+    m_reef9.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.NINE));
+    m_reef10.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TEN));
+    m_reef11.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.ELEVEN));
+    m_reef12.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TWELVE));
+
+    // Choose Source
+    m_leftSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_LEFT));
+    m_rightSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_RIGHT));
+
+    // Win Button!!!
+    m_win.onTrue(new InstantCommand());
   }
 
   /**
