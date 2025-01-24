@@ -114,21 +114,64 @@ public final class Constants {
 
   public static final class PivotConstants {
     public static final int k_pivotMotor = 9;
+    
+    public static final double k_p = 0;
+    public static final double k_i = 0;
+    public static final double k_d = 0;
+    public static final double k_f = 0;
+    public static final double k_ticksToDegrees = 1;
   }
   
   public static final class RollerConstants {
     public static final int k_LcoralMotor = 12;
     public static final int k_RcoralMotor = 13;
+    
+    public static final double k_coralP = 0;
+    public static final double k_coralI = 0;
+    public static final double k_coralD = 0;
+    public static final double k_coralF = 0;
+    public static final double k_coralTicksToDegrees = 1;
 
     public static final int k_algaeMotor = 10;
+    
+    public static final double k_algaeP = 0;
+    public static final double k_algaeI = 0;
+    public static final double k_algaeD = 0;
+    public static final double k_algaeF = 0;
+    public static final double k_algaeTicksToDegrees = 1;
+
+    public static final int k_hopperMotor = 0;
   }
 
   public static final class ElevatorConstants {
     public static final int k_elevatorMotor = 11;
+    
+    public static final double k_p = 0;
+    public static final double k_i = 0;
+    public static final double k_d = 0;
+    public static final double k_f = 0;
+    public static final double k_ticksToInches = 1;
   }
 
   public static final class WristConstants {
     public static final int k_wristMotor = 14;
+
+    public static final double k_p = 0;
+    public static final double k_i = 0;
+    public static final double k_d = 0;
+    public static final double k_f = 0;
+    public static final double k_ticksToDegrees = 1;
+  }
+
+  public static final class ClimberConstants{
+    public static final int k_climberMotor = 16;
+    public static final int k_climberFollower = 17;
+
+    public static final double k_p = 0;
+    public static final double k_i = 0;
+    public static final double k_d = 0;
+    public static final double k_f = 0;
+    public static final double k_ticksToDegrees = 1;
   }
 
 
@@ -187,18 +230,27 @@ public final class Constants {
 
     public static final class Climber {
       public static final SparkMaxConfig config = new SparkMaxConfig();
+      public static SparkMaxConfig followConfig = new SparkMaxConfig();
 
       public static SparkMaxConfig coastConfig = new SparkMaxConfig();
+      public static SparkMaxConfig fcConfig = new SparkMaxConfig();
 
       static {
 
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
           config.absoluteEncoder
-              .positionConversionFactor(0)
-              .velocityConversionFactor(0);
-        coastConfig = config;
+              .positionConversionFactor(ClimberConstants.k_ticksToDegrees)
+              .velocityConversionFactor(ClimberConstants.k_ticksToDegrees);
+        config.closedLoop
+          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+          .pidf(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d, ClimberConstants.k_f);
+        followConfig = config;
+        followConfig.follow(ClimberConstants.k_climberMotor);
 
+
+        coastConfig = config;
         coastConfig.idleMode(IdleMode.kCoast);
+        fcConfig.follow(ClimberConstants.k_climberMotor);
       }
     }
 
@@ -210,12 +262,11 @@ public final class Constants {
       static {
         elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
         elevatorConfig.absoluteEncoder
-            .positionConversionFactor(1)
-            .velocityConversionFactor(1);
+            .positionConversionFactor(ElevatorConstants.k_ticksToInches)
+            .velocityConversionFactor(ElevatorConstants.k_ticksToInches);
         elevatorConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .pid(0, 0, 0)
-            .outputRange(0, 0);
+            .pidf(ElevatorConstants.k_p, ElevatorConstants.k_i, ElevatorConstants.k_d, ElevatorConstants.k_f);
         coastElevatorConfig = elevatorConfig;
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
@@ -244,16 +295,16 @@ public final class Constants {
       static {
         leftConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
         leftConfig.absoluteEncoder
-        .positionConversionFactor(1)
-        .velocityConversionFactor(1);
+        .positionConversionFactor(RollerConstants.k_coralTicksToDegrees)
+        .velocityConversionFactor(RollerConstants.k_coralTicksToDegrees);
         coastLeftConfig = leftConfig;
 
         coastLeftConfig.idleMode(IdleMode.kCoast);
 
         rightConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
         rightConfig.absoluteEncoder
-        .positionConversionFactor(1)
-        .velocityConversionFactor(1);
+        .positionConversionFactor(RollerConstants.k_coralTicksToDegrees)
+        .velocityConversionFactor(RollerConstants.k_coralTicksToDegrees);
         coastRightConfig = rightConfig;
 
         coastRightConfig.idleMode(IdleMode.kCoast);
@@ -270,12 +321,8 @@ public final class Constants {
       static {
         pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
         pivotConfig.absoluteEncoder
-            .positionConversionFactor(1)
-            .velocityConversionFactor(1);
-        pivotConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .pid(0, 0, 0)
-            .outputRange(0, 0);
+            .positionConversionFactor(PivotConstants.k_ticksToDegrees)
+            .velocityConversionFactor(PivotConstants.k_ticksToDegrees);
         coastAlgaeConfig = pivotConfig;
 
         coastAlgaeConfig.idleMode(IdleMode.kCoast);
@@ -283,12 +330,11 @@ public final class Constants {
 
         rollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
         rollerConfig.absoluteEncoder
-            .positionConversionFactor(1)
-            .velocityConversionFactor(1);
+            .positionConversionFactor(RollerConstants.k_algaeTicksToDegrees)
+            .velocityConversionFactor(RollerConstants.k_algaeTicksToDegrees);
         rollerConfig.closedLoop
              .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-             .pid(0, 0, 0)
-             .outputRange(0, 0);
+             .pid(RollerConstants.k_algaeP, RollerConstants.k_algaeI, RollerConstants.k_algaeD);
         coastRoller = rollerConfig;
   
         coastRoller.idleMode(IdleMode.kCoast);

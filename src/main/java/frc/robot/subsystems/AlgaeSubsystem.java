@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorConfigs;
+import frc.robot.Constants.PivotConstants;
 
 public class AlgaeSubsystem extends SubsystemBase {
   // motor
@@ -31,7 +32,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   private static final double k_intakePositionDegrees = 0;
   private static final double k_outtakePositionDegrees = 0;
 
-  private static final PIDController m_pivotPID = new PIDController(1, 0, 0);
+  private static final PIDController m_pivotPID = new PIDController(PivotConstants.k_p, PivotConstants.k_i, PivotConstants.k_d);
 
   private RelativeEncoder m_algaeEncoder = m_pivotMotor.getEncoder();
 

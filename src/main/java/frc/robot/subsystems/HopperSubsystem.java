@@ -12,11 +12,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorConfigs;
 
 public class HopperSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_motor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_motor = new SparkFlex(Constants.RollerConstants.k_hopperMotor, MotorType.kBrushless);
 
   //absoulte encoder
 
