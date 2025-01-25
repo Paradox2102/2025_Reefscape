@@ -173,8 +173,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_backLeft.getPosition(), m_backRight.getPosition() };
   }
 
-  // Any interface that takes or receives an angle should be using Rotation2d.
-  // This protects us from confusing degrees and radians. - Gavin
+  // FIXME: Any interface that takes or receives an angle should be using Rotation2d.This protects us from confusing degrees and radians. - Gavin
   public double orientPID(double setpoint) {
     double heading = getHeadingInDegrees();
     double rot = m_orientPID.calculate(heading, setpoint);
@@ -182,6 +181,7 @@ public class DriveSubsystem extends SubsystemBase {
     // rot += (Constants.DriveConstants.k_rotateF * Math.signum(rot));
     // return Math.abs(heading) < Constants.DriveConstants.k_rotateDeadzone ? 0
     // : rot;
+    // FIXME: Should use MathUtil.clamp here. - Gavin
     rot = Math.abs(rot) > Constants.DriveConstants.k_maxRotInput
         ? Constants.DriveConstants.k_maxRotInput * Math.signum(rot)
         : rot;
@@ -251,6 +251,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     double yaw = ParadoxField.normalizeAngle(m_gyro.getYaw().getValueAsDouble());
     if (m_setGyroZero) {
+      // FIXME: I think this calculation is wrong becauuse it neglects that fact that yaw is clockwise positive. Also, we shouldn't be trying to zero the gyro ourselves, as the PoseEstimator already takes care of this. And it's unsed.  - Gavin
       m_gyroZero = ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw);
       m_setGyroZero = false;
     }
@@ -260,6 +261,10 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro", yaw);
     SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw));
     SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
+
+    // FIXME: This code might be simpler as something like:
+    // m_futurePos = currentPos.exp(chassisSpeed.toTwist2d(k_lookAheadTimeSeconds));
+    // - Gavin
 
     double currentY = currentPos.getY();
     double currentX = currentPos.getX();
@@ -330,6 +335,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
+    // FIXME: See comment in setXYAngle. We should be passing in a Pose2d. - Gavin
     m_tracker.setXYAngle(pose.getX(), pose.getY(), pose.getRotation().getDegrees());
   }
 
@@ -504,6 +510,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
+  // FIXME: This is a bad idea. We should not offer this method. Also, it is unused. - Gavin
   public void resetEncoders() {
     m_frontLeft.resetEncoders();
     m_backLeft.resetEncoders();
@@ -512,7 +519,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /** Zeroes the heading of the robot. */
+  // FIXME: Zeroes? No indication of angle units; should have been Rotation2d. Also, unused, so let's just get rid of it. - Gavin
   public void setHeading(double angle) {
+    // See note that we we should be passing in a Pose2d here. - Gavin
     m_tracker.setXYAngle(m_tracker.getPose2d().getX(),
         m_tracker.getPose2d().getY(), angle);
   }
@@ -522,6 +531,7 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
+  // FIXME: This should return a Rotation2d. - Gavin
   public double getHeadingInDegrees() {
     double angle = m_tracker.getPose2d().getRotation().getDegrees();
     return ParadoxField.normalizeAngle(angle);

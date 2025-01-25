@@ -36,23 +36,12 @@ public class PositionTrackerPose {
                              DriveSubsystem driveSubsystem, PhotonCamera camera1) {
     super();
     m_driveSubsystem = driveSubsystem;
+    // Let's have arrays of cameras and estimators, please. Much easier to update when we change the number of cameras. Same with their names and transforms. -Gavin
     m_camera1 = camera1;
     //m_camera2 = camera2;
     m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
     m_photon1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     //m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
-    // For the extended constructor, the default values are:
-    // VecBuilder.fill(0.02, 0.02, 0.01) - SD of internal state
-    // VecBuilder.fill(0.1, 0.1, 0.1)) - SD of vision pose measurment
-    // Based on the experiments performed on 2023-03-17 Friday, the vison pose
-    // estimates (in metres, metres, radians) should be between:
-    // env vs cam: 0.038299922 0.03770631627 0.01169028658
-    // est vs cam: 0.01801886372 0.01776299463 0.007439846418
-    // As these are significantly lower than the defaults, using them would make
-    // us trust the camera more. Slicing the data by distance, I see a stong
-    // linear relationship between distance and SD for all of X, Y, and angle,
-    // but at the maximum distance the errors are still less than the default.
-    // -Gavin
 
     m_poseEstimator = new SwerveDrivePoseEstimator(
         m_driveSubsystem.getSwerve(), m_driveSubsystem.getGyroRotation2d(),
@@ -66,17 +55,14 @@ public class PositionTrackerPose {
 
   public Pose2d getPose2d() { return m_poseEstimator.getEstimatedPosition(); }
 
-  // BUG: The third parameter to resetPosition should use the estimated position
-  // angle, not the gyro angle.  This function should take a Pose2d (estimated
-  // position) and a Rotation2d (gyro angle) and use them to reset the position.
-  // Alternatively, it could take just a Pose2d because we already have access
-  // to the drive subsystem. These wrapper types are supposed to make this kind
-  // of bug less likely, but constantly converting into and out of them defeats
-  // the purpose.  -Gavin
   public void setXYAngle(double x, double y, double angleInDegrees) {
     m_poseEstimator.resetPosition(
+        // FIXME: This code is crazy. It should just be: 
+        // m_driveSubsystem.getGyro().getRotation2d() 
+        // -Gavin
         Rotation2d.fromDegrees(-m_driveSubsystem.getGyro().getYaw().getValueAsDouble()),
         m_driveSubsystem.getModulePosition(),
+        // FIXME: It would be much better to have this method take a Pose2d. -Gavin
         new Pose2d(x, y, Rotation2d.fromDegrees(angleInDegrees)));
     System.out.println("pose2d " + getPose2d());
   }
@@ -94,10 +80,12 @@ public class PositionTrackerPose {
 
   public void update() {
     m_photon1.setReferencePose(getPose2d());
+    // FIXME: The getLatestResult() method is deprecated. If we used getAllUnreadResults() instead, we wouldn't need to store and check the timestamp. -Gavin
     PhotonPipelineResult camera1Result = m_camera1.getLatestResult();
     //PhotonPipelineResult camera2Result = m_camera2.getLatestResult();
     if(camera1Result.hasTargets() && camera1Result.getTimestampSeconds() != m_timestamp1){
       //System.out.println(m_photon1.update(camera1Result).isPresent());
+      // Probably doesn't matter much, but better to get the timestamp from the estimated pose, not the camera result. -Gavin
       m_poseEstimator.addVisionMeasurement(
         m_photon1.update(camera1Result).get().estimatedPose.toPose2d(), 
         camera1Result.getTimestampSeconds());

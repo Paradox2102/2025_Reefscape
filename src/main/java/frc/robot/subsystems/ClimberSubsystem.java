@@ -16,6 +16,7 @@ import frc.robot.Constants.MotorConfigs;
 
 public class ClimberSubsystem extends SubsystemBase {
   // motor
+  // FIXME: Need to add constant here. -Gavin
   private SparkFlex m_pivotMotor = new SparkFlex(0, MotorType.kBrushless);
 
   /** Creates a new PivotSubsystem. */
@@ -34,13 +35,16 @@ public class ClimberSubsystem extends SubsystemBase {
     m_pivotMotor.set(power);
   }
 
+  // FIXME: Should use constants here. -Gavin
   public Command climb(boolean up) {
+    // FIXME: Why not runOnce? -Gavin
     return Commands.run(() -> {
       setPower(up ? 1 : -1);
     }, this);
   }
 
   public Command stop() {
+    // FIXME: Why not runOnce? -Gavin
     return Commands.run(() -> {
       setPower(0);
     }, this);

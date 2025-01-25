@@ -44,6 +44,7 @@ public class RobotContainer {
 
   private final RobotControl m_robotControl = new RobotControl();
   
+  // Triggers are self-registering. It's not necessary to store them in a variable if you're only using them once. Putting the button binding next to the command binding might make the code easier to read because you can more easily see what command each button is connected to. -Gavin
   private final Trigger m_L1 = new Trigger(()->m_robotControl.checkButton(1));
   private final Trigger m_L2 = new Trigger(()->m_robotControl.checkButton(2));
   private final Trigger m_L3 = new Trigger(()->m_robotControl.checkButton(3));
@@ -126,6 +127,7 @@ public class RobotContainer {
     m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
 
     // Reef Position
+    // FIXME: What is this number business? Given that FIRST has officially named the reef branches A-L, it would be much better to use those names. -Gavin
     m_reef1.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.ONE));
     m_reef2.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TWO));
     m_reef3.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.THREE));
@@ -140,6 +142,7 @@ public class RobotContainer {
     m_reef12.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TWELVE));
 
     // Choose Source
+    // Presumably these are for choosing between the two Coral Stations. I think you're going to want to be able to choose the position within on Coral Station as well. -Gavin
     m_leftSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_LEFT));
     m_rightSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_RIGHT));
 

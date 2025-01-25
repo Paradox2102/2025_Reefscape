@@ -102,6 +102,7 @@ public final class Constants {
     public static final int k_DrivingMotorPinionTeeth = 12;
 
     // Calculations required for driving motor conversion factors and feed forward
+    // FIXME: Integer division!!! -Gavin
     public static final double k_DrivingMotorFreeSpeedRps = 6784 / 60;
     public static final double k_WheelDiameterMeters = 0.0762;
     public static final double k_WheelCircumferenceMeters = k_WheelDiameterMeters * Math.PI;
@@ -176,7 +177,9 @@ public final class Constants {
             // to 10 degrees will go through 0 rather than the other direction which is a
             // longer route.
             .positionWrappingEnabled(true)
+            // FIXME: turningFactor is only coincidentally the right value here because the encoder is in revolutions. With a different encoder, this would be wrong. -Gavin 
             .positionWrappingInputRange(0, turningFactor);
+        // FIXME: This is a bug. Java does not have assignment overloading. This will throw away the existing coastDriveConfig and coastTurnConfig objects and replace them with references to drivingConfig and turningConfig. The idleMode() method then modifies the object in place, so this is not creating a separate config object, but seeting coast mode on all configs. -Gavin
         coastDriveConfig = drivingConfig;
         coastTurnConfig = turningConfig;
         
@@ -194,8 +197,10 @@ public final class Constants {
 
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
           config.absoluteEncoder
+              // FIXME: zero? -Gavin
               .positionConversionFactor(0)
               .velocityConversionFactor(0);
+        // FIXME: Same bug as above. -Gavin
         coastConfig = config;
 
         coastConfig.idleMode(IdleMode.kCoast);
@@ -216,6 +221,7 @@ public final class Constants {
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
             .pid(0, 0, 0)
             .outputRange(0, 0);
+        // FIXME: Same bug as above. -Gavin
         coastElevatorConfig = elevatorConfig;
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
@@ -246,6 +252,7 @@ public final class Constants {
         leftConfig.absoluteEncoder
         .positionConversionFactor(1)
         .velocityConversionFactor(1);
+        // FIXME: Same bug as above. -Gavin
         coastLeftConfig = leftConfig;
 
         coastLeftConfig.idleMode(IdleMode.kCoast);
@@ -276,6 +283,7 @@ public final class Constants {
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
             .pid(0, 0, 0)
             .outputRange(0, 0);
+        // FIXME: Same bug as above. -Gavin
         coastAlgaeConfig = pivotConfig;
 
         coastAlgaeConfig.idleMode(IdleMode.kCoast);
@@ -289,6 +297,7 @@ public final class Constants {
              .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
              .pid(0, 0, 0)
              .outputRange(0, 0);
+        // FIXME: Same bug as above. -Gavin
         coastRoller = rollerConfig;
   
         coastRoller.idleMode(IdleMode.kCoast);

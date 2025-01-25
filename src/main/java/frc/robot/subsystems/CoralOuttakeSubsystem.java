@@ -18,6 +18,7 @@ import frc.robot.Constants.MotorConfigs;
 
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
+  // FIXME: Need to add constant here. Is there a right motor? -Gavin
   private SparkFlex m_coralLeftMotor = new SparkFlex(0, MotorType.kBrushless);
 
   private static final double k_ejectedCurrent = 20;
@@ -26,6 +27,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   private static final double k_intakePower = .5;
   private static final double k_outtakePower = -.5;
 
+  // I'm still unsure that testing against a current level is going to be reliable here. Also, consider using distance travelled instead of a time. We can talk about how to do that in a Trigger. -Gavin
   public final Trigger ejectedCoral = new Trigger(
     () -> getCurrentDraw() < k_ejectedCurrent)
     .debounce(.1, DebounceType.kRising);
@@ -66,6 +68,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   }
 
   public Command stop() {
+    // FIXME: Why not runOnce? You forgot to add the requirement. Better to use Subsyste,runOnce() instead. -Gavin
     return Commands.run(() -> {
       setPower(0);
     });
