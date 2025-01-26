@@ -170,7 +170,7 @@ public final class Constants {
     public static final int k_climberMotor = 16;
     public static final int k_climberFollower = 17;
 
-    public static final double k_p = 0.001;
+    public static final double k_p = 0.1;
     public static final double k_i = 0;
     public static final double k_d = 0;
     public static final double k_f = 0;

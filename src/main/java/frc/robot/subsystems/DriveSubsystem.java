@@ -202,6 +202,8 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
+    SmartDashboard.putNumber("Heading", getHeadingInDegrees());
+
     // SmartDashboard.putNumber("Rotate Error",
     // getRotationDistanceFromTargetError());
     // // Update the odometry in the periodic block
@@ -432,7 +434,7 @@ public class DriveSubsystem extends SubsystemBase {
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(getPose().getRotation().getDegrees() +
+                Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble() + // change this when photonvision
                     (allianceRed.getAsBoolean() ? 180 : 0)))
             : new ChassisSpeeds(-xSpeedDelivered, -ySpeedDelivered,
                 rotDelivered),
@@ -525,14 +527,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_backLeft.resetEncoders();
     m_frontRight.resetEncoders();
     m_backRight.resetEncoders();
-  }
-
-  /** Zeroes the heading of the robot. */
-  // FIXME: Zeroes? No indication of angle units; should have been Rotation2d. Also, unused, so let's just get rid of it. - Gavin
-  public void setHeading(double angle) {
-    // See note that we we should be passing in a Pose2d here. - Gavin
-    m_tracker.setXYAngle(m_tracker.getPose2d().getX(),
-        m_tracker.getPose2d().getY(), angle);
   }
 
   /**
