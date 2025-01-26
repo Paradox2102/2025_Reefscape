@@ -21,6 +21,7 @@ import frc.robot.Constants.PivotConstants;
 
 public class AlgaeSubsystem extends SubsystemBase {
   // motor
+  // FIXME: Need to add constants here. -Gavin
   private SparkFlex m_pivotMotor = new SparkFlex(0, MotorType.kBrushless);
   private SparkFlex m_rollerMotor = new SparkFlex(0, MotorType.kBrushless);
 
@@ -56,6 +57,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public Command intake() {
+    // FIXME: Why not runOnce? -Gavin
     return Commands.run(() -> {
       m_rollerMotor.set(k_intakePower);
       m_pivotPID.setSetpoint(k_intakePositionDegrees);
@@ -63,6 +65,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public Command outtake() {
+    // FIXME: Why not runOnce? -Gavin
     return Commands.run(() -> {
       m_rollerMotor.set(k_outtakePower);
       m_pivotPID.setSetpoint(k_outtakePositionDegrees);
@@ -70,6 +73,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public Command reset() {
+    // FIXME: Why not runOnce? -Gavin
     return Commands.run(() -> {
       m_rollerMotor.set(k_holdAlgaePower);
       m_pivotPID.setSetpoint(k_resetPositionDegrees);

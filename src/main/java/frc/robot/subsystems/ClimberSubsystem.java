@@ -49,13 +49,16 @@ public class ClimberSubsystem extends SubsystemBase {
     m_pid.setReference(degrees, ControlType.kPosition);
   }
 
+  // FIXME: Should use constants here. -Gavin
   public Command climb(boolean up) {
+    // FIXME: Why not runOnce? -Gavin
     return Commands.run(() -> {
       setPower(up ? 90 : 0);
     }, this);
   }
 
   public Command stop() {
+    // FIXME: Why not runOnce? -Gavin
     return Commands.run(() -> {
       setPower(0);
     }, this);

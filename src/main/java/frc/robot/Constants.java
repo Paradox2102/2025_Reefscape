@@ -102,6 +102,7 @@ public final class Constants {
     public static final int k_DrivingMotorPinionTeeth = 12;
 
     // Calculations required for driving motor conversion factors and feed forward
+    // FIXME: Integer division!!! -Gavin
     public static final double k_DrivingMotorFreeSpeedRps = 6784 / 60;
     public static final double k_WheelDiameterMeters = 0.0762;
     public static final double k_WheelCircumferenceMeters = k_WheelDiameterMeters * Math.PI;
@@ -219,7 +220,9 @@ public final class Constants {
             // to 10 degrees will go through 0 rather than the other direction which is a
             // longer route.
             .positionWrappingEnabled(true)
+            // FIXME: turningFactor is only coincidentally the right value here because the encoder is in revolutions. With a different encoder, this would be wrong. -Gavin 
             .positionWrappingInputRange(0, turningFactor);
+        // FIXME: This is a bug. Java does not have assignment overloading. This will throw away the existing coastDriveConfig and coastTurnConfig objects and replace them with references to drivingConfig and turningConfig. The idleMode() method then modifies the object in place, so this is not creating a separate config object, but seeting coast mode on all configs. -Gavin
         coastDriveConfig = drivingConfig;
         coastTurnConfig = turningConfig;
         
