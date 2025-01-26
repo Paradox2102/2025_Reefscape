@@ -143,10 +143,13 @@ public class DriveSubsystem extends SubsystemBase {
     // PathPlannerLogging.setLogActivePathCallback((poses) -> m_field.getObject("path").setPoses(poses));
   }
 
+  // FIXME: This should be a command factory. -Gavin
+  // FIXME: Why don't these methods share an implementation? - Gavin
   public void setReefPosition(FieldPosition position) {
     m_reefPosition = position;
   }
 
+  // FIXME: This should be a command factory. -Gavin
   public void setSource(FieldPosition source) {
     m_source = source;
   }
@@ -173,7 +176,8 @@ public class DriveSubsystem extends SubsystemBase {
         m_backLeft.getPosition(), m_backRight.getPosition() };
   }
 
-  // FIXME: Any interface that takes or receives an angle should be using Rotation2d.This protects us from confusing degrees and radians. - Gavin
+  // FIXME: Any interface that takes or receives an angle should be using Rotation2d. This protects us from confusing degrees and radians. - Gavin
+  // FIXME: This might be better bundled as a method that takes rotation supplier and returns a double supplier. That way it can have its own PIDController. - Gavin
   public double orientPID(double setpoint) {
     double heading = getHeadingInDegrees();
     double rot = m_orientPID.calculate(heading, setpoint);
@@ -350,6 +354,8 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
+
+   // TODO: Consider wrapping this in a command factory that takes a ChassisSpeeds supplier. -Gavin
   public void drive(double xSpeed, double ySpeed, double rot,
       boolean fieldRelative, boolean rateLimit) {
 
@@ -464,9 +470,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_backRight.setBrakeMode(brake);
   }
 
+  // FIXME: Consider having a stop() method. - Gavin
+
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
+  // FIXME: This should be a command factory. -Gavin
   public void setX() {
     m_frontLeft.setDesiredState(
         new SwerveModuleState(0, Rotation2d.fromDegrees(45)));

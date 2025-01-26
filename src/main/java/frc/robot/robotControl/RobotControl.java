@@ -75,6 +75,8 @@ public class RobotControl implements NetworkReceiver {
         }
     }
 
+    // TODO: We should expose Triggers for buttons. -Gavin
+
     public boolean checkButton(int button) {
         if ((button < 0) || (button >= k_maxButtons)) {
             Logger.log("RobotContainer", 3, String.format("checkButton: Invalid button: %d", button));
