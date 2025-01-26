@@ -7,33 +7,31 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.MotorConfigs;
 
 public class ClimberSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_leadMotor = new SparkFlex(Constants.ClimberConstants.k_climberMotor, MotorType.kBrushless);
-  private SparkFlex m_followMotor = new SparkFlex(Constants.ClimberConstants.k_climberFollower, MotorType.kBrushless);
-  private PIDController m_pid = new PIDController(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d);
-  private DutyCycleEncoder m_encoder = new DutyCycleEncoder(9);
+  private SparkFlex m_leadMotor = new SparkFlex(ClimberConstants.k_climberMotor, MotorType.kBrushless);
+  private SparkFlex m_followMotor = new SparkFlex(ClimberConstants.k_climberFollower, MotorType.kBrushless);
+  private SparkClosedLoopController m_pid;
+  private RelativeEncoder m_encoder;
 
   /** Creates a new PivotSubsystem. */
   public ClimberSubsystem() {
     m_leadMotor.configure(MotorConfigs.Climber.config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_followMotor.configure(MotorConfigs.Climber.followConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_encoder = m_leadMotor.getEncoder();
+    m_pid = m_leadMotor.getClosedLoopController();
   }
 
   public void setBrakeMode(boolean brake) {
@@ -46,28 +44,25 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void setPower(double power) {
     m_leadMotor.set(power);
-    System.out.println(String.format("%s, %f", "running motor at", power));
   }
 
   public void setAngle(double degrees) {
-    m_pid.setSetpoint(degrees);
+    m_pid.setReference(degrees, ControlType.kPosition);
   }
 
   public double getAngle(){
-    return (m_encoder.get() - Constants.ClimberConstants.k_resetPosition)*Constants.ClimberConstants.k_ticksToDegrees;
+    return m_encoder.getPosition();
   }
 
-  // FIXME: Should use constants here. -Gavin
   public Command climb(boolean up) {
-    // FIXME: Why not runOnce? -Gavin
-    return Commands.run(() -> {
-      setAngle(up ? -15 : 90);
+    return Commands.runOnce(() -> {
+      setAngle(up ? ClimberConstants.k_returnPosition : ClimberConstants.k_extendPosition);
     }, this);
   }
 
   public Command runIn(){
     return Commands.startEnd(() -> {
-      setPower(0.5);},
+      setPower(0.25);},
       () -> {
       setPower(0);},
      this);
@@ -75,22 +70,21 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public Command runOut(){
     return Commands.startEnd(() -> {
-      setPower(-0.5);},
+      setPower(-0.25);},
       () -> {
       setPower(0);},
      this);
   }
 
   public Command stop() {
-    // FIXME: Why not runOnce? -Gavin
-    return Commands.run(() -> {
+    return Commands.runOnce(() -> {
       setPower(0);
     }, this);
   }
 
   @Override
   public void periodic() {
-    double power = MathUtil.applyDeadband(m_pid.calculate(getAngle()), .1);
+    SmartDashboard.putNumber("climber angle", getAngle());
     //m_leadMotor.set(power);
     //System.out.println(power);
     //System.out.println(getAngle());

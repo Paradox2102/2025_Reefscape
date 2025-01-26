@@ -174,8 +174,9 @@ public final class Constants {
     public static final double k_i = 0;
     public static final double k_d = 0;
     public static final double k_f = 0;
-    public static final double k_ticksToDegrees = 360;
-    public static double k_resetPosition = 0.2897;
+    public static final double k_ticksToDegrees = 90/98.283;
+    public static double k_extendPosition = 90;
+    public static double k_returnPosition = -15;
   }
 
 
@@ -246,16 +247,18 @@ public final class Constants {
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
         config.encoder
               .positionConversionFactor(ClimberConstants.k_ticksToDegrees);
-        // config.closedLoop
-        //   .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        //   .pid(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d);
-        followConfig = config;
-        followConfig.follow(ClimberConstants.k_climberMotor).inverted(true);
+        config.closedLoop
+          .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+          .pid(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d)
+          .positionWrappingInputRange(ClimberConstants.k_returnPosition, ClimberConstants.k_extendPosition);
+        followConfig.apply(config);
+        followConfig.follow(ClimberConstants.k_climberMotor, true);
 
 
-        coastConfig = config;
+        coastConfig.apply(config);
         coastConfig.idleMode(IdleMode.kCoast);
-        fcConfig.follow(ClimberConstants.k_climberMotor).inverted(true);
+        fcConfig.apply(coastConfig);
+        fcConfig.follow(ClimberConstants.k_climberMotor, true);
       }
     }
 
