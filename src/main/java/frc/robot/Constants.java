@@ -8,6 +8,8 @@ package frc.robot;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.SparkBase;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -168,11 +170,12 @@ public final class Constants {
     public static final int k_climberMotor = 16;
     public static final int k_climberFollower = 17;
 
-    public static final double k_p = 0;
+    public static final double k_p = 0.001;
     public static final double k_i = 0;
     public static final double k_d = 0;
     public static final double k_f = 0;
-    public static final double k_ticksToDegrees = 1;
+    public static final double k_ticksToDegrees = 360;
+    public static double k_resetPosition = 0.2897;
   }
 
 
@@ -232,28 +235,27 @@ public final class Constants {
     }
 
     public static final class Climber {
-      public static final SparkMaxConfig config = new SparkMaxConfig();
-      public static SparkMaxConfig followConfig = new SparkMaxConfig();
+      public static final SparkFlexConfig config = new SparkFlexConfig();
+      public static SparkFlexConfig followConfig = new SparkFlexConfig();
 
-      public static SparkMaxConfig coastConfig = new SparkMaxConfig();
-      public static SparkMaxConfig fcConfig = new SparkMaxConfig();
+      public static SparkFlexConfig coastConfig = new SparkFlexConfig();
+      public static SparkFlexConfig fcConfig = new SparkFlexConfig();
 
       static {
 
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
-          config.absoluteEncoder
-              .positionConversionFactor(ClimberConstants.k_ticksToDegrees)
-              .velocityConversionFactor(ClimberConstants.k_ticksToDegrees);
-        config.closedLoop
-          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-          .pidf(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d, ClimberConstants.k_f);
+        config.encoder
+              .positionConversionFactor(ClimberConstants.k_ticksToDegrees);
+        // config.closedLoop
+        //   .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        //   .pid(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d);
         followConfig = config;
-        followConfig.follow(ClimberConstants.k_climberMotor);
+        followConfig.follow(ClimberConstants.k_climberMotor).inverted(true);
 
 
         coastConfig = config;
         coastConfig.idleMode(IdleMode.kCoast);
-        fcConfig.follow(ClimberConstants.k_climberMotor);
+        fcConfig.follow(ClimberConstants.k_climberMotor).inverted(true);
       }
     }
 

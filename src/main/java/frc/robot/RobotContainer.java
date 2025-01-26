@@ -36,11 +36,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
-  private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
+  // private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
+  // private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
   private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
-  private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
-  private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+  // private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
+  // private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private final RobotControl m_robotControl = new RobotControl();
   
@@ -116,15 +116,15 @@ public class RobotContainer {
     );
 
     // Climb
-    m_driverController.a().whileTrue(m_climberSubsystem.climb(false));
-    m_driverController.b().whileTrue(m_climberSubsystem.climb(true));
+    m_driverController.a().whileTrue(m_climberSubsystem.runIn());
+    m_driverController.b().whileTrue(m_climberSubsystem.runOut());
 
     // Operator UI Controls
     // Elevator Position
-    m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
-    m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
-    m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
-    m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
+    // m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
+    // m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
+    // m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
+    // m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
 
     // Reef Position
     // FIXME: What is this number business? Given that FIRST has officially named the reef branches A-L, it would be much better to use those names. -Gavin
@@ -147,7 +147,7 @@ public class RobotContainer {
     m_rightSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_RIGHT));
 
     // Win Button!!!
-    m_win.onTrue(new InstantCommand());
+    // m_win.onTrue(new InstantCommand());
   }
 
   /**

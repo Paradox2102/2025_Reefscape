@@ -16,14 +16,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorConfigs;
 import frc.robot.Constants.PivotConstants;
 
 public class AlgaeSubsystem extends SubsystemBase {
   // motor
-  // FIXME: Need to add constants here. -Gavin
-  private SparkFlex m_pivotMotor = new SparkFlex(0, MotorType.kBrushless);
-  private SparkFlex m_rollerMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_pivotMotor = new SparkFlex(Constants.PivotConstants.k_pivotMotor, MotorType.kBrushless);
+  private SparkFlex m_rollerMotor = new SparkFlex(Constants.RollerConstants.k_algaeMotor, MotorType.kBrushless);
 
   private static final double k_intakePower = .5;
   private static final double k_outtakePower = .5;

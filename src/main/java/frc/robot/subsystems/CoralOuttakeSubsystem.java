@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.MotorConfigs;
+import frc.robot.Constants.RollerConstants;
 
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
-  // FIXME: Need to add constant here. Is there a right motor? -Gavin
-  private SparkFlex m_coralLeftMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_coralLeftMotor = new SparkFlex(RollerConstants.k_LcoralMotor, MotorType.kBrushless);
 
   private static final double k_ejectedCurrent = 20;
   private static final double k_intakeCurrent = 20;

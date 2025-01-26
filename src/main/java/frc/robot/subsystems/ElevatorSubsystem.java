@@ -17,11 +17,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorConfigs;
 
 public class ElevatorSubsystem extends SubsystemBase {
   // motor (neo vortex according to co-engineering pres?)
-  private SparkFlex m_elevatorMotor = new SparkFlex(1, MotorType.kBrushless);
+  private SparkFlex m_elevatorMotor = new SparkFlex(Constants.ElevatorConstants.k_elevatorMotor, MotorType.kBrushless);
   // pid
   private SparkClosedLoopController m_PID;
 
