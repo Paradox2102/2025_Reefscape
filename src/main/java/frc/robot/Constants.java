@@ -118,10 +118,10 @@ public final class Constants {
   public static final class PivotConstants {
     public static final int k_pivotMotor = 9;
     
-    public static final double k_p = 0;
-    public static final double k_i = 0;
-    public static final double k_d = 0;
-    public static final double k_f = 0;
+    public static final double k_p = .005;
+    public static final double k_i = .011;
+    public static final double k_d = .0001;
+    public static final double k_f = .02;
     public static final double k_ticksToDegrees = 1;
   }
   
