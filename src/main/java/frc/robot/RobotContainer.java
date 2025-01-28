@@ -37,7 +37,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  // private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
+  private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   // private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
   private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   // private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
@@ -101,14 +101,14 @@ public class RobotContainer {
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX));
-    // m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
+    m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
     // m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
     // m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
     // m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
 
     // Algae
-    // m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
-    // m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
+    m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
+    m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
 
     // Coral
     //m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
