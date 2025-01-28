@@ -15,6 +15,7 @@ public class AlgaePIDCommand extends Command {
   public AlgaePIDCommand(AlgaeSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -27,10 +28,6 @@ public class AlgaePIDCommand extends Command {
   @Override
   public void execute() {
     m_subsystem.configurePID(
-    SmartDashboard.getNumber("Algae Roller F", 0),
-    SmartDashboard.getNumber("Algae Roller P", 0),
-    SmartDashboard.getNumber("Algae Roller I", 0),
-    SmartDashboard.getNumber("Algae Roller D", 0),
     SmartDashboard.getNumber("Algae Pivot F", 0),
     SmartDashboard.getNumber("Algae Pivot P", 0),
     SmartDashboard.getNumber("Algae Pivot I", 0),

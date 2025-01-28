@@ -21,7 +21,7 @@ import frc.robot.Constants.MotorConfigs.Elevator;;
 
 public class ElevatorSubsystem extends SubsystemBase {
   // motor (neo vortex according to co-engineering pres?)
-  private SparkFlex m_elevatorMotor = new SparkFlex(1, MotorType.kBrushless);
+  private SparkFlex m_elevatorMotor = new SparkFlex(29, MotorType.kBrushless);
   // pid
   private SparkClosedLoopController m_PID;
 

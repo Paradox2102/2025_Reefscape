@@ -37,10 +37,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
-  private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
-  private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
-  private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
-  private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+  // private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
+  // private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  // private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
+  // private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private PhotonCamera m_camera1 = new PhotonCamera("camera1");
   //private PhotonCamera m_camera2 = new PhotonCamera("camera2");
@@ -73,31 +73,31 @@ public class RobotContainer {
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX));
-    m_algaeSubsystem.setDefaultCommand(new AlgaePIDCommand(m_algaeSubsystem));
-    m_coralOuttakeSubsystem.setDefaultCommand(new CoralPIDCommand(m_coralOuttakeSubsystem));
-    m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
-    m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
-    m_elevatorSubsystem.setDefaultCommand(new ElevatorPIDCommand(m_elevatorSubsystem));
+    // m_algaeSubsystem.setDefaultCommand(new AlgaePIDCommand(m_algaeSubsystem));
+    // m_coralOuttakeSubsystem.setDefaultCommand(new CoralPIDCommand(m_coralOuttakeSubsystem));
+    // m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
+    // m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
+    // m_elevatorSubsystem.setDefaultCommand(new ElevatorPIDCommand(m_elevatorSubsystem));
 
     //Test
-    m_driverController.a().whileTrue(new TestElevator(m_elevatorSubsystem, 0));
-    m_driverController.b().whileTrue(new TestCoralOuttake(m_coralOuttakeSubsystem, 0));
-    m_driverController.x().whileTrue(new TestPivot(m_algaeSubsystem, 0));
-    m_driverController.y().whileTrue(new TestAlgae(m_algaeSubsystem, 0));
+    // m_driverController.a().whileTrue(new TestElevator(m_elevatorSubsystem, 0));
+    // m_driverController.b().whileTrue(new TestCoralOuttake(m_coralOuttakeSubsystem, 0));
+    m_driverController.x().whileTrue(new TestPivot(m_algaeSubsystem, 45));
+    m_driverController.y().whileTrue(new TestPivot(m_algaeSubsystem, 0));
     // Algae
     m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
     m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
 
     // Coral
-    m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
+    // m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
     m_driverController.rightTrigger().toggleOnTrue(
       new DriveToPosition(m_driveSubsystem, false)
       .until(() -> false/* enter the has game piece condition */)
     );
 
     // Climb
-    m_driverController.a().whileTrue(m_climberSubsystem.climb(false));
-    m_driverController.b().whileTrue(m_climberSubsystem.climb(true));
+    // m_driverController.a().whileTrue(m_climberSubsystem.climb(false));
+    // m_driverController.b().whileTrue(m_climberSubsystem.climb(true));
       
   }
 

@@ -16,7 +16,7 @@ import frc.robot.Constants.MotorConfigs;
 
 public class HopperSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_motor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_motor = new SparkFlex(28, MotorType.kBrushless);
 
   //absoulte encoder
 

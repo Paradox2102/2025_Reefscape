@@ -22,7 +22,7 @@ import frc.robot.Constants.MotorConfigs.Elevator;
 
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_coralLeftMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_coralLeftMotor = new SparkFlex(34, MotorType.kBrushless);
   private SparkClosedLoopController m_PID;
 
   private static final double k_ejectedCurrent = 20;

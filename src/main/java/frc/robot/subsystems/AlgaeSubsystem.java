@@ -22,8 +22,8 @@ import frc.robot.Constants.MotorConfigs.Algae;
 
 public class AlgaeSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_pivotMotor = new SparkFlex(0, MotorType.kBrushless);
-  private SparkFlex m_rollerMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_pivotMotor = new SparkFlex(10, MotorType.kBrushless);
+  private SparkFlex m_rollerMotor = new SparkFlex(9, MotorType.kBrushless);
 
   private static final double k_intakePower = .5;
   private static final double k_outtakePower = .5;
@@ -34,9 +34,9 @@ public class AlgaeSubsystem extends SubsystemBase {
   private static final double k_outtakePositionDegrees = 0;
 
   private double k_balanceAngle = 0;
-  private double k_f = 0;
+  private double k_f = .02;
 
-  private static final PIDController m_pivotPID = new PIDController(0, 0, 0);
+  private static final PIDController m_pivotPID = new PIDController(.005, .011, .0001);
   private SparkClosedLoopController m_rollerPID;
 
   private RelativeEncoder m_algaeEncoder = m_pivotMotor.getEncoder();
@@ -58,11 +58,13 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public void testRoller(double speed){
-    m_rollerPID.setReference(speed, ControlType.kVelocity);
+    // m_rollerPID.setReference(speed, ControlType.kVelocity);
+    m_rollerMotor.set(speed);
   }
 
   public void testPivot(double pos){
     m_pivotPID.setSetpoint(pos);
+    // m_pivotMotor.set(pos);
   }
 
   public double getPivotPosition() {
@@ -90,14 +92,10 @@ public class AlgaeSubsystem extends SubsystemBase {
     }, this);
   }
 
-  public void configurePID(double rollerF, double rollerP, double rollerI, double rollerD, double pivotF, double pivotP, double pivotI, double pivotD){
-    Algae.p = rollerP;
-    Algae.i = rollerI;
-    Algae.d = rollerD;
-    Algae.f = rollerF;
+  public void configurePID(double pivotF, double pivotP, double pivotI, double pivotD){
     m_pivotPID.setPID(pivotP, pivotI, pivotD);
     k_f = pivotF;
-    m_rollerMotor.configure(Algae.rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // m_rollerMotor.configure(Algae.rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
@@ -105,9 +103,14 @@ public class AlgaeSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Raw Algae Position", getPivotPosition());
     // This method will be called once per scheduler run
     double currentAngle = getPivotPosition();
-    double feedForward = Math.sin(Math.toRadians(currentAngle - k_balanceAngle)) * k_f;
+    double feedForward = Math.sin(Math.toRadians(k_balanceAngle - currentAngle)) * k_f;
       // might fix floor slamming problem
-    feedForward += MathUtil.applyDeadband(m_pivotPID.calculate(currentAngle), .05);
+    feedForward += MathUtil.applyDeadband(m_pivotPID.calculate(currentAngle), 0);
     m_pivotMotor.set(feedForward);
+
+    // SmartDashboard.getNumber("Algae Pivot F", .1);
+    // SmartDashboard.getNumber("Algae Pivot P", 0);
+    // SmartDashboard.getNumber("Algae Pivot I", 0);
+    // SmartDashboard.getNumber("Algae Pivot D", 0);
   }
 }

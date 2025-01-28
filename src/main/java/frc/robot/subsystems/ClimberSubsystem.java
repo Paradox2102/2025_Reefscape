@@ -16,7 +16,7 @@ import frc.robot.Constants.MotorConfigs;
 
 public class ClimberSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_pivotMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_pivotMotor = new SparkFlex(33, MotorType.kBrushless);
 
   /** Creates a new PivotSubsystem. */
   public ClimberSubsystem() {
