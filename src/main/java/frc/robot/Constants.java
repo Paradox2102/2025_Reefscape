@@ -116,7 +116,7 @@ public final class Constants {
   }
 
   public static final class PivotConstants {
-    public static final int k_pivotMotor = 9;
+    public static final int k_pivotMotor = 10;
     
     public static final double k_p = 0;
     public static final double k_i = 0;
@@ -135,7 +135,7 @@ public final class Constants {
     public static final double k_coralF = 0;
     public static final double k_coralTicksToDegrees = 1;
 
-    public static final int k_algaeMotor = 10;
+    public static final int k_algaeMotor = 9;
     
     public static final double k_algaeP = 0;
     public static final double k_algaeI = 0;
