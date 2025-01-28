@@ -30,7 +30,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   private static final double k_holdAlgaePower = 0;
 
   private static final double k_resetPositionDegrees = 0;
-  private static final double k_intakePositionDegrees = 0;
+  private static final double k_intakePositionDegrees = 30;
   private static final double k_outtakePositionDegrees = 0;
 
   private static final PIDController m_pivotPID = new PIDController(PivotConstants.k_p, PivotConstants.k_i, PivotConstants.k_d);
