@@ -20,8 +20,8 @@ import frc.robot.Constants.MotorConfigs;
 
 public class AlgaeSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_pivotMotor = new SparkFlex(0, MotorType.kBrushless);
-  private SparkFlex m_rollerMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_pivotMotor = new SparkFlex(9, MotorType.kBrushless);
+  private SparkFlex m_rollerMotor = new SparkFlex(10, MotorType.kBrushless);
 
   private static final double k_intakePower = .5;
   private static final double k_outtakePower = .5;
