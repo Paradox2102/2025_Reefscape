@@ -122,7 +122,7 @@ public final class Constants {
     public static final double k_i = .011;
     public static final double k_d = .0001;
     public static final double k_f = .02;
-    public static final double k_ticksToDegrees = 1;
+    public static final double k_ticksToDegrees = 45.0/1.6;
   }
   
   public static final class RollerConstants {
@@ -328,6 +328,7 @@ public final class Constants {
 
       static {
         pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        pivotConfig.encoder.positionConversionFactor(PivotConstants.k_ticksToDegrees);
         pivotConfig.absoluteEncoder
             .positionConversionFactor(PivotConstants.k_ticksToDegrees)
             .velocityConversionFactor(PivotConstants.k_ticksToDegrees);

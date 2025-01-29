@@ -25,13 +25,14 @@ public class AlgaeSubsystem extends SubsystemBase {
   private SparkFlex m_pivotMotor = new SparkFlex(Constants.PivotConstants.k_pivotMotor, MotorType.kBrushless);
   private SparkFlex m_rollerMotor = new SparkFlex(Constants.RollerConstants.k_algaeMotor, MotorType.kBrushless);
 
-  private static final double k_intakePower = .5;
+  private static final double k_intakePower = -.5;
   private static final double k_outtakePower = .5;
   private static final double k_holdAlgaePower = 0;
 
   private static final double k_resetPositionDegrees = 0;
-  private static final double k_intakePositionDegrees = 70;
+  private static final double k_intakePositionDegrees = 65;
   private static final double k_outtakePositionDegrees = 0;
+  private static double k_balanceAngle = 0;
 
   private static final PIDController m_pivotPID = new PIDController(PivotConstants.k_p, PivotConstants.k_i, PivotConstants.k_d);
 
@@ -84,7 +85,10 @@ public class AlgaeSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Raw Algae Position", getPivotPosition());
     // This method will be called once per scheduler run
-    double power = MathUtil.applyDeadband(m_pivotPID.calculate(getPivotPosition()), .1);
-    m_pivotMotor.set(power);
+    double currentAngle = getPivotPosition();
+    double feedForward = Math.sin(Math.toRadians(k_balanceAngle - currentAngle)) * PivotConstants.k_f;
+      // might fix floor slamming problem
+    feedForward += MathUtil.applyDeadband(m_pivotPID.calculate(currentAngle), 0);
+    m_pivotMotor.set(feedForward);
   }
 }
