@@ -170,13 +170,13 @@ public final class Constants {
     public static final int k_climberMotor = 16;
     public static final int k_climberFollower = 17;
 
-    public static final double k_p = 0.1;
+    public static final double k_p = 0.25;
     public static final double k_i = 0;
     public static final double k_d = 0;
     public static final double k_f = 0;
-    public static final double k_ticksToDegrees = 90/98.283;
+    public static final double k_ticksToDegrees = 90/106.94;//90/98.283;
     public static double k_extendPosition = 90;
-    public static double k_returnPosition = -15;
+    public static double k_returnPosition = -150;
   }
 
 
@@ -248,7 +248,7 @@ public final class Constants {
         config.encoder
               .positionConversionFactor(ClimberConstants.k_ticksToDegrees);
         config.closedLoop
-          .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
           .pid(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d)
           .positionWrappingInputRange(ClimberConstants.k_returnPosition, ClimberConstants.k_extendPosition);
         followConfig.apply(config);

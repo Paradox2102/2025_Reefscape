@@ -89,6 +89,6 @@ public class AlgaeSubsystem extends SubsystemBase {
     double feedForward = Math.sin(Math.toRadians(k_balanceAngle - currentAngle)) * PivotConstants.k_f;
       // might fix floor slamming problem
     feedForward += MathUtil.applyDeadband(m_pivotPID.calculate(currentAngle), 0);
-    m_pivotMotor.set(feedForward);
+    //m_pivotMotor.set(feedForward);
   }
 }

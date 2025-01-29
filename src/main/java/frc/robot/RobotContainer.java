@@ -120,8 +120,8 @@ public class RobotContainer {
     // Climb
     m_testStick.button(1).whileTrue(m_climberSubsystem.climb(false));
     m_testStick.button(2).whileTrue(m_climberSubsystem.climb(true));
-    m_driverController.x().whileTrue(m_climberSubsystem.runOut());
-    m_driverController.y().whileTrue(m_climberSubsystem.runIn());
+    m_testStick.button(3).whileTrue(m_climberSubsystem.runOut());
+    m_testStick.button(4).whileTrue(m_climberSubsystem.runIn());
 
     // Operator UI Controls
     // Elevator Position
