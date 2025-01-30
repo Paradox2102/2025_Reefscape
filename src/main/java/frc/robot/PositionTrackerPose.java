@@ -75,7 +75,11 @@ public class PositionTrackerPose {
     Optional<EstimatedRobotPose> visionEst = Optional.empty();
     for (var change : m_camera1.getAllUnreadResults()) {
         visionEst = m_photon1.update(change);
-      }
+    }
+
+    for (var change : m_camera2.getAllUnreadResults()) {
+      visionEst = m_photon2.update(change);
+    }
     return visionEst;
   }
 
@@ -94,8 +98,6 @@ public class PositionTrackerPose {
   public void update() {
     m_photon1.setReferencePose(getPose2d());
     m_photon2.setReferencePose(getPose2d());
-    List<PhotonPipelineResult> camera1Result = m_camera1.getAllUnreadResults();
-    List<PhotonPipelineResult> camera2Result = m_camera2.getAllUnreadResults();
 
     Rotation2d gyroRotation = m_driveSubsystem.getGyroRotation2d();
     SwerveModulePosition[] modules = m_driveSubsystem.getModulePosition();
