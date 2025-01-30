@@ -52,16 +52,18 @@ public class DriveSubsystem extends SubsystemBase {
     SOURCE_RIGHT(new Pose2d(new Translation2d(1.7, .65), Rotation2d.fromDegrees(127.5)), new Pose2d(new Translation2d(16.3, 7.1), Rotation2d.fromDegrees(-127.5)),"Right"),
     SOURCE_LEFT(new Pose2d(new Translation2d(1.7, 7.38), new Rotation2d(-127.5)), new Pose2d(new Translation2d(16.3, 0.95), Rotation2d.fromDegrees(127.5)),"Left");
 
-    private Pose2d m_targetPos;
+    private Pose2d m_bluePose;
+    private Pose2d m_redPose;
     private String m_name;
 
     FieldPosition(Pose2d bluePose, Pose2d redPose, String name) {
-      m_targetPos = (Constants.States.m_alliance == Alliance.Blue ? bluePose : redPose);
+      m_bluePose = bluePose;
+      m_redPose = redPose;
       m_name = name;
     }
 
     public Pose2d targetPose() {
-      return m_targetPos;
+      return Constants.States.m_alliance == Alliance.Blue ? m_bluePose : m_redPose;
     }
 
     public String getName() {
