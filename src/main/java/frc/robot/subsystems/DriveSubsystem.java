@@ -228,42 +228,13 @@ public class DriveSubsystem extends SubsystemBase {
         m_backRight.getPosition().angle.getRadians()); // + (Math.PI / 2)) / Math.PI);
     SmartDashboard.putNumber(
         "Turn BL Radians", m_backLeft.getPosition().angle.getRadians()); // + (Math.PI)) / Math.PI);
-    // SmartDashboard.putNumber("Pose Est X",
-    // (m_tracker.getPose2dFRC().getTranslation().getX()));
-    // SmartDashboard.putNumber("Pose Est Y",
-    // (m_tracker.getPose2dFRC().getTranslation().getY()));
-    // SmartDashboard.putNumber("Pose Est Rot",
-    // (m_tracker.getPose2dFRC().getRotation().getDegrees()));
-    // SmartDashboard.putNumber("Pigeon2", m_gyro.getYaw().getValueAsDouble());
-    // SmartDashboard.putNumber("Gyro Rotation2D",
-    // getGyroRotation2d().getDegrees());
-    // Dashboard.putNumber("Tracker
-    // Rotation2D", m_tracker.getPose2d().getRotation().getDegrees());
     SmartDashboard.putNumber("Gyro Angle", ParadoxField.normalizeAngle(-m_gyro.getYaw().getValueAsDouble()));
     // spin robot very fast for many rotations eventually back to the original
     // angle, look at the gyro angle and see the offset
 
-    // SmartDashboard.putNumber("Speaker X",
-    // getSpeakerLocationMeters().m_xMeters); SmartDashboard.putNumber("Speaker
-    // Y", getSpeakerLocationMeters().m_yMeters);
-    // SmartDashboard.putBoolean("Face Speaker",
-    // Constants.States.m_faceSpeaker); SmartDashboard.putBoolean("Shoot
-    // Front/Back", Constants.States.m_shootIntakeSide);
-    // SmartDashboard.putBoolean("Aim On", Constants.States.m_autoRotateAim);
-    // SmartDashboard.putNumber("FL Encoder Diff",
-    // m_frontLeft.getMagEncoderPosRadians() - m_frontLeft.getMotorPosRadians());
-    // SmartDashboard.putNumber("FR Encoder Diff",
-    // m_frontRight.getMagEncoderPosRadians() - m_frontRight.getMotorPosRadians());
-    // SmartDashboard.putNumber("BL Encoder Diff",
-    // m_backLeft.getMagEncoderPosRadians() - m_backLeft.getMotorPosRadians());
-    // SmartDashboard.putNumber("BR Encoder Diff",
-    // m_backRight.getMagEncoderPosRadians() - m_backRight.getMotorPosRadians());
-
     // For efficiency. we could pass in the module states here, to avoid calling it
     // twice. Maybe also currentPos. - Gavin
 
-    // Estimate future position of robot
-    // *****************************************
     Pose2d currentPos = m_tracker.getPose2d();
 
     double yaw = ParadoxField.normalizeAngle(m_gyro.getYaw().getValueAsDouble());
@@ -278,6 +249,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro", yaw);
     SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw));
     SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
+    SmartDashboard.putNumber("Robot X", currentPos.getX());
+    SmartDashboard.putNumber("Robot Y", currentPos.getY());
 
     // *********************************************************
 
