@@ -25,4 +25,10 @@ public class SetReefPos extends InstantCommand {
   public void initialize() {
     m_subsystem.setReefPosition(m_position);
   }
+
+  @Override
+  public boolean runsWhenDisabled()
+  {
+      return true;
+  }
 }

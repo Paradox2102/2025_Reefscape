@@ -22,26 +22,26 @@ import frc.robot.subsystems.DriveSubsystem;
 public class PositionTrackerPose {
   private SwerveDrivePoseEstimator m_poseEstimator;
   private DriveSubsystem m_driveSubsystem;
-  private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo); //TODO: Change to k2025Reefscape when added
+  private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField); //TODO: Change to k2025Reefscape when added
   private PhotonCamera m_camera1; //TODO: add camera names, transforms, and more once we figure out camera layouts
-  //private PhotonCamera m_camera2;
+  private PhotonCamera m_camera2;
   private PhotonPoseEstimator m_photon1;
   private double m_timestamp1 = 0;
-  //private double m_timestamp2 = 0;
-  //private PhotonPoseEstimator m_photon2;
+  private double m_timestamp2 = 0;
+  private PhotonPoseEstimator m_photon2;
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
 
   public PositionTrackerPose(double x, double y,
-                             DriveSubsystem driveSubsystem, PhotonCamera camera1) {
+                             DriveSubsystem driveSubsystem, PhotonCamera camera1, PhotonCamera camera2) {
     super();
     m_driveSubsystem = driveSubsystem;
     // Let's have arrays of cameras and estimators, please. Much easier to update when we change the number of cameras. Same with their names and transforms. -Gavin
     m_camera1 = camera1;
-    //m_camera2 = camera2;
+    m_camera2 = camera2;
     m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
     m_photon1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-    //m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
+    m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
 
     m_poseEstimator = new SwerveDrivePoseEstimator(
         m_driveSubsystem.getSwerve(), m_driveSubsystem.getGyroRotation2d(),
@@ -57,10 +57,7 @@ public class PositionTrackerPose {
 
   public void setXYAngle(double x, double y, double angleInDegrees) {
     m_poseEstimator.resetPosition(
-        // FIXME: This code is crazy. It should just be: 
-        // m_driveSubsystem.getGyro().getRotation2d() 
-        // -Gavin
-        Rotation2d.fromDegrees(-m_driveSubsystem.getGyro().getYaw().getValueAsDouble()),
+        m_driveSubsystem.getGyro().getRotation2d(),
         m_driveSubsystem.getModulePosition(),
         // FIXME: It would be much better to have this method take a Pose2d. -Gavin
         new Pose2d(x, y, Rotation2d.fromDegrees(angleInDegrees)));
@@ -82,7 +79,7 @@ public class PositionTrackerPose {
     m_photon1.setReferencePose(getPose2d());
     // FIXME: The getLatestResult() method is deprecated. If we used getAllUnreadResults() instead, we wouldn't need to store and check the timestamp. -Gavin
     PhotonPipelineResult camera1Result = m_camera1.getLatestResult();
-    //PhotonPipelineResult camera2Result = m_camera2.getLatestResult();
+    PhotonPipelineResult camera2Result = m_camera2.getLatestResult();
     if(camera1Result.hasTargets() && camera1Result.getTimestampSeconds() != m_timestamp1){
       //System.out.println(m_photon1.update(camera1Result).isPresent());
       // Probably doesn't matter much, but better to get the timestamp from the estimated pose, not the camera result. -Gavin
@@ -90,11 +87,12 @@ public class PositionTrackerPose {
         m_photon1.update(camera1Result).get().estimatedPose.toPose2d(), 
         camera1Result.getTimestampSeconds());
     }
-    // if(camera2Result.hasTargets()){
-    //   m_poseEstimator.addVisionMeasurement(
-    //     m_photon2.update(camera1Result).get().estimatedPose.toPose2d(), 
-    //     camera1Result.getTimestampSeconds());
-    // }
+    if(camera2Result.hasTargets() && camera2Result.getTimestampSeconds() != m_timestamp2){
+      m_poseEstimator.addVisionMeasurement(
+        m_photon2.update(camera2Result).get().estimatedPose.toPose2d(), 
+        camera2Result.getTimestampSeconds());
+    }
     m_timestamp1 = camera1Result.getTimestampSeconds();
+    m_timestamp2 = camera2Result.getTimestampSeconds();
   }
 }

@@ -36,29 +36,35 @@ public class DriveSubsystem extends SubsystemBase {
 
   public enum FieldPosition {
     // blue alliance
-    ONE(new Pose2d(new Translation2d(5.81, 3.86), Rotation2d.fromDegrees(180))),
-    TWO(new Pose2d(new Translation2d(5.27, 2.98), Rotation2d.fromDegrees(120))),
-    THREE(new Pose2d(new Translation2d(5.01, 2.82), Rotation2d.fromDegrees(120))),
-    FOUR(new Pose2d(new Translation2d(3.96, 2.82), new Rotation2d(60))),
-    FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(60))),
-    SIX(new Pose2d(new Translation2d(3.17, 3.86), Rotation2d.fromDegrees(0))),
-    SEVEN(new Pose2d(new Translation2d(3.17, 4.17), Rotation2d.fromDegrees(0))),
-    EIGHT(new Pose2d(new Translation2d(3.69, 5.09), Rotation2d.fromDegrees(-60))),
-    NINE(new Pose2d(new Translation2d(3.96, 5.23), Rotation2d.fromDegrees(-60))),
-    TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120))),
-    ELEVEN(new Pose2d(new Translation2d(5.27, 5.09), Rotation2d.fromDegrees(-120))),
-    TWELVE(new Pose2d(new Translation2d(5.81, 4.17), Rotation2d.fromDegrees(180))),
-    SOURCE_RIGHT(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(127.5))),
-    SOURCE_LEFT(new Pose2d(new Translation2d(1.7, .65), new Rotation2d(-127.5)));
+    ONE(new Pose2d(new Translation2d(5.81, 3.86), Rotation2d.fromDegrees(180)), "1"),
+    TWO(new Pose2d(new Translation2d(5.27, 2.98), Rotation2d.fromDegrees(120)), "2"),
+    THREE(new Pose2d(new Translation2d(5.01, 2.82), Rotation2d.fromDegrees(120)), "3"),
+    FOUR(new Pose2d(new Translation2d(3.96, 2.82), new Rotation2d(60)), "4"),
+    FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(60)), "5"),
+    SIX(new Pose2d(new Translation2d(3.17, 3.86), Rotation2d.fromDegrees(0)), "6"),
+    SEVEN(new Pose2d(new Translation2d(3.17, 4.17), Rotation2d.fromDegrees(0)), "7"),
+    EIGHT(new Pose2d(new Translation2d(3.69, 5.09), Rotation2d.fromDegrees(-60)), "8"),
+    NINE(new Pose2d(new Translation2d(3.96, 5.23), Rotation2d.fromDegrees(-60)), "9"),
+    TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120)), "10"),
+    ELEVEN(new Pose2d(new Translation2d(5.27, 5.09), Rotation2d.fromDegrees(-120)), "11"),
+    TWELVE(new Pose2d(new Translation2d(5.81, 4.17), Rotation2d.fromDegrees(180)), "12"),
+    SOURCE_RIGHT(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(127.5)), "Right"),
+    SOURCE_LEFT(new Pose2d(new Translation2d(1.7, .65), new Rotation2d(-127.5)), "Left");
 
     private Pose2d m_targetPos;
+    private String m_name;
 
-    FieldPosition(Pose2d pose) {
+    FieldPosition(Pose2d pose, String name) {
       m_targetPos = pose;
+      m_name = name;
     }
 
     public Pose2d targetPose() {
       return m_targetPos;
+    }
+
+    public String getName() {
+      return m_name;
     }
   }
 
@@ -203,6 +209,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
 
     SmartDashboard.putNumber("Heading", getHeadingInDegrees());
+    SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
+    SmartDashboard.putString("Source Position", m_source.getName());
 
     // SmartDashboard.putNumber("Rotate Error",
     // getRotationDistanceFromTargetError());
@@ -434,7 +442,7 @@ public class DriveSubsystem extends SubsystemBase {
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(m_gyro.getYaw().getValueAsDouble() + // change this when photonvision
+                Rotation2d.fromDegrees(m_tracker.getPose2d().getRotation().getDegrees() +
                     (allianceRed.getAsBoolean() ? 180 : 0)))
             : new ChassisSpeeds(-xSpeedDelivered, -ySpeedDelivered,
                 rotDelivered),

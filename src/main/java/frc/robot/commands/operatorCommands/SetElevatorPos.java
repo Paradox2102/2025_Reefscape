@@ -25,4 +25,10 @@ public class SetElevatorPos extends InstantCommand {
   public void initialize() {
     m_subsystem.setPosition(m_position);
   }
+
+  @Override
+  public boolean runsWhenDisabled()
+  {
+      return true;
+  }
 }

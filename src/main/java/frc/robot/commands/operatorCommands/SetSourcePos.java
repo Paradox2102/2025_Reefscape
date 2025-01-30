@@ -25,4 +25,10 @@ public class SetSourcePos extends InstantCommand {
   public void initialize() {
     m_subsystem.setSource(m_position);
   }
+
+  @Override
+  public boolean runsWhenDisabled()
+  {
+      return true;
+  }
 }

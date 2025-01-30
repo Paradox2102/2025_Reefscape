@@ -36,20 +36,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
 
   public enum ElevatorPosition {
-    L4(0),
-    L3(0),
-    L2(0),
-    L1(0);
+    L4(0, "Level 4"),
+    L3(0, "Level 3"),
+    L2(0, "Level 2"),
+    L1(0, "Level 1");
 
     private double m_heightInches;
-    ElevatorPosition(double heightInches) {
+    private String m_name;
+    ElevatorPosition(double heightInches, String name) {
       m_heightInches = heightInches;
+      m_name = name;
     }
 
     public double heightInches() {
       return m_heightInches;
     }
 
+    public String getName() {
+      return m_name;
+    }
   }
 
   /** Creates a new ElevatorSubsystem. */
