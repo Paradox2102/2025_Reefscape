@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -77,22 +79,21 @@ public class PositionTrackerPose {
 
   public void update() {
     m_photon1.setReferencePose(getPose2d());
+    m_photon2.setReferencePose(getPose2d());
     // FIXME: The getLatestResult() method is deprecated. If we used getAllUnreadResults() instead, we wouldn't need to store and check the timestamp. -Gavin
-    PhotonPipelineResult camera1Result = m_camera1.getLatestResult();
-    PhotonPipelineResult camera2Result = m_camera2.getLatestResult();
-    if(camera1Result.hasTargets() && camera1Result.getTimestampSeconds() != m_timestamp1){
-      //System.out.println(m_photon1.update(camera1Result).isPresent());
+    List<PhotonPipelineResult> camera1Result = m_camera1.getAllUnreadResults();
+    List<PhotonPipelineResult> camera2Result = m_camera2.getAllUnreadResults();
+    
+    if (m_photon1.update(camera1Result.get(0)).isPresent()) {
       // Probably doesn't matter much, but better to get the timestamp from the estimated pose, not the camera result. -Gavin
       m_poseEstimator.addVisionMeasurement(
-        m_photon1.update(camera1Result).get().estimatedPose.toPose2d(), 
-        camera1Result.getTimestampSeconds());
+        m_photon1.update(camera1Result.get(0)).get().estimatedPose.toPose2d(), 
+        camera1Result.get(0).getTimestampSeconds());
     }
-    if(camera2Result.hasTargets() && camera2Result.getTimestampSeconds() != m_timestamp2){
-      m_poseEstimator.addVisionMeasurement(
-        m_photon2.update(camera2Result).get().estimatedPose.toPose2d(), 
-        camera2Result.getTimestampSeconds());
-    }
-    m_timestamp1 = camera1Result.getTimestampSeconds();
-    m_timestamp2 = camera2Result.getTimestampSeconds();
+    // if(camera2Result.hasTargets() && camera2Result.getTimestampSeconds() != m_timestamp2){
+    //   m_poseEstimator.addVisionMeasurement(
+    //     m_photon2.update(camera2Result).get().estimatedPose.toPose2d(), 
+    //     camera2Result.getTimestampSeconds());
+    // }
   }
 }
