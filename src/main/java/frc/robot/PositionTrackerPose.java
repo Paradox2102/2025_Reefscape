@@ -80,19 +80,20 @@ public class PositionTrackerPose {
   public void update() {
     m_photon1.setReferencePose(getPose2d());
     m_photon2.setReferencePose(getPose2d());
-    // FIXME: The getLatestResult() method is deprecated. If we used getAllUnreadResults() instead, we wouldn't need to store and check the timestamp. -Gavin
     List<PhotonPipelineResult> camera1Result = m_camera1.getAllUnreadResults();
     List<PhotonPipelineResult> camera2Result = m_camera2.getAllUnreadResults();
-    
-    if(camera1Result.get(0).hasTargets() && camera1Result.get(0).getTimestampSeconds() != m_timestamp1){
-      m_poseEstimator.addVisionMeasurement(
-        m_photon1.update(camera1Result.get(0)).get().estimatedPose.toPose2d(), 
-        camera1Result.get(0).getTimestampSeconds());
-    }
-    if(camera2Result.get(0).hasTargets() && camera2Result.get(0).getTimestampSeconds() != m_timestamp2){
-      m_poseEstimator.addVisionMeasurement(
-        m_photon2.update(camera2Result.get(0)).get().estimatedPose.toPose2d(), 
-        camera2Result.get(0).getTimestampSeconds());
-    }
+
+    try {
+      if(camera1Result.get(0).hasTargets() && camera1Result.get(0).getTimestampSeconds() != m_timestamp1){
+        m_poseEstimator.addVisionMeasurement(
+          m_photon1.update(camera1Result.get(0)).get().estimatedPose.toPose2d(), 
+          camera1Result.get(0).getTimestampSeconds());
+      }
+      if(camera2Result.get(0).hasTargets() && camera2Result.get(0).getTimestampSeconds() != m_timestamp2){
+        m_poseEstimator.addVisionMeasurement(
+          m_photon2.update(camera2Result.get(0)).get().estimatedPose.toPose2d(), 
+          camera2Result.get(0).getTimestampSeconds());
+      }
+    } catch (Exception e) {}
   }
 }
