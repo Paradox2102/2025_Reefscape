@@ -84,16 +84,15 @@ public class PositionTrackerPose {
     List<PhotonPipelineResult> camera1Result = m_camera1.getAllUnreadResults();
     List<PhotonPipelineResult> camera2Result = m_camera2.getAllUnreadResults();
     
-    if (m_photon1.update(camera1Result.get(0)).isPresent()) {
-      // Probably doesn't matter much, but better to get the timestamp from the estimated pose, not the camera result. -Gavin
+    if(camera1Result.get(0).hasTargets() && camera1Result.get(0).getTimestampSeconds() != m_timestamp1){
       m_poseEstimator.addVisionMeasurement(
         m_photon1.update(camera1Result.get(0)).get().estimatedPose.toPose2d(), 
         camera1Result.get(0).getTimestampSeconds());
     }
-    // if(camera2Result.hasTargets() && camera2Result.getTimestampSeconds() != m_timestamp2){
-    //   m_poseEstimator.addVisionMeasurement(
-    //     m_photon2.update(camera2Result).get().estimatedPose.toPose2d(), 
-    //     camera2Result.getTimestampSeconds());
-    // }
+    if(camera2Result.get(0).hasTargets() && camera2Result.get(0).getTimestampSeconds() != m_timestamp2){
+      m_poseEstimator.addVisionMeasurement(
+        m_photon2.update(camera2Result.get(0)).get().estimatedPose.toPose2d(), 
+        camera2Result.get(0).getTimestampSeconds());
+    }
   }
 }
