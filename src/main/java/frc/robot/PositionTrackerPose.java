@@ -1,11 +1,15 @@
 package frc.robot;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
+import java.util.Optional;
 
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -15,6 +19,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -66,6 +71,15 @@ public class PositionTrackerPose {
     System.out.println("pose2d " + getPose2d());
   }
 
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+    Optional<EstimatedRobotPose> visionEst = Optional.empty();
+    for (var change : m_camera1.getAllUnreadResults()) {
+        visionEst = m_photon1.update(change);
+      }
+    return visionEst;
+  }
+
+  
   public static class PositionContainer {
     public double x, y;
 
@@ -83,17 +97,28 @@ public class PositionTrackerPose {
     List<PhotonPipelineResult> camera1Result = m_camera1.getAllUnreadResults();
     List<PhotonPipelineResult> camera2Result = m_camera2.getAllUnreadResults();
 
-    try {
-      if(camera1Result.get(0).hasTargets() && camera1Result.get(0).getTimestampSeconds() != m_timestamp1){
-        m_poseEstimator.addVisionMeasurement(
-          m_photon1.update(camera1Result.get(0)).get().estimatedPose.toPose2d(), 
-          camera1Result.get(0).getTimestampSeconds());
+    Rotation2d gyroRotation = m_driveSubsystem.getGyroRotation2d();
+    SwerveModulePosition[] modules = m_driveSubsystem.getModulePosition();
+    m_poseEstimator.update(gyroRotation, modules);
+
+    var visionEst = getEstimatedGlobalPose();
+    visionEst.ifPresent(
+      est -> {
+        m_poseEstimator.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds);
       }
-      if(camera2Result.get(0).hasTargets() && camera2Result.get(0).getTimestampSeconds() != m_timestamp2){
-        m_poseEstimator.addVisionMeasurement(
-          m_photon2.update(camera2Result.get(0)).get().estimatedPose.toPose2d(), 
-          camera2Result.get(0).getTimestampSeconds());
-      }
-    } catch (Exception e) {}
+    );
+
+    // try {
+    //   if(camera1Result.get(0).hasTargets() && camera1Result.get(0).getTimestampSeconds() != m_timestamp1){
+    //     m_poseEstimator.addVisionMeasurement(
+    //       m_photon1.update(camera1Result.get(0)).get().estimatedPose.toPose2d(), 
+    //       camera1Result.get(0).getTimestampSeconds());
+    //   }
+    //   if(camera2Result.get(0).hasTargets() && camera2Result.get(0).getTimestampSeconds() != m_timestamp2){
+    //     m_poseEstimator.addVisionMeasurement(
+    //       m_photon2.update(camera2Result.get(0)).get().estimatedPose.toPose2d(), 
+    //       camera2Result.get(0).getTimestampSeconds());
+    //   }
+    // } catch (Exception e) {}
   }
 }

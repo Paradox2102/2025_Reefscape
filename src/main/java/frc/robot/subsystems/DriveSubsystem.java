@@ -276,28 +276,6 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw));
     SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
 
-    // FIXME: This code might be simpler as something like:
-    // m_futurePos = currentPos.exp(chassisSpeed.toTwist2d(k_lookAheadTimeSeconds));
-    // - Gavin
-
-    double currentY = currentPos.getY();
-    double currentX = currentPos.getX();
-    Rotation2d currentAngle = currentPos.getRotation();
-
-    ChassisSpeeds chassisSpeed = ChassisSpeeds.fromRobotRelativeSpeeds(
-        m_swerve.toChassisSpeeds(getModuleStates()), currentAngle);
-    double yVelocity = chassisSpeed.vyMetersPerSecond;
-    double xVelocity = chassisSpeed.vxMetersPerSecond;
-    double angularVelocity = chassisSpeed.omegaRadiansPerSecond;
-
-    double futureY = currentY + yVelocity * Constants.DriveConstants.k_lookAheadTimeSeconds;
-    double futureX = currentX + xVelocity * Constants.DriveConstants.k_lookAheadTimeSeconds;
-    double futureAngle = ParadoxField.normalizeAngle(
-        currentAngle.getDegrees() +
-            Math.toDegrees(angularVelocity) *
-                Constants.DriveConstants.k_lookAheadTimeSeconds);
-
-    m_futurePos = new Pose2d(futureX, futureY, Rotation2d.fromDegrees(futureAngle));
     // *********************************************************
 
     // m_field.setRobotPose(m_tracker.getPose2dFRC().getTranslation().getX(),
