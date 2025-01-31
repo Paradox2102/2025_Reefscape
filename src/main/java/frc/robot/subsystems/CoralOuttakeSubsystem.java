@@ -14,12 +14,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.Constants.MotorConfigs;
 import frc.robot.Constants.RollerConstants;
 
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_coralLeftMotor = new SparkFlex(RollerConstants.k_LcoralMotor, MotorType.kBrushless);
+  private SparkFlex m_coralMotor = new SparkFlex(RollerConstants.k_coralMotor, MotorType.kBrushless);
+  private SparkFlex m_practiceMotor;
 
   private static final double k_ejectedCurrent = 20;
   private static final double k_intakeCurrent = 20;
@@ -38,21 +40,27 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   /** Creates a new RollerSubsystem. */
   public CoralOuttakeSubsystem() {
-    m_coralLeftMotor.configure(MotorConfigs.CoralOuttake.leftConfig, ResetMode.kResetSafeParameters,
+    m_coralMotor.configure(MotorConfigs.CoralOuttake.config, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+
+    m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new SparkFlex(0, MotorType.kBrushless);
+    if (!Constants.States.m_isCompetitionRobot) {
+      m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
+    }
   }
 
   public void setBrakeMode(boolean brake) {
-    m_coralLeftMotor.configure((brake ? MotorConfigs.CoralOuttake.leftConfig : MotorConfigs.CoralOuttake.coastLeftConfig), ResetMode.kResetSafeParameters,
+    m_coralMotor.configure((brake ? MotorConfigs.CoralOuttake.config : MotorConfigs.CoralOuttake.coastConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
   }
 
   public void setPower(double power) {
-    m_coralLeftMotor.set(power);
+    m_coralMotor.set(power);
   }
 
   public double getCurrentDraw() {
-    return m_coralLeftMotor.getOutputCurrent();
+    return m_coralMotor.getOutputCurrent();
   }
 
   public Command ejectCoral() {

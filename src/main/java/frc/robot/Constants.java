@@ -9,11 +9,15 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
+
+import java.io.File;
+
 import com.revrobotics.spark.SparkBase;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -29,8 +33,19 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public Constants() {
+    File f = new File("home/lvuser/practice");
+    SmartDashboard.putString("Robot Name", "Practice Bot");
+    if (!f.exists()) {
+      SmartDashboard.putString("Robot Name", "Comp Bot");
+      States.m_isCompetitionRobot = true;
+    }
+  }
+
   public static final class States {
     public static Alliance m_alliance = Alliance.Blue;
+    public static boolean m_isCompetitionRobot = false;
+
   }
   
   public static class OperatorConstants {
@@ -75,8 +90,8 @@ public final class Constants {
     public static final double k_rotateDeadzone = 2;
     public static final double k_maxRotInput = .8;
 
-    public static double k_maxSpeedMetersPerSecond = 5.74;
-    public static final double k_maxDriveAcceleration = 7.427;
+    public static double k_maxSpeedMetersPerSecond = 4.92;
+    public static final double k_maxDriveAcceleration = 7.427; // change?
     public static final double k_maxAngularSpeed = Math.PI * 1.5; // radians per second
     public static final double k_maxAngularAcceleration = Math.PI;
 
@@ -126,7 +141,7 @@ public final class Constants {
   }
   
   public static final class RollerConstants {
-    public static final int k_LcoralMotor = 12;
+    public static final int k_coralMotor = 12;
     public static final int k_RcoralMotor = 13;
     
     public static final double k_coralP = 0;
@@ -183,10 +198,10 @@ public final class Constants {
 
   public final class MotorConfigs {
     public static final class SwerveModule {
-      public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
+      public static final SparkFlexConfig drivingConfig = new SparkFlexConfig();
       public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
-      public static SparkMaxConfig coastDriveConfig = new SparkMaxConfig();
+      public static SparkFlexConfig coastDriveConfig = new SparkFlexConfig();
       public static SparkMaxConfig coastTurnConfig = new SparkMaxConfig();
 
       static {
@@ -263,12 +278,15 @@ public final class Constants {
     }
 
     public static final class Elevator {
-      public static final SparkMaxConfig elevatorConfig = new SparkMaxConfig();
+      public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
+      public static final SparkFlexConfig followerConfig = new SparkFlexConfig();
 
-      public static SparkMaxConfig coastElevatorConfig = new SparkMaxConfig();
+      public static SparkFlexConfig coastElevatorConfig = new SparkFlexConfig();
+      public static SparkFlexConfig coastFollowerConfig = new SparkFlexConfig();
 
       static {
-        elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+      
         elevatorConfig.absoluteEncoder
             .positionConversionFactor(ElevatorConstants.k_ticksToInches)
             .velocityConversionFactor(ElevatorConstants.k_ticksToInches);
@@ -278,12 +296,14 @@ public final class Constants {
         coastElevatorConfig = elevatorConfig;
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
+
+        followerConfig.follow(ElevatorConstants.k_elevatorMotor);
       }
 
     }
 
     public static final class Hopper {
-      public static final SparkMaxConfig config = new SparkMaxConfig();
+      public static final SparkFlexConfig config = new SparkFlexConfig();
 
       static {
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
@@ -294,37 +314,33 @@ public final class Constants {
     }
 
     public static final class CoralOuttake {
-      public static final SparkMaxConfig leftConfig = new SparkMaxConfig();
-      public static final SparkMaxConfig rightConfig = new SparkMaxConfig();
+      public static final SparkFlexConfig config = new SparkFlexConfig();
+      public static final SparkFlexConfig practiceConfig = new SparkFlexConfig();
 
-      public static SparkMaxConfig coastLeftConfig = new SparkMaxConfig();
-      public static SparkMaxConfig coastRightConfig = new SparkMaxConfig();
+      public static SparkFlexConfig coastConfig = new SparkFlexConfig();
+      public static SparkFlexConfig coastPracticeConfig = new SparkFlexConfig();
 
       static {
-        leftConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-        leftConfig.absoluteEncoder
-        .positionConversionFactor(RollerConstants.k_coralTicksToDegrees)
-        .velocityConversionFactor(RollerConstants.k_coralTicksToDegrees);
-        coastLeftConfig = leftConfig;
+        config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        coastConfig = config;
 
-        coastLeftConfig.idleMode(IdleMode.kCoast);
+        coastConfig.idleMode(IdleMode.kCoast);
 
-        rightConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
-        rightConfig.absoluteEncoder
-        .positionConversionFactor(RollerConstants.k_coralTicksToDegrees)
-        .velocityConversionFactor(RollerConstants.k_coralTicksToDegrees);
-        coastRightConfig = rightConfig;
+        practiceConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        practiceConfig.follow(RollerConstants.k_coralMotor);
 
-        coastRightConfig.idleMode(IdleMode.kCoast);
+        coastPracticeConfig = practiceConfig;
+
+        coastPracticeConfig.idleMode(IdleMode.kCoast);
       }
         }
         
         public static final class Algae {
-      public static final SparkMaxConfig pivotConfig = new SparkMaxConfig();
-      public static final SparkMaxConfig rollerConfig = new SparkMaxConfig();
+      public static final SparkFlexConfig pivotConfig = new SparkFlexConfig();
+      public static final SparkFlexConfig rollerConfig = new SparkFlexConfig();
 
-      public static SparkMaxConfig coastAlgaeConfig = new SparkMaxConfig();
-      public static SparkMaxConfig coastRoller = new SparkMaxConfig();
+      public static SparkFlexConfig coastAlgaeConfig = new SparkFlexConfig();
+      public static SparkFlexConfig coastRoller = new SparkFlexConfig();
 
       static {
         pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);

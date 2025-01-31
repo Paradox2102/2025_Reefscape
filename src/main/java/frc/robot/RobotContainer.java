@@ -20,10 +20,13 @@ import frc.robot.subsystems.DriveSubsystem.FieldPosition;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.robotControl.RobotControl;
 
+import java.util.concurrent.locks.Condition;
+
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -35,13 +38,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private Constants m_constants = new Constants();
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
-  // private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
-  private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
-  // private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
-  // private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+  private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
+  private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
+  private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
+  private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
+  private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private final RobotControl m_robotControl = new RobotControl();
   
@@ -102,14 +106,8 @@ public class RobotContainer {
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX));
-    m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
-    // m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
-    // m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
-    // m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
-
-    // Algae
-    m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
-    m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
+    m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
+    m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
 
     // Coral
     //m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
@@ -118,11 +116,7 @@ public class RobotContainer {
       .until(() -> false/* enter the has game piece condition */)
     );
 
-    // Climb
-    m_testStick.button(1).whileTrue(m_climberSubsystem.climb(false));
-    m_testStick.button(2).whileTrue(m_climberSubsystem.climb(true));
-    m_testStick.button(3).whileTrue(m_climberSubsystem.runOut());
-    m_testStick.button(4).whileTrue(m_climberSubsystem.runIn());
+
 
     // Operator UI Controls
     // Elevator Position
@@ -153,6 +147,23 @@ public class RobotContainer {
 
     // Win Button!!!
     // m_win.onTrue(new InstantCommand());
+
+    // put algae & climber commands here
+    if (Constants.States.m_isCompetitionRobot) {
+      // Climb
+      m_testStick.button(1).whileTrue(m_climberSubsystem.climb(false));
+      m_testStick.button(2).whileTrue(m_climberSubsystem.climb(true));
+      m_testStick.button(3).whileTrue(m_climberSubsystem.runOut());
+      m_testStick.button(4).whileTrue(m_climberSubsystem.runIn());
+
+      // Algae
+      m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
+      m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
+
+      //default commands
+      m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
+      m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
+    }
   }
 
   /**

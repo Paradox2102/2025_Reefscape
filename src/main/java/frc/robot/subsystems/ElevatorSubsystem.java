@@ -23,6 +23,7 @@ import frc.robot.Constants.MotorConfigs;
 public class ElevatorSubsystem extends SubsystemBase {
   // motor (neo vortex according to co-engineering pres?)
   private SparkFlex m_elevatorMotor = new SparkFlex(Constants.ElevatorConstants.k_elevatorMotor, MotorType.kBrushless);
+  private SparkFlex m_followerMotor = new SparkFlex(0, MotorType.kBrushless);
   // pid
   private SparkClosedLoopController m_PID;
 
@@ -61,6 +62,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public ElevatorSubsystem() {
     m_elevatorMotor.configure(MotorConfigs.Elevator.elevatorConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+    m_followerMotor.configure(MotorConfigs.Elevator.followerConfig, ResetMode.kResetSafeParameters,
+    PersistMode.kPersistParameters);
     m_PID = m_elevatorMotor.getClosedLoopController();
   }
 
