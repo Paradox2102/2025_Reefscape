@@ -17,10 +17,13 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveSubsystem;
 
 // import frc.lib.CSVWriter;
@@ -38,6 +41,7 @@ public class PositionTrackerPose {
   private PhotonPoseEstimator m_photon2;
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
+  private final Field2d m_testField = new Field2d();
 
   public PositionTrackerPose(double x, double y,
                              DriveSubsystem driveSubsystem, PhotonCamera camera1, PhotonCamera camera2) {
@@ -49,6 +53,7 @@ public class PositionTrackerPose {
     m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
     m_photon1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
+    m_photon2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     m_poseEstimator = new SwerveDrivePoseEstimator(
         m_driveSubsystem.getSwerve(), m_driveSubsystem.getGyroRotation2d(),
@@ -58,6 +63,7 @@ public class PositionTrackerPose {
 
     // m_posServer = new PositionServer();
     // m_posServer.start();
+    SmartDashboard.putData("photon pose", m_testField);
   }
 
   public Pose2d getPose2d() { return m_poseEstimator.getEstimatedPosition(); }
@@ -71,16 +77,67 @@ public class PositionTrackerPose {
     System.out.println("pose2d " + getPose2d());
   }
 
+  // FIXME: delete next 2 functions
+  public List<PhotonPipelineResult> getCamera1UnreadResults() {
+    return m_camera1.getAllUnreadResults();
+  }
+
+  /*TESTING CLASSES! DO NOT USE */
+  // public Optional<EstimatedRobotPose> getPhoton1Pose() {
+  //   Optional<EstimatedRobotPose> visionEst = Optional.empty();
+  //   for (var change : m_camera1.getAllUnreadResults()) {
+  //     visionEst = m_photon1.update(change);
+  //   }
+  //   return visionEst;
+  // }
+
+  // private double m_lastTimestamp = 0;
+
+  // private Optional<EstimatedRobotPose> photon2Update(PhotonPipelineResult result){
+  //   if(Math.abs(m_lastTimestamp - result.getTimestampSeconds()) < 1e-6) {
+  //     System.out.println("timestamp is the same");
+  //   }
+  //   return m_photon2.update(result);
+  // }
+
+  // public Optional<EstimatedRobotPose> getPhoton2Pose() {
+  //   Optional<EstimatedRobotPose> visionEst = Optional.empty();
+  //   List<PhotonPipelineResult> results = m_camera2.getAllUnreadResults();
+  //   if(results.size() > 0){
+  //     //System.out.println(results.get(0).hasTargets());
+  //     //System.out.println(results.get(0).getTimestampSeconds());
+  //     if(results.get(0).hasTargets()){
+  //       //System.out.println(m_photon2.update(results.get(0)).isPresent());
+  //       visionEst = photon2Update(results.get(0));
+  //     }
+  //   }
+  //   // for (var change : results) {
+  //   //   visionEst = m_photon2.update(change);
+  //   // }
+  //   return visionEst;
+  // }
+
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
     Optional<EstimatedRobotPose> visionEst = Optional.empty();
     for (var change : m_camera1.getAllUnreadResults()) {
-        visionEst = m_photon1.update(change);
+      visionEst = m_photon1.update(change);
     }
 
     for (var change : m_camera2.getAllUnreadResults()) {
       visionEst = m_photon2.update(change);
     }
     return visionEst;
+  }
+
+  public void displayRobotPosWithCamera() {
+    Optional<EstimatedRobotPose> results = getEstimatedGlobalPose();
+    //System.out.println(results.isPresent());
+    if (results.isPresent()) {
+      SmartDashboard.putNumber("photon2 x", results.get().estimatedPose.toPose2d().getX());
+      SmartDashboard.putNumber("photon2 y", results.get().estimatedPose.toPose2d().getY());
+      SmartDashboard.putNumber("photon2 angle", results.get().estimatedPose.toPose2d().getRotation().getDegrees());
+      m_testField.setRobotPose(results.get().estimatedPose.toPose2d());
+    }
   }
 
   

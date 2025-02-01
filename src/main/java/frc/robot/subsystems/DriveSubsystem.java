@@ -28,7 +28,13 @@ import frc.robot.Constants;
 import frc.robot.ParadoxField;
 import frc.robot.PositionTrackerPose;
 import frc.utils.SwerveUtils;
+
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -208,12 +214,14 @@ public class DriveSubsystem extends SubsystemBase {
   public static boolean m_setGyroZero = true;
   public static double m_gyroZero = 0;
 
+
   @Override
   public void periodic() {
 
     SmartDashboard.putNumber("Heading", getHeadingInDegrees());
     SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
     SmartDashboard.putString("Source Position", m_source.getName());
+    SmartDashboard.putBoolean("Do we see a target", m_tracker.getCamera1UnreadResults().size() > 0);
 
     // SmartDashboard.putNumber("Rotate Error",
     // getRotationDistanceFromTargetError());
@@ -236,6 +244,7 @@ public class DriveSubsystem extends SubsystemBase {
     // twice. Maybe also currentPos. - Gavin
 
     Pose2d currentPos = m_tracker.getPose2d();
+    //m_tracker.displayRobotPosWithCamera();
 
     double yaw = ParadoxField.normalizeAngle(m_gyro.getYaw().getValueAsDouble());
     if (m_setGyroZero) {
@@ -254,9 +263,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // *********************************************************
 
-    // m_field.setRobotPose(m_tracker.getPose2dFRC().getTranslation().getX(),
-    // m_tracker.getPose2dFRC().getTranslation().getY(),
-    // m_tracker.getPose2dFRC().getRotation());
+    m_field.setRobotPose(m_tracker.getPose2d());
     m_tracker.update();
   }
 
