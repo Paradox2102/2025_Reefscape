@@ -40,10 +40,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
-  private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
+  // private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
   private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
   private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
-  private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+  // private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private final RobotControl m_robotControl = new RobotControl();
   
@@ -104,15 +104,17 @@ public class RobotContainer {
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX));
-    m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
+    // m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
 
     // Coral
-    m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
+    // m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
     m_driverController.rightTrigger().toggleOnTrue(
       new DriveToPosition(m_driveSubsystem, false)
       .until(() -> m_hopperSubsystem.getBeamBreak())
     );
+
+    m_driverController.a().whileTrue(m_hopperSubsystem.runHopper());
 
 
 
@@ -154,10 +156,10 @@ public class RobotContainer {
 
       // Operator Controls
       // Elevator Position
-      m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
-      m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
-      m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
-      m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
+      // m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
+      // m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
+      // m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
+      // m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
 
       //default commands
       m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());

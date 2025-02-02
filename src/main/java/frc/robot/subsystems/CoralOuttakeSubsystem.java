@@ -43,7 +43,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     m_coralMotor.configure(MotorConfigs.CoralOuttake.config, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new SparkFlex(0, MotorType.kBrushless);
+    m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new SparkFlex(Constants.RollerConstants.k_RcoralMotor, MotorType.kBrushless);
     if (!Constants.States.m_isCompetitionRobot) {
       m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);

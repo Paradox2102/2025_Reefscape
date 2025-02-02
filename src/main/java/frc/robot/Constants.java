@@ -36,7 +36,7 @@ public final class Constants {
   public Constants() {
     File f = new File("home/lvuser/practice");
     SmartDashboard.putString("Robot Name", "Practice Bot");
-    if (!f.exists()) {
+    if (false) { // !f.exists()
       SmartDashboard.putString("Robot Name", "Comp Bot");
       States.m_isCompetitionRobot = true;
     }
@@ -70,15 +70,15 @@ public final class Constants {
     public static double k_BROffset = 6.239 + k_BRChassisAngularOffset;
 
     // SPARK MAX CAN IDs
-    public static final int k_FRTurningMotor = 2;
-    public static final int k_FLTurningMotor = 4;
-    public static final int k_BRTurningMotor = 6;
-    public static final int k_BLTurningMotor = 8;
+    public static final int k_FRTurningMotor = 2; // 2
+    public static final int k_FLTurningMotor = 4; // 4
+    public static final int k_BRTurningMotor = 6; // 6
+    public static final int k_BLTurningMotor = 8; // 8
 
-    public static final int k_FRDriveMotor = 1;
-    public static final int k_FLDriveMotor = 3;
-    public static final int k_BRDriveMotor = 5;
-    public static final int k_BLDriveMotor = 7;
+    public static final int k_FRDriveMotor = 1; // 1
+    public static final int k_FLDriveMotor = 3; // 3
+    public static final int k_BRDriveMotor = 5; // 5
+    public static final int k_BLDriveMotor = 7; // 7
 
     public static final double k_driveDeadband = 0.1;
 
@@ -158,7 +158,7 @@ public final class Constants {
     public static final double k_algaeF = 0;
     public static final double k_algaeTicksToDegrees = 1;
 
-    public static final int k_hopperMotor = 0;
+    public static final int k_hopperMotor = 14;
   }
 
   public static final class ElevatorConstants {
