@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -45,7 +46,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
     m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new SparkFlex(Constants.RollerConstants.k_coralFollower, MotorType.kBrushless);
     if (!Constants.States.m_isCompetitionRobot) {
-      m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig, ResetMode.kResetSafeParameters,
+    m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
     }
   }
@@ -57,6 +58,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   public void setPower(double power) {
     m_coralMotor.set(power);
+    //m_practiceMotor.set(power);
   }
 
   public double getCurrentDraw() {
@@ -76,14 +78,18 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   }
 
   public Command stop() {
-    // FIXME: Why not runOnce? You forgot to add the requirement. Better to use Subsyste,runOnce() instead. -Gavin
-    return Commands.run(() -> {
+    return Commands.runOnce(() -> {
       setPower(0);
     }, this);
   }
 
+  public Command runOut() {
+    return Commands.run(() -> {setPower(k_intakePower);System.out.println("running coral outtakes");}, this);
+  }
+
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Coral Current", getCurrentDraw());
     // This method will be called once per scheduler run
   }
 }

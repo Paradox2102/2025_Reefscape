@@ -39,9 +39,9 @@ public class RobotContainer {
   private Constants m_constants = new Constants();
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
-  // private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
-  private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
+ // private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
+  private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
+  //private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
   private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
   // private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
@@ -104,7 +104,7 @@ public class RobotContainer {
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX));
-    // m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
+    m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
 
     // Coral
@@ -114,9 +114,8 @@ public class RobotContainer {
       .until(() -> m_hopperSubsystem.getBeamBreak())
     );
 
-    m_driverController.a().whileTrue(m_hopperSubsystem.runHopper());
-
-
+    m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
+    m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
 
     // Operator UI Controls
 
@@ -145,14 +144,14 @@ public class RobotContainer {
     // put algae & climber commands here
     if (Constants.States.m_isCompetitionRobot) {
       // Climb
-      m_testStick.button(1).whileTrue(m_climberSubsystem.climb(false));
-      m_testStick.button(2).whileTrue(m_climberSubsystem.climb(true));
-      m_testStick.button(3).whileTrue(m_climberSubsystem.runOut());
-      m_testStick.button(4).whileTrue(m_climberSubsystem.runIn());
+      // m_testStick.button(1).whileTrue(m_climberSubsystem.climb(false));
+      // m_testStick.button(2).whileTrue(m_climberSubsystem.climb(true));
+      // m_testStick.button(3).whileTrue(m_climberSubsystem.runOut());
+      // m_testStick.button(4).whileTrue(m_climberSubsystem.runIn());
 
-      // Algae
-      m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
-      m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
+      // // Algae
+      // m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
+      // m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
 
       // Operator Controls
       // Elevator Position
@@ -162,8 +161,8 @@ public class RobotContainer {
       // m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
 
       //default commands
-      m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
-      m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
+      // m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
+      // m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
     }
   }
 

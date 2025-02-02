@@ -233,8 +233,8 @@ public final class Constants {
             // FIXME: turningFactor is only coincidentally the right value here because the encoder is in revolutions. With a different encoder, this would be wrong. -Gavin 
             .positionWrappingInputRange(0, turningFactor);
         // FIXME: This is a bug. Java does not have assignment overloading. This will throw away the existing coastDriveConfig and coastTurnConfig objects and replace them with references to drivingConfig and turningConfig. The idleMode() method then modifies the object in place, so this is not creating a separate config object, but seeting coast mode on all configs. -Gavin
-        coastDriveConfig = drivingConfig;
-        coastTurnConfig = turningConfig;
+        coastDriveConfig.apply(drivingConfig);
+        coastTurnConfig.apply(turningConfig);
         
         coastDriveConfig.idleMode(IdleMode.kCoast);
         coastTurnConfig.idleMode(IdleMode.kCoast);
@@ -284,7 +284,7 @@ public final class Constants {
         elevatorConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
             .pidf(ElevatorConstants.k_p, ElevatorConstants.k_i, ElevatorConstants.k_d, ElevatorConstants.k_f);
-        coastElevatorConfig = elevatorConfig;
+        coastElevatorConfig.apply(elevatorConfig);
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
 
@@ -313,14 +313,14 @@ public final class Constants {
 
       static {
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
-        coastConfig = config;
+        coastConfig.apply(config);
 
         coastConfig.idleMode(IdleMode.kCoast);
 
-        practiceConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        practiceConfig.apply(config);
         practiceConfig.follow(RollerConstants.k_coralMotor);
 
-        coastPracticeConfig = practiceConfig;
+        coastPracticeConfig.apply(practiceConfig);
 
         coastPracticeConfig.idleMode(IdleMode.kCoast);
       }
@@ -339,7 +339,7 @@ public final class Constants {
         pivotConfig.absoluteEncoder
             .positionConversionFactor(PivotConstants.k_ticksToDegrees)
             .velocityConversionFactor(PivotConstants.k_ticksToDegrees);
-        coastAlgaeConfig = pivotConfig;
+        coastAlgaeConfig.apply(pivotConfig);
 
         coastAlgaeConfig.idleMode(IdleMode.kCoast);
 
@@ -351,7 +351,7 @@ public final class Constants {
         rollerConfig.closedLoop
              .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
              .pid(RollerConstants.k_algaeP, RollerConstants.k_algaeI, RollerConstants.k_algaeD);
-        coastRoller = rollerConfig;
+        coastRoller.apply(rollerConfig);
   
         coastRoller.idleMode(IdleMode.kCoast);
       }
