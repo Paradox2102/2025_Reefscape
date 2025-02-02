@@ -141,8 +141,8 @@ public final class Constants {
   }
   
   public static final class RollerConstants {
-    public static final int k_coralMotor = 12;
-    public static final int k_RcoralMotor = 13;
+    public static final int k_coralMotor = 14;
+    public static final int k_coralFollower = 15;
     
     public static final double k_coralP = 0;
     public static final double k_coralI = 0;
@@ -158,27 +158,18 @@ public final class Constants {
     public static final double k_algaeF = 0;
     public static final double k_algaeTicksToDegrees = 1;
 
-    public static final int k_hopperMotor = 14;
+    public static final int k_hopperMotor = 13;
   }
 
   public static final class ElevatorConstants {
     public static final int k_elevatorMotor = 11;
+    public static final int k_elevatorFollower = 12;
     
     public static final double k_p = 0;
     public static final double k_i = 0;
     public static final double k_d = 0;
     public static final double k_f = 0;
     public static final double k_ticksToInches = 1;
-  }
-
-  public static final class WristConstants {
-    public static final int k_wristMotor = 14;
-
-    public static final double k_p = 0;
-    public static final double k_i = 0;
-    public static final double k_d = 0;
-    public static final double k_f = 0;
-    public static final double k_ticksToDegrees = 1;
   }
 
   public static final class ClimberConstants{
