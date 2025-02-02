@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,6 +19,7 @@ import frc.robot.Constants.MotorConfigs;
 public class HopperSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_motor = new SparkFlex(Constants.RollerConstants.k_hopperMotor, MotorType.kBrushless);
+  DigitalInput m_beamBreak = new DigitalInput(0);
 
   //absoulte encoder
 
@@ -32,14 +34,21 @@ public class HopperSubsystem extends SubsystemBase {
     PersistMode.kPersistParameters);
   }
 
+  public boolean getBeamBreak() {
+    return m_beamBreak.get();
+  }
+
   public Command runHopper() {
-// FIXME: Why not runOnce? You forgot to add the requirement. Better to use Subsyste,runOnce() instead. -Gavin
-    return Commands.run(() -> {
+    return Commands.runOnce(() -> {
       m_motor.set(0.5);
     });
   }
 
-  // FIXME: Add a stop method. -Gavin
+  public Command stop() {
+    return Commands.runOnce(() -> {
+      m_motor.set(0);
+    });
+  }
 
   @Override
   public void periodic() {

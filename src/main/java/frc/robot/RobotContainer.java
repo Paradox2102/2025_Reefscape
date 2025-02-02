@@ -105,13 +105,13 @@ public class RobotContainer {
       m_driverController::getLeftY, 
       m_driverController::getRightX));
     m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
-    m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.runHopper());
+    m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
 
     // Coral
-    //m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
+    m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
     m_driverController.rightTrigger().toggleOnTrue(
       new DriveToPosition(m_driveSubsystem, false)
-      .until(() -> false/* enter the has game piece condition */)
+      .until(() -> m_hopperSubsystem.getBeamBreak())
     );
 
 
@@ -119,7 +119,6 @@ public class RobotContainer {
     // Operator UI Controls
 
     // Reef Position
-    // FIXME: What is this number business? Given that FIRST has officially named the reef branches A-L, it would be much better to use those names. -Gavin
     m_reef1.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.ONE));
     m_reef2.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TWO));
     m_reef3.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.THREE));
