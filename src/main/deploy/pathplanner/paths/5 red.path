@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6104541843220337,
-        "y": 0.7243048199152543
+        "x": 3.7,
+        "y": 2.98
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3367918535977985,
-        "y": 1.6498283537435512
+        "x": 3.9470478925868484,
+        "y": 3.0183058581472473
       },
       "isLocked": false,
-      "linkedName": "Right Pick Up"
+      "linkedName": "5 oclock"
     },
     {
       "anchor": {
-        "x": 3.632720636917373,
-        "y": 2.975958355402542
+        "x": 1.52,
+        "y": 0.74
       },
       "prevControl": {
-        "x": 2.6613911813721916,
-        "y": 1.839458281009067
+        "x": 1.3036347440370888,
+        "y": 0.5715118669039546
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Good 5 end"
+      "linkedName": "red station"
     }
   ],
   "rotationTargets": [],
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.92,
-    "maxAcceleration": 7.2,
+    "maxVelocity": 5.74,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 984.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -120.7686011771462
+    "rotation": -127.50000000000001
   },
   "reversed": false,
-  "folder": "Good Right Auto Paths",
+  "folder": "4 coral",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -126.62750515786372
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

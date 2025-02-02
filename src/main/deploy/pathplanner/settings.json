@@ -4,9 +4,8 @@
   "holonomicMode": true,
   "pathFolders": [
     "Center Auto Paths",
-    "Good Right Auto Paths",
-    "Push Blue Paths",
     "Push Auto Paths",
+    "Push Blue Paths",
     "Push Red Paths"
   ],
   "autoFolders": [],
