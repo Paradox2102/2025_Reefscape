@@ -82,6 +82,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.set(power);
   }
 
+  public ElevatorPosition getPreset() {
+    return m_position;
+  }
+
   public double getPosition() {
     return m_elevatorEncoder.getPosition();
   }

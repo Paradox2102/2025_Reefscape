@@ -25,8 +25,6 @@ import java.util.concurrent.locks.Condition;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -119,11 +117,6 @@ public class RobotContainer {
 
 
     // Operator UI Controls
-    // Elevator Position
-    // m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
-    // m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
-    // m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
-    // m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
 
     // Reef Position
     // FIXME: What is this number business? Given that FIRST has officially named the reef branches A-L, it would be much better to use those names. -Gavin
@@ -159,6 +152,13 @@ public class RobotContainer {
       // Algae
       m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
       m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
+
+      // Operator Controls
+      // Elevator Position
+      m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
+      m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
+      m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
+      m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
 
       //default commands
       m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
