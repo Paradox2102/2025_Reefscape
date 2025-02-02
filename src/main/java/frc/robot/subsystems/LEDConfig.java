@@ -3,26 +3,22 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-
-import frc.robot.Constants;
 import frc.robot.Robot;
-
+import frc.robot.LED.Blinker;
+import frc.robot.LED.ParadoxAnim2;
 public class LEDConfig {
     private final LEDSubsystem m_string1 = new LEDSubsystem(0, 45);
     private final LEDSubsystem m_string2 = new LEDSubsystem(45, 46, true);
     private final LEDSubsystem m_string3 = new LEDSubsystem(45 + 46, 30);
-    private final ApriltagsCamera m_cameraFrontBack;
-    private final ApriltagsCamera m_cameraLeftRight;
+
     private final Robot m_robot;
 
-    private Command m_currentCommand = null;
+    // private Command m_currentCommand = null;
 
     @SuppressWarnings("unused")
-    private ParallelCommandGroup m_paradox = new ParallelCommandGroup(new ParadoxAnim(m_string1, 0.1),
-            new ParadoxAnim(m_string2, 0.1), new ParadoxAnim(m_string3, 0.1));
-    private ParallelCommandGroup m_rainbow = new ParallelCommandGroup(new RainbowAnim(m_string1),
-            new RainbowAnim(m_string2), new RainbowAnim(m_string3));
-    private ParallelCommandGroup m_cameraFailure = new ParallelCommandGroup(new Blinker(m_string1, 0.5, Color.kBlue),
+    private ParallelCommandGroup m_paradox = new ParallelCommandGroup(new ParadoxAnim2(m_string1),
+            new ParadoxAnim2(m_string2), new ParadoxAnim2(m_string3),
+    // private ParallelCommandGroup m_cameraFailure = new ParallelCommandGroup(new Blinker(m_string1, 0.5, Color.kBlue),
             new Blinker(m_string2, 0.5, Color.kBlue), new Blinker(m_string3, 0.5, Color.kBlue));
     private ParallelCommandGroup m_coral = new ParallelCommandGroup(new Blinker(m_string1, 0, Color.kPurple),
             new Blinker(m_string2, 0, Color.kPurple), new Blinker(m_string3, 0, Color.kPurple));
@@ -34,41 +30,17 @@ public class LEDConfig {
             new Blinker(m_string2, 0.2, Color.kGreen), new Blinker(m_string3, 0.2, Color.kGreen));
     private ParallelCommandGroup m_cameraError;
 
-    public LEDConfig(Robot robot, ApriltagsCamera cameraFrontBack, ApriltagsCamera cameraLeftRight) {
+    public LEDConfig(Robot robot/*, ApriltagsCamera cameraFrontBack, ApriltagsCamera cameraLeftRight*/) {
         m_robot = robot;
-        m_cameraFrontBack = cameraFrontBack;
-        m_cameraLeftRight = cameraLeftRight;
+        // m_cameraFrontBack = cameraFrontBack;
+        // m_cameraLeftRight = cameraLeftRight;
 
-        m_cameraError = new ParallelCommandGroup(new DisplayCameraError(m_string1, m_cameraFrontBack), new DisplayCameraError(m_string2, m_cameraFrontBack), new DisplayCameraError(m_string3, m_cameraFrontBack));
+        // m_cameraError = new ParallelCommandGroup(new DisplayCameraError(m_string1, m_cameraFrontBack), new DisplayCameraError(m_string2, m_cameraFrontBack), new DisplayCameraError(m_string3, m_cameraFrontBack));
     }
 
     public void periodic() {
-        Command command = null;
+        // Command command = null;
 
-        if ((!m_cameraFrontBack.isConnected() && !m_cameraLeftRight.isConnected()) && Constants.States.m_autoRotateAim) {
-            command = m_cameraFailure;
-        } else if (m_cameraFrontBack.isTagVisible() && m_robot.isDisabled()) {
-            // command = m_paradox;
-            command = m_cameraError;
-        } else if (m_robot.isDisabled()) {
-            command = m_rainbow;
-        } else if (Constants.States.m_speakerMode) {
-            if (Constants.States.m_isGamePieceStowed) {
-                command = m_coralNote;
-            } else {
-                command = m_coral;
-            }
-        } else {
-            if (Constants.States.m_isGamePieceStowed) {
-                command = m_algaeNote;
-            } else {
-                command = m_algae;
-            }
-        }
-
-        if (command != m_currentCommand) {
-            m_currentCommand = command;
-            m_currentCommand.schedule();
-        }
-    }
+       
+}
 }
