@@ -297,7 +297,7 @@ public final class Constants {
       public static final SparkFlexConfig config = new SparkFlexConfig();
 
       static {
-        config.idleMode(IdleMode.kBrake).smartCurrentLimit(20);
+        config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
         config.absoluteEncoder
             .positionConversionFactor(1)
             .velocityConversionFactor(1);

@@ -27,7 +27,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   private static final double k_ejectedCurrent = 20;
   private static final double k_intakeCurrent = 20;
 
-  private static final double k_intakePower = .5;
+  private static final double k_intakePower = 1;
   private static final double k_outtakePower = -.5;
 
   // I'm still unsure that testing against a current level is going to be reliable here. Also, consider using distance travelled instead of a time. We can talk about how to do that in a Trigger. -Gavin
