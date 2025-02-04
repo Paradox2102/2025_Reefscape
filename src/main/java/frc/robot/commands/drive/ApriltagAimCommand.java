@@ -19,11 +19,19 @@ public class ApriltagAimCommand extends Command {
   private DriveSubsystem m_subsystem;
   private PhotonCamera m_camera;
   private PhotonPipelineResult m_result;
+  private double m_dist = 0;
+  private static final double k_ldist = 0;
+  private static final double k_rdist = 0;
   /** Creates a new ApriltagAimCommand. */
-  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem) {
+  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem, boolean left) {
     m_camera = camera;
     m_subsystem =  subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
+    if(left){
+      m_dist = k_ldist;
+    } else {
+      m_dist = k_rdist;
+    }
   }
 
   // Called when the command is initially scheduled.
@@ -45,12 +53,11 @@ public class ApriltagAimCommand extends Command {
       }
       x /= 4;
       //find horizontal distance, where -0.5 is all the way to the left and 0.5 is all the way to the right
-      horizDist = (x)-0.5; //todo: find what the x actually means for photonvision, and convert to -0.5-0.5 number
-      //TODO: add logic to find distance from tag, then drive sideways to align
+      horizDist = (x/1280)-m_dist; //todo: find what the x actually means for photonvision, and convert to -0.5-0.5 number
     }
     SmartDashboard.putNumber("tag x", x);
     SmartDashboard.putNumber("tag x dist", horizDist);
-    m_subsystem.drive(0, horizDist/2, 0, false, false);
+    //m_subsystem.drive(0, horizDist/2, 0, false, false);
   }
 
   // Called once the command ends or is interrupted.
