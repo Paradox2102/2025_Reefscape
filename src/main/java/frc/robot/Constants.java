@@ -168,8 +168,8 @@ public final class Constants {
     public static final double k_p = 0;
     public static final double k_i = 0;
     public static final double k_d = 0;
-    public static final double k_f = 0;
-    public static final double k_ticksToInches = 1;
+    public static final double k_f = .03;
+    public static final double k_ticksToInches = 3488435;//4.0/2.67;
   }
 
   public static final class ClimberConstants{
@@ -277,6 +277,7 @@ public final class Constants {
 
       static {
         elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        followerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
       
         elevatorConfig.absoluteEncoder
             .positionConversionFactor(ElevatorConstants.k_ticksToInches)
@@ -288,7 +289,7 @@ public final class Constants {
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
 
-        followerConfig.follow(ElevatorConstants.k_elevatorMotor);
+        followerConfig.follow(ElevatorConstants.k_elevatorMotor, true);
       }
 
     }

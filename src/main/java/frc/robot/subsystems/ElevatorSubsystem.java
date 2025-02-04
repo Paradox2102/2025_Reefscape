@@ -23,7 +23,7 @@ import frc.robot.Constants.MotorConfigs;
 public class ElevatorSubsystem extends SubsystemBase {
   // motor (neo vortex according to co-engineering pres?)
   private SparkFlex m_elevatorMotor = new SparkFlex(Constants.ElevatorConstants.k_elevatorMotor, MotorType.kBrushless);
-  private SparkFlex m_followerMotor = new SparkFlex(0, MotorType.kBrushless);
+  private SparkFlex m_followerMotor = new SparkFlex(Constants.ElevatorConstants.k_elevatorFollower, MotorType.kBrushless);
   // pid
   private SparkClosedLoopController m_PID;
 
@@ -102,11 +102,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     }, this);
   }
 
+  public Command manualMove(boolean up) {
+    return Commands.run(() -> {
+      m_elevatorMotor.set(up ? .2 : -.2);
+    }, this);
+  }
+
 
   @Override
   public void periodic() {
     //Shows data on SmartDashBoard
     SmartDashboard.putNumber("Elevator Raw Position", getPosition());
     // This method will be called once per scheduler run
-  }
+  } 
 }

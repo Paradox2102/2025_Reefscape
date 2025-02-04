@@ -25,10 +25,12 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   private SparkFlex m_practiceMotor;
 
   private static final double k_ejectedCurrent = 20;
-  private static final double k_intakeCurrent = 20;
+  private static final double k_intakeCurrent = 40;
 
-  private static final double k_intakePower = 1;
-  private static final double k_outtakePower = -.5;
+  private static final double k_intakePower = .25;
+  private static final double k_outtakePower = .5;
+
+  private boolean m_running = false;
 
   // I'm still unsure that testing against a current level is going to be reliable here. Also, consider using distance travelled instead of a time. We can talk about how to do that in a Trigger. -Gavin
   public final Trigger ejectedCoral = new Trigger(
@@ -36,8 +38,12 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     .debounce(.1, DebounceType.kRising);
 
   public final Trigger hasCoral = new Trigger(
-    () -> getCurrentDraw() > k_intakeCurrent)
-    .debounce(.1, DebounceType.kRising);
+    () -> getCurrentDraw() > k_intakeCurrent && m_running)
+    .debounce(.05, DebounceType.kRising);
+
+  public final Trigger running = new Trigger(
+    () -> getCurrentDraw() < k_intakeCurrent)
+    .debounce(.05, DebounceType.kRising);
 
   /** Creates a new RollerSubsystem. */
   public CoralOuttakeSubsystem() {
@@ -61,6 +67,10 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     //m_practiceMotor.set(power);
   }
 
+  public void toggleRunning() {
+    m_running = !m_running;
+  }
+
   public double getCurrentDraw() {
     return m_coralMotor.getOutputCurrent();
   }
@@ -72,24 +82,27 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   }
 
   public Command intakeCoral() {
-    return Commands.runOnce(() -> {
+    return Commands.run(() -> {
+      m_running = true;
       setPower(k_intakePower);
-    }, this).until(hasCoral);
+    }, this).until(hasCoral).andThen(stop());
   }
 
   public Command stop() {
     return Commands.runOnce(() -> {
+      m_running = false;
       setPower(0);
     }, this);
   }
 
   public Command runOut() {
-    return Commands.run(() -> {setPower(k_intakePower);System.out.println("running coral outtakes");}, this);
+    return Commands.run(() -> {setPower(k_intakePower);}, this);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Coral Current", getCurrentDraw());
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Coral Current High", m_running);
   }
 }

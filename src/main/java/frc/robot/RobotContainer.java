@@ -25,6 +25,8 @@ import java.util.concurrent.locks.Condition;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -43,7 +45,7 @@ public class RobotContainer {
   private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
   //private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
   private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
-  // private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+  private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private final RobotControl m_robotControl = new RobotControl();
   
@@ -106,16 +108,22 @@ public class RobotContainer {
       m_driverController::getRightX));
     m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
+    m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
     // Coral
     // m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
-    m_driverController.rightTrigger().toggleOnTrue(
-      new DriveToPosition(m_driveSubsystem, false)
-      .until(() -> m_hopperSubsystem.getBeamBreak())
-    );
+    // m_driverController.rightTrigger().toggleOnTrue(
+    //   new DriveToPosition(m_driveSubsystem, false)
+    //   .until(() -> m_hopperSubsystem.getBeamBreak())
+    // );
+    m_driverController.rightTrigger().whileTrue(m_coralOuttakeSubsystem.intakeCoral());
+
+    m_coralOuttakeSubsystem.running.onTrue(new InstantCommand(() -> {m_coralOuttakeSubsystem.toggleRunning();}));
 
     m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
     m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
+    m_driverController.x().whileTrue(m_elevatorSubsystem.manualMove(false));
+    m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(true));
 
     // Operator UI Controls
 

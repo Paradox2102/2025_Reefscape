@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,7 +42,7 @@ public class HopperSubsystem extends SubsystemBase {
   public Command runHopper() {
 // FIXME: Why not runOnce? You forgot to add the requirement. Better to use Subsyste,runOnce() instead. -Gavin
     return Commands.run(() -> {
-      m_motor.set(-1);
+      m_motor.set(-.25);
     }, this);
   }
 
@@ -51,8 +52,13 @@ public class HopperSubsystem extends SubsystemBase {
     }, this);
   }
 
+  public double getCurrentDraw() {
+    return m_motor.getOutputCurrent();
+  }
+
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Hopper Current", getCurrentDraw());
     // This method will be called once per scheduler run
   }
 }
