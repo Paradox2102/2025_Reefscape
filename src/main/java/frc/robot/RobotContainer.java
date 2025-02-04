@@ -143,7 +143,6 @@ public class RobotContainer {
     m_reef12.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TWELVE));
 
     // Choose Source
-    // Presumably these are for choosing between the two Coral Stations. I think you're going to want to be able to choose the position within on Coral Station as well. -Gavin
     m_leftSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_LEFT));
     m_rightSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_RIGHT));
 
