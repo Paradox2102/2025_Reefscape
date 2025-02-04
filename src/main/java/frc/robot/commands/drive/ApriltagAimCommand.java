@@ -32,6 +32,7 @@ public class ApriltagAimCommand extends Command {
     } else {
       m_dist = k_rdist;
     }
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.

@@ -32,7 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorPosition m_position = ElevatorPosition.L1;
 
   private static final double k_deadzoneInches = 0;
-
+  
   public Trigger atPosition = new Trigger(
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
 

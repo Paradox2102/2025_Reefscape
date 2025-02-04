@@ -1,6 +1,5 @@
 package frc.robot;
 
-import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -17,7 +15,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -36,8 +33,7 @@ public class PositionTrackerPose {
   private PhotonCamera m_camera1; //TODO: add camera names, transforms, and more once we figure out camera layouts
   private PhotonCamera m_camera2;
   private PhotonPoseEstimator m_photon1;
-  private double m_timestamp1 = 0;
-  private double m_timestamp2 = 0;
+
   private PhotonPoseEstimator m_photon2;
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
@@ -68,12 +64,11 @@ public class PositionTrackerPose {
 
   public Pose2d getPose2d() { return m_poseEstimator.getEstimatedPosition(); }
 
-  public void setXYAngle(double x, double y, double angleInDegrees) {
+  public void setPose(Pose2d pose) {
     m_poseEstimator.resetPosition(
         m_driveSubsystem.getGyro().getRotation2d(),
         m_driveSubsystem.getModulePosition(),
-        // FIXME: It would be much better to have this method take a Pose2d. -Gavin
-        new Pose2d(x, y, Rotation2d.fromDegrees(angleInDegrees)));
+        new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
     System.out.println("pose2d " + getPose2d());
   }
 

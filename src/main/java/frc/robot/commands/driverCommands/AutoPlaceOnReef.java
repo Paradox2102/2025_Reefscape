@@ -8,6 +8,7 @@ import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.States;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
@@ -24,12 +25,14 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveToPosition(driveSubsystem, true).unless(() -> elevatorSubsystem.getPreset() == ElevatorPosition.L1),
+      new DriveToPosition(driveSubsystem, true)
+        .unless(() -> (elevatorSubsystem.getPreset() == ElevatorPosition.L1) || !States.m_autoAim),
       new ParallelCommandGroup(
-        new ApriltagAimCommand(camera, driveSubsystem, driveSubsystem.getReefPosition().leftRight()),
+        new ApriltagAimCommand(camera, driveSubsystem, driveSubsystem.getReefPosition().leftRight())
+        .unless(() -> (elevatorSubsystem.getPreset() == ElevatorPosition.L1) || !States.m_autoAim),
         elevatorSubsystem.goToPosition().until(elevatorSubsystem.atPosition)
       ),
-      COSubsystem.ejectCoral().until(COSubsystem.hasCoral.negate()),
+      COSubsystem.ejectCoral(),
       elevatorSubsystem.resetPosition()
     );
   }

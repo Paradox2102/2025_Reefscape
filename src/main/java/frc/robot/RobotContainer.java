@@ -20,12 +20,9 @@ import frc.robot.subsystems.DriveSubsystem.FieldPosition;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.robotControl.RobotControl;
 
-import java.util.concurrent.locks.Condition;
-
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -71,7 +68,7 @@ public class RobotContainer {
   private final Trigger m_leftSource = new Trigger(()->m_robotControl.checkButton(17));
   private final Trigger m_rightSource = new Trigger(()->m_robotControl.checkButton(18));
 
-  private final Trigger m_win = new Trigger(()->m_robotControl.checkButton(19));
+  // private final Trigger m_win = new Trigger(()->m_robotControl.checkButton(19));
 
   private PhotonCamera m_camera1 = new PhotonCamera("Arducam 1");
   private PhotonCamera m_camera2 = new PhotonCamera("Arducam 2");
@@ -81,7 +78,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.k_DriverControllerPort);
-  private final CommandJoystick m_testStick = new CommandJoystick(0);
+  private final CommandJoystick m_operatorController = new CommandJoystick(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -111,14 +108,12 @@ public class RobotContainer {
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
     // Coral
-    // m_driverController.rightBumper().onTrue(m_coralOuttakeSubsystem.ejectCoral());
+    m_driverController.rightBumper().toggleOnTrue(m_coralOuttakeSubsystem.ejectCoral());
     // m_driverController.rightTrigger().toggleOnTrue(
     //   new DriveToPosition(m_driveSubsystem, false)
     //   .until(() -> m_hopperSubsystem.getBeamBreak())
     // );
-    m_driverController.rightTrigger().whileTrue(m_coralOuttakeSubsystem.intakeCoral());
-
-    m_coralOuttakeSubsystem.running.onTrue(new InstantCommand(() -> {m_coralOuttakeSubsystem.toggleRunning();}));
+    m_driverController.rightTrigger().whileTrue(m_coralOuttakeSubsystem.intakeCoral().deadlineFor(m_hopperSubsystem.runHopper()));
 
     m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
     m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
@@ -126,6 +121,12 @@ public class RobotContainer {
     m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(true));
 
     // Operator UI Controls
+
+    // Elevator Position
+    m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
+    m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
+    m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
+    m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
 
     // Reef Position
     m_reef1.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.ONE));
@@ -161,17 +162,15 @@ public class RobotContainer {
       // m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
       // m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
 
-      // Operator Controls
-      // Elevator Position
-      // m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
-      // m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
-      // m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
-      // m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
 
       //default commands
       // m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
       // m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
     }
+  }
+
+  public boolean getThrottle() {
+    return m_operatorController.getThrottle() > 0;
   }
 
   /**
