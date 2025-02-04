@@ -26,7 +26,7 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
     addCommands(
       new DriveToPosition(driveSubsystem, true).unless(() -> elevatorSubsystem.getPreset() == ElevatorPosition.L1),
       new ParallelCommandGroup(
-        new ApriltagAimCommand(camera, driveSubsystem),
+        new ApriltagAimCommand(camera, driveSubsystem, driveSubsystem.getReefPosition().leftRight()),
         elevatorSubsystem.goToPosition().until(elevatorSubsystem.atPosition)
       ),
       COSubsystem.ejectCoral().until(COSubsystem.hasCoral.negate()),

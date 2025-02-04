@@ -46,7 +46,7 @@ public class DriveToPosition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d pose = m_goToReef ? m_subsystem.getReefPosition() : m_subsystem.getSourcePosition();
+    Pose2d pose = m_goToReef ? m_subsystem.getReefPosition().targetPose() : m_subsystem.getSourcePosition();
     m_xPID.setSetpoint(pose.getX());
     m_yPID.setSetpoint(pose.getY());
     m_rotationDegrees = pose.getRotation().getDegrees();
