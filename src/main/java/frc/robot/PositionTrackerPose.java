@@ -48,9 +48,9 @@ public class PositionTrackerPose {
     // Let's have arrays of cameras and estimators, please. Much easier to update when we change the number of cameras. Same with their names and transforms. -Gavin
     m_cameraFL = cameraFL;
     m_cameraBR = cameraBR;
-    m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(45))));
+    m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(-0.267, -0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(225))));
     m_photon1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-    m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(-0.267, -1.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(225))));
+    m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(45))));
     m_photon2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     m_poseEstimator = new SwerveDrivePoseEstimator(
