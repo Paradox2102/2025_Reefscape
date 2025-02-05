@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -92,14 +93,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Command goToPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(15, ControlType.kPosition);
+      m_PID.setReference(15, ControlType.kPosition, ClosedLoopSlot.kSlot0);
       // m_PID.setReference(m_position.heightInches(), ControlType.kPosition);
     }, this);
   }
 
   public Command resetPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(2, ControlType.kPosition);
+      m_PID.setReference(2, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this);
   }
 

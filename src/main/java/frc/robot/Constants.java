@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import java.io.File;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -165,10 +166,14 @@ public final class Constants {
   public static final class ElevatorConstants {
     public static final int k_elevatorMotor = 11;
     public static final int k_elevatorFollower = 12;
+
+    public static final double k_pUP = .3;
+    public static final double k_iUP = 0;
+    public static final double k_dUp = 0;
     
-    public static final double k_p = .1;
-    public static final double k_i = 0;
-    public static final double k_d = 0;
+    public static final double k_pDown = .08;
+    public static final double k_iDown = 0;
+    public static final double k_dDown = 0;
     public static final double k_f = .03; // .03;
     public static final double k_ticksToInches = 4.0/2.67;
   }
@@ -284,7 +289,8 @@ public final class Constants {
             .positionConversionFactor(ElevatorConstants.k_ticksToInches);
         elevatorConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pidf(ElevatorConstants.k_p, ElevatorConstants.k_i, ElevatorConstants.k_d, ElevatorConstants.k_f);
+            .pidf(ElevatorConstants.k_pDown, ElevatorConstants.k_iDown, ElevatorConstants.k_dDown, ElevatorConstants.k_f, ClosedLoopSlot.kSlot0)
+            .pidf(ElevatorConstants.k_pUP, ElevatorConstants.k_iUP, ElevatorConstants.k_dUp, ElevatorConstants.k_f, ClosedLoopSlot.kSlot1);
         coastElevatorConfig.apply(elevatorConfig);
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
