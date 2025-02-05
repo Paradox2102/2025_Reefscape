@@ -16,7 +16,9 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -29,9 +31,9 @@ import frc.robot.subsystems.DriveSubsystem;
 public class PositionTrackerPose {
   private SwerveDrivePoseEstimator m_poseEstimator;
   private DriveSubsystem m_driveSubsystem;
-  private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField); //TODO: Change to k2025Reefscape when added
-  private PhotonCamera m_camera1; //TODO: add camera names, transforms, and more once we figure out camera layouts
-  private PhotonCamera m_camera2;
+  private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  private PhotonCamera m_cameraFL;
+  private PhotonCamera m_cameraBR;
   private PhotonPoseEstimator m_photon1;
 
   private PhotonPoseEstimator m_photon2;
@@ -40,15 +42,15 @@ public class PositionTrackerPose {
   private final Field2d m_testField = new Field2d();
 
   public PositionTrackerPose(double x, double y,
-                             DriveSubsystem driveSubsystem, PhotonCamera camera1, PhotonCamera camera2) {
+                             DriveSubsystem driveSubsystem, PhotonCamera cameraFL, PhotonCamera cameraBR) {
     super();
     m_driveSubsystem = driveSubsystem;
     // Let's have arrays of cameras and estimators, please. Much easier to update when we change the number of cameras. Same with their names and transforms. -Gavin
-    m_camera1 = camera1;
-    m_camera2 = camera2;
-    m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
+    m_cameraFL = cameraFL;
+    m_cameraBR = cameraBR;
+    m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(45))));
     m_photon1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-    m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
+    m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(-0.267, -1.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(225))));
     m_photon2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     m_poseEstimator = new SwerveDrivePoseEstimator(
@@ -73,8 +75,8 @@ public class PositionTrackerPose {
   }
 
   // FIXME: delete next 2 functions
-  public List<PhotonPipelineResult> getCamera1UnreadResults() {
-    return m_camera1.getAllUnreadResults();
+  public List<PhotonPipelineResult> getFLCameraUnreadResults() {
+    return m_cameraFL.getAllUnreadResults();
   }
 
   /*TESTING CLASSES! DO NOT USE */
@@ -114,11 +116,11 @@ public class PositionTrackerPose {
 
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
     Optional<EstimatedRobotPose> visionEst = Optional.empty();
-    for (var change : m_camera1.getAllUnreadResults()) {
+    for (var change : m_cameraFL.getAllUnreadResults()) {
       visionEst = m_photon1.update(change);
     }
 
-    for (var change : m_camera2.getAllUnreadResults()) {
+    for (var change : m_cameraBR.getAllUnreadResults()) {
       visionEst = m_photon2.update(change);
     }
     return visionEst;

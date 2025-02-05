@@ -227,7 +227,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Heading", getHeadingInDegrees());
     SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
     SmartDashboard.putString("Source Position", m_source.getName());
-    SmartDashboard.putBoolean("Do we see a target", m_tracker.getCamera1UnreadResults().size() > 0);
+    SmartDashboard.putBoolean("Do we see a target", m_tracker.getFLCameraUnreadResults().size() > 0);
 
     // SmartDashboard.putNumber("Rotate Error",
     // getRotationDistanceFromTargetError());

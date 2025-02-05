@@ -70,10 +70,10 @@ public class RobotContainer {
 
   // private final Trigger m_win = new Trigger(()->m_robotControl.checkButton(19));
 
-  private PhotonCamera m_camera1 = new PhotonCamera("Arducam 1");
-  private PhotonCamera m_camera2 = new PhotonCamera("Arducam 2");
+  private PhotonCamera m_cameraFL = new PhotonCamera("fl_camera");
+  private PhotonCamera m_cameraBR = new PhotonCamera("br_camera");
   //private PhotonCamera m_alignCamera = new PhotonCamera("align");
-  public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, m_camera1, m_camera2);
+  public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, m_cameraFL, m_cameraBR);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
