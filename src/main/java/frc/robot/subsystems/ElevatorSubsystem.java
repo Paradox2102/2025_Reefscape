@@ -32,7 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorPosition m_position = ElevatorPosition.L1;
 
   private static final double k_deadzoneInches = 0;
-  
+
   public Trigger atPosition = new Trigger(
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
 
@@ -91,14 +91,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public Command goToPosition() {
-    return Commands.runOnce(() -> {
-      m_PID.setReference(m_position.heightInches(), ControlType.kPosition);
+    return Commands.run(() -> {
+      m_PID.setReference(15, ControlType.kPosition);
+      // m_PID.setReference(m_position.heightInches(), ControlType.kPosition);
     }, this);
   }
 
   public Command resetPosition() {
-    return Commands.runOnce(() -> {
-      m_PID.setReference(0, ControlType.kPosition);
+    return Commands.run(() -> {
+      m_PID.setReference(2, ControlType.kPosition);
     }, this);
   }
 

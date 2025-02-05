@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
+import frc.robot.commands.driverCommands.IntakeCoral;
+import frc.robot.commands.driverCommands.ScoreCoral;
 import frc.robot.commands.operatorCommands.SetElevatorPos;
 import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
@@ -108,17 +110,19 @@ public class RobotContainer {
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
     // Coral
-    m_driverController.rightBumper().toggleOnTrue(m_coralOuttakeSubsystem.ejectCoral());
+    m_driverController.rightBumper().toggleOnTrue(new ScoreCoral(m_coralOuttakeSubsystem));
     // m_driverController.rightTrigger().toggleOnTrue(
     //   new DriveToPosition(m_driveSubsystem, false)
     //   .until(() -> m_hopperSubsystem.getBeamBreak())
     // );
-    m_driverController.rightTrigger().whileTrue(m_coralOuttakeSubsystem.intakeCoral().deadlineFor(m_hopperSubsystem.runHopper()));
+    m_driverController.rightTrigger().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem));
 
-    m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
-    m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
+    // m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
+    // m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
     m_driverController.x().whileTrue(m_elevatorSubsystem.manualMove(false));
     m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(true));
+    m_driverController.a().whileTrue(m_elevatorSubsystem.goToPosition());
+    m_driverController.b().whileTrue(m_elevatorSubsystem.resetPosition());
 
     // Operator UI Controls
 

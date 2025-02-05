@@ -39,6 +39,10 @@ public class HopperSubsystem extends SubsystemBase {
     return m_beamBreak.get();
   }
 
+  public void setPower(double power) {
+    m_motor.set(power);
+  }
+
   public Command runHopper() {
 // FIXME: Why not runOnce? You forgot to add the requirement. Better to use Subsyste,runOnce() instead. -Gavin
     return Commands.run(() -> {

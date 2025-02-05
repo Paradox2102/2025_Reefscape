@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -25,21 +26,16 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   private SparkFlex m_coralMotor = new SparkFlex(RollerConstants.k_coralMotor, MotorType.kBrushless);
   private SparkFlex m_practiceMotor;
 
-  private static final double k_ejectedCurrent = 20;
+  private static final double k_ejectedCurrent = 40;
   private static final double k_intakeCurrent = 40;
 
   private static final double k_intakePower = .25;
   private static final double k_outtakePower = .5;
 
-  private double m_intakeStartTime = 0;
-
   // I'm still unsure that testing against a current level is going to be reliable here. Also, consider using distance travelled instead of a time. We can talk about how to do that in a Trigger. -Gavin
   public final Trigger ejectedCoral = new Trigger(
     () -> getCurrentDraw() < k_ejectedCurrent)
-    .debounce(.1, DebounceType.kRising);
-
-  public final Trigger hasCoral = new Trigger(
-    () -> getCurrentDraw() > k_intakeCurrent && Timer.getFPGATimestamp() - m_intakeStartTime > .1);
+    .debounce(1, DebounceType.kRising);
 
   /** Creates a new RollerSubsystem. */
   public CoralOuttakeSubsystem() {
@@ -67,16 +63,9 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   }
 
   public Command ejectCoral() {
-    return Commands.runOnce(() -> {
+    return Commands.run(() -> {
       setPower(k_outtakePower);
     }, this).until(ejectedCoral);
-  }
-
-  public Command intakeCoral() {
-    return Commands.run(() -> {
-      m_intakeStartTime = Timer.getFPGATimestamp();
-      setPower(k_intakePower);
-    }, this).until(hasCoral);
   }
 
   public Command stop() {
