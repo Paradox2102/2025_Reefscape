@@ -78,7 +78,7 @@ public class DriveToPosition extends Command {
     yVelocity = MathUtil.clamp(yVelocity, -0.1, 0.1);
     rotVelocity = MathUtil.clamp(rotVelocity, -0.5, 0.5);
 
-    m_subsystem.drive(xVelocity, yVelocity, rotVelocity, true, true);
+    m_subsystem.drive(-xVelocity, -yVelocity, rotVelocity, true, true);
   }
 
   // Called once the command ends or is interrupted.
