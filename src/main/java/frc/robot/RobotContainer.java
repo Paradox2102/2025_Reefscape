@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
+import frc.robot.commands.drive.ReefTestCommand;
 import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ScoreCoral;
 import frc.robot.commands.operatorCommands.SetElevatorPos;
@@ -123,6 +124,8 @@ public class RobotContainer {
     m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(true));
     m_driverController.a().whileTrue(m_elevatorSubsystem.goToPosition());
     m_driverController.b().whileTrue(m_elevatorSubsystem.resetPosition());
+
+    m_driverController.povUp().whileTrue(new ReefTestCommand(m_driveSubsystem));
 
     // Operator UI Controls
 

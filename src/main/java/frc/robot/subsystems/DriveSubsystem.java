@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.ParadoxField;
@@ -164,15 +166,13 @@ public class DriveSubsystem extends SubsystemBase {
     // PathPlannerLogging.setLogActivePathCallback((poses) -> m_field.getObject("path").setPoses(poses));
   }
 
-  // FIXME: This should be a command factory. -Gavin
-  // FIXME: Why don't these methods share an implementation? - Gavin
-  public void setReefPosition(FieldPosition position) {
-    m_reefPosition = position;
+  public Command setReefPosition(FieldPosition position) {
+    return Commands.runOnce(() -> {m_reefPosition = position;}, this);
   }
 
   // FIXME: This should be a command factory. -Gavin
-  public void setSource(FieldPosition source) {
-    m_source = source;
+  public Command setSource(FieldPosition source) {
+    return Commands.runOnce(() -> {m_source = source;}, this);
   }
 
   public FieldPosition getReefPosition() {

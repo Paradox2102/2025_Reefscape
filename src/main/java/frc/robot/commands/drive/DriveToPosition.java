@@ -4,6 +4,7 @@
 
 package frc.robot.commands.drive;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -72,6 +73,10 @@ public class DriveToPosition extends Command {
     yVelocity = Math.abs(m_currentY - m_yPos) < k_deadzoneMeters ? 0 : yVelocity;
 
     yVelocity *= Constants.States.m_alliance == Alliance.Blue ? -1 : 1;
+
+    xVelocity = MathUtil.clamp(xVelocity, -0.1, 0.1);
+    yVelocity = MathUtil.clamp(yVelocity, -0.1, 0.1);
+    rotVelocity = MathUtil.clamp(rotVelocity, -0.5, 0.5);
 
     m_subsystem.drive(xVelocity, yVelocity, rotVelocity, true, true);
   }
