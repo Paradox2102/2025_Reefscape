@@ -167,11 +167,11 @@ public final class Constants {
     public static final int k_elevatorMotor = 11;
     public static final int k_elevatorFollower = 12;
 
-    public static final double k_pUP = .3;
+    public static final double k_pUP = .03;
     public static final double k_iUP = 0;
     public static final double k_dUp = 0;
     
-    public static final double k_pDown = .08;
+    public static final double k_pDown = .02;
     public static final double k_iDown = 0;
     public static final double k_dDown = 0;
     public static final double k_f = .03; // .03;
@@ -288,8 +288,8 @@ public final class Constants {
             .positionConversionFactor(ElevatorConstants.k_ticksToInches);
         elevatorConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pidf(ElevatorConstants.k_pDown, ElevatorConstants.k_iDown, ElevatorConstants.k_dDown, ElevatorConstants.k_f, ClosedLoopSlot.kSlot0)
-            .pidf(ElevatorConstants.k_pUP, ElevatorConstants.k_iUP, ElevatorConstants.k_dUp, ElevatorConstants.k_f, ClosedLoopSlot.kSlot1);
+            .pidf(ElevatorConstants.k_pDown, ElevatorConstants.k_iDown, ElevatorConstants.k_dDown, ElevatorConstants.k_f, ClosedLoopSlot.kSlot1)
+            .pidf(ElevatorConstants.k_pUP, ElevatorConstants.k_iUP, ElevatorConstants.k_dUp, ElevatorConstants.k_f, ClosedLoopSlot.kSlot0);
         coastElevatorConfig.apply(elevatorConfig);
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);

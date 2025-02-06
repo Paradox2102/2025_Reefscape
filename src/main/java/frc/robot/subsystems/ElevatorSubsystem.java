@@ -32,7 +32,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private ElevatorPosition m_position = ElevatorPosition.L1;
 
-  private static final double k_deadzoneInches = 0;
+  private static final double k_deadzoneInches = 3;
+  private double m_targetPos = 0;
 
   public Trigger atPosition = new Trigger(
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
@@ -93,14 +94,15 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Command goToPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(15, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-      // m_PID.setReference(m_position.heightInches(), ControlType.kPosition);
+      m_targetPos = 15;//m_position.heightInches();
+      // m_PID.setReference(15, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }, this);
   }
 
   public Command resetPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(2, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_targetPos = 1;
+      // m_PID.setReference(2, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this);
   }
 
@@ -114,7 +116,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     //Shows data on SmartDashBoard
-    SmartDashboard.putNumber("Elevator Raw Position", getPosition());
+    double pos = getPosition();
+    SmartDashboard.putNumber("Elevator Raw Position", pos);
+    if (Math.abs(m_targetPos - pos) > k_deadzoneInches) {
+      setPower((.2 * Math.signum(m_targetPos - pos)) + Constants.ElevatorConstants.k_f);
+    } else {
+      setPower(Constants.ElevatorConstants.k_f);
+    }
+
     // This method will be called once per scheduler run
   } 
 }
