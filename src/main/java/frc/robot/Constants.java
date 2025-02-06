@@ -146,10 +146,10 @@ public final class Constants {
     public static final int k_coralMotor = 14;
     public static final int k_coralFollower = 15;
     
-    public static final double k_coralP = 0;
-    public static final double k_coralI = 0;
+    public static final double k_coralP = 0.00005;
+    public static final double k_coralI = 0.0000001;
     public static final double k_coralD = 0;
-    public static final double k_coralF = 0;
+    public static final double k_coralF = 0.00018;
     public static final double k_coralTicksToDegrees = 1;
 
     public static final int k_algaeMotor = 9;
@@ -238,7 +238,6 @@ public final class Constants {
             .positionWrappingEnabled(true)
             // FIXME: turningFactor is only coincidentally the right value here because the encoder is in revolutions. With a different encoder, this would be wrong. -Gavin 
             .positionWrappingInputRange(0, turningFactor);
-        // FIXME: This is a bug. Java does not have assignment overloading. This will throw away the existing coastDriveConfig and coastTurnConfig objects and replace them with references to drivingConfig and turningConfig. The idleMode() method then modifies the object in place, so this is not creating a separate config object, but seeting coast mode on all configs. -Gavin
         coastDriveConfig.apply(drivingConfig);
         coastTurnConfig.apply(turningConfig);
         
@@ -320,12 +319,14 @@ public final class Constants {
 
       static {
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        config.closedLoop.pid(RollerConstants.k_coralP, RollerConstants.k_coralI, RollerConstants.k_coralD)
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder).velocityFF(RollerConstants.k_coralF);
         coastConfig.apply(config);
 
         coastConfig.idleMode(IdleMode.kCoast);
 
         practiceConfig.apply(config);
-        practiceConfig.follow(RollerConstants.k_coralMotor);
+        practiceConfig.follow(RollerConstants.k_coralMotor, false);
 
         coastPracticeConfig.apply(practiceConfig);
 

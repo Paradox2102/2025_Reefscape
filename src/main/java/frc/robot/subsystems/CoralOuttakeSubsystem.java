@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -25,6 +28,8 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_coralMotor = new SparkFlex(RollerConstants.k_coralMotor, MotorType.kBrushless);
   private SparkFlex m_practiceMotor;
+  private SparkClosedLoopController m_pid;
+  private RelativeEncoder m_encoder;
 
   private static final double k_ejectedCurrent = 40;
   private static final double k_intakeCurrent = 40;
@@ -47,6 +52,8 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
     }
+    m_pid = m_coralMotor.getClosedLoopController();
+    m_encoder = m_coralMotor.getEncoder();
   }
 
   public void setBrakeMode(boolean brake) {
@@ -58,8 +65,23 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     m_coralMotor.set(power);
   }
 
+  public double getSpeedMotorRPM() {
+    return m_encoder.getVelocity();
+  }
+
+  public void setSpeed(double speed){
+    SmartDashboard.putNumber("coral target speed", speed);
+    m_pid.setReference(speed, ControlType.kVelocity);
+  }
+
   public double getCurrentDraw() {
     return m_coralMotor.getOutputCurrent();
+  }
+
+  public Command runSpeed(double speed) {
+    return Commands.run(() -> {
+      setSpeed(speed);
+    }, this);
   }
 
   public Command ejectCoral() {
@@ -70,7 +92,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   public Command stop() {
     return Commands.runOnce(() -> {
-      setPower(0);
+      setSpeed(0);
     }, this);
   }
 
@@ -81,6 +103,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Coral Current", getCurrentDraw());
+    SmartDashboard.putNumber("coral speed rpm", getSpeedMotorRPM());
     // This method will be called once per scheduler run
   }
 }
