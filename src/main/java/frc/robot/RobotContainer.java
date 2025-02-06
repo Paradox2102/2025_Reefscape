@@ -25,6 +25,8 @@ import frc.robot.robotControl.RobotControl;
 
 import org.photonvision.PhotonCamera;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -41,7 +43,7 @@ public class RobotContainer {
   private Constants m_constants = new Constants();
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
- // private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
+ private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
   private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
   //private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
   private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
@@ -85,6 +87,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    NamedCommands.registerCommand("Intake Coral", new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem));
+    NamedCommands.registerCommand("Score Coral", new ScoreCoral(m_coralOuttakeSubsystem));
+    NamedCommands.registerCommand("Intake Algae", m_algaeSubsystem.intake());
+    NamedCommands.registerCommand("Remove Algae", m_algaeSubsystem.outtake());
+    
     // Configure the trigger bindings
     configureBindings();
     m_driveSubsystem.setTracker(m_tracker);
