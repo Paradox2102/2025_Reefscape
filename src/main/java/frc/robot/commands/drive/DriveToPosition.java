@@ -25,10 +25,10 @@ public class DriveToPosition extends Command {
   double m_currentY = 0;
   double m_currentRot = 0;
 
-  private static final double k_f = .4;
-  private static final double k_p = .003;
-  private static final double k_i = 0.003;
-  private static final double k_d = .0007;
+  private static final double k_f = 0;
+  private static final double k_p = .6;
+  private static final double k_i = .2;
+  private static final double k_d = 0;//.0007;
   private static final double k_deadzoneMeters = .1;
 
   PIDController m_xPID = new PIDController(k_p, k_i, k_d);
@@ -65,8 +65,8 @@ public class DriveToPosition extends Command {
     double yVelocity = m_yPID.calculate(m_currentY);
     double rotVelocity = m_subsystem.orientPID(m_rotationDegrees);
 
-    xVelocity += k_f * Math.signum(xVelocity);
-    yVelocity += k_f * Math.signum(yVelocity);
+    // xVelocity += k_f * Math.signum(xVelocity);
+    // yVelocity += k_f * Math.signum(yVelocity);
     rotVelocity += Constants.DriveConstants.k_rotateF * Math.signum(rotVelocity);
     
     xVelocity = Math.abs(m_currentX - m_xPos) < k_deadzoneMeters ? 0 : xVelocity;
@@ -74,14 +74,14 @@ public class DriveToPosition extends Command {
 
     yVelocity *= Constants.States.m_alliance == Alliance.Blue ? -1 : 1;
 
-    xVelocity = MathUtil.clamp(xVelocity, -0.1, 0.1);
-    yVelocity = MathUtil.clamp(yVelocity, -0.1, 0.1);
-    rotVelocity = MathUtil.clamp(rotVelocity, -0.5, 0.5);
+    // xVelocity = MathUtil.clamp(xVelocity, -0.1, 0.1);
+    // yVelocity = MathUtil.clamp(yVelocity, -0.1, 0.1);
+    // rotVelocity = MathUtil.clamp(rotVelocity, -0.5, 0.5);
 
     xVelocity = MathUtil.applyDeadband(xVelocity, .07);
     yVelocity = MathUtil.applyDeadband(yVelocity, .07);
 
-    m_subsystem.drive(xVelocity, -yVelocity, rotVelocity, true, true);
+    m_subsystem.drive(xVelocity, /*-yVelocity*/0, /*rotVelocity*/0, true, true);
   }
 
   // Called once the command ends or is interrupted.
