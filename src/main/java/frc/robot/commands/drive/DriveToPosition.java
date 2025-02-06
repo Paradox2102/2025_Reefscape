@@ -78,10 +78,10 @@ public class DriveToPosition extends Command {
     // yVelocity = MathUtil.clamp(yVelocity, -0.1, 0.1);
     // rotVelocity = MathUtil.clamp(rotVelocity, -0.5, 0.5);
 
-    xVelocity = MathUtil.applyDeadband(xVelocity, .07);
-    yVelocity = MathUtil.applyDeadband(yVelocity, .07);
+    // xVelocity = MathUtil.applyDeadband(xVelocity, .07);
+    // yVelocity = MathUtil.applyDeadband(yVelocity, .07);
 
-    m_subsystem.drive(xVelocity, /*-yVelocity*/0, /*rotVelocity*/0, true, true);
+    m_subsystem.drive(xVelocity, -yVelocity, 0, true, true);
   }
 
   // Called once the command ends or is interrupted.
