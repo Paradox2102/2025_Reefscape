@@ -94,15 +94,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Command goToPosition() {
     return Commands.run(() -> {
-      m_targetPos = 15;//m_position.heightInches();
-      // m_PID.setReference(15, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+      m_PID.setReference(35, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }, this);
   }
 
   public Command resetPosition() {
     return Commands.run(() -> {
-      m_targetPos = 1;
-      // m_PID.setReference(2, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_PID.setReference(2, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this);
   }
 
@@ -118,12 +116,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     //Shows data on SmartDashBoard
     double pos = getPosition();
     SmartDashboard.putNumber("Elevator Raw Position", pos);
-    if (Math.abs(m_targetPos - pos) > k_deadzoneInches) {
-      setPower((.2 * Math.signum(m_targetPos - pos)) + Constants.ElevatorConstants.k_f);
-    } else {
-      setPower(Constants.ElevatorConstants.k_f);
-    }
-
     // This method will be called once per scheduler run
   } 
 }
