@@ -111,7 +111,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       m_elevatorMotor.set(up ? .2 : -.2);
     }, this);
   }
-// yay
+
 
   @Override
   public void periodic() {
