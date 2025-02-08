@@ -144,7 +144,7 @@ public final class Constants {
   
   public static final class RollerConstants {
     public static final int k_coralMotor = 14;
-    public static final int k_coralFollower = 15;
+    //public static final int k_coralFollower = 15;
     
     public static final double k_coralP = 0.00005;
     public static final double k_coralI = 0.0000001;
@@ -312,10 +312,10 @@ public final class Constants {
 
     public static final class CoralOuttake {
       public static final SparkFlexConfig config = new SparkFlexConfig();
-      public static final SparkFlexConfig practiceConfig = new SparkFlexConfig();
+      //public static final SparkFlexConfig practiceConfig = new SparkFlexConfig();
 
       public static SparkFlexConfig coastConfig = new SparkFlexConfig();
-      public static SparkFlexConfig coastPracticeConfig = new SparkFlexConfig();
+      //public static SparkFlexConfig coastPracticeConfig = new SparkFlexConfig();
 
       static {
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
@@ -325,12 +325,12 @@ public final class Constants {
 
         coastConfig.idleMode(IdleMode.kCoast);
 
-        practiceConfig.apply(config);
-        practiceConfig.follow(RollerConstants.k_coralMotor, false);
+        // practiceConfig.apply(config);
+        // practiceConfig.follow(RollerConstants.k_coralMotor, false);
 
-        coastPracticeConfig.apply(practiceConfig);
+        // coastPracticeConfig.apply(practiceConfig);
 
-        coastPracticeConfig.idleMode(IdleMode.kCoast);
+        //coastPracticeConfig.idleMode(IdleMode.kCoast);
       }
         }
         

@@ -27,7 +27,7 @@ import frc.robot.Constants.RollerConstants;
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_coralMotor = new SparkFlex(RollerConstants.k_coralMotor, MotorType.kBrushless);
-  private SparkFlex m_practiceMotor;
+  //private SparkFlex m_practiceMotor;
   private SparkClosedLoopController m_pid;
   private RelativeEncoder m_encoder;
 
@@ -47,10 +47,10 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     m_coralMotor.configure(MotorConfigs.CoralOuttake.config, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new SparkFlex(Constants.RollerConstants.k_coralFollower, MotorType.kBrushless);
+    //m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new SparkFlex(Constants.RollerConstants.k_coralFollower, MotorType.kBrushless);
     if (!Constants.States.m_isCompetitionRobot) {
-    m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig, ResetMode.kResetSafeParameters,
-        PersistMode.kPersistParameters);
+    //m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig, ResetMode.kResetSafeParameters,
+        //PersistMode.kPersistParameters);
     }
     m_pid = m_coralMotor.getClosedLoopController();
     m_encoder = m_coralMotor.getEncoder();
