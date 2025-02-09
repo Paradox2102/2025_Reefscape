@@ -16,8 +16,8 @@ public class IntakeCoral extends Command {
   HopperSubsystem m_hopperSubsystem;
   private Timer m_timer = new Timer();
   private static final double k_intakeCurrent = 30;
-  private static final double k_stopSpeed = 1400;
-  private static final double k_intakeSpeed = 1500;
+  private static final double k_stopSpeed = 4900;
+  private static final double k_intakeSpeed = 5000;
 
 
   public IntakeCoral(CoralOuttakeSubsystem COSubsystem, HopperSubsystem hopperSubsystem) {
@@ -38,7 +38,7 @@ public class IntakeCoral extends Command {
   @Override
   public void execute() {
     m_coSubsystem.setSpeed(k_intakeSpeed);
-    m_hopperSubsystem.setPower(-.4);
+    m_hopperSubsystem.setPower(-.5);
   }
 
   // Called once the command ends or is interrupted.
@@ -50,6 +50,6 @@ public class IntakeCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_coSubsystem.getSpeedMotorRPM() < k_stopSpeed && m_timer.get() > .2 && m_coSubsystem.getCurrentDraw() > k_intakeCurrent;
+    return m_coSubsystem.getSpeedMotorRPM() < k_stopSpeed && m_timer.get() > .5 && m_coSubsystem.getCurrentDraw() > k_intakeCurrent;
   }
 }

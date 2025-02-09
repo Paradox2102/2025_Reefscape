@@ -13,7 +13,7 @@ public class ScoreCoral extends Command {
   CoralOuttakeSubsystem m_coSubsystem;
 
   private Timer m_timer = new Timer();
-  private static final double k_current = 30;
+  private static final double k_current = 20;
   private static final double k_outtakePower = .5;
   
   /** Creates a new ScoreCoral. */

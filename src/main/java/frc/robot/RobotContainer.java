@@ -111,7 +111,7 @@ public class RobotContainer {
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
     // Coral
-    m_driverController.rightBumper().toggleOnTrue(m_coralOuttakeSubsystem.ejectCoral());
+    m_driverController.rightBumper().toggleOnTrue(new ScoreCoral(m_coralOuttakeSubsystem));
     // m_driverController.rightTrigger().toggleOnTrue(
     //   new DriveToPosition(m_driveSubsystem, false)
     //   .until(() -> m_hopperSubsystem.getBeamBreak())
