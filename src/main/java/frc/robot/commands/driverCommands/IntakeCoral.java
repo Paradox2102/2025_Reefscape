@@ -15,8 +15,8 @@ public class IntakeCoral extends Command {
   CoralOuttakeSubsystem m_coSubsystem;
   HopperSubsystem m_hopperSubsystem;
   private Timer m_timer = new Timer();
-  private static final double k_intakeCurrent = 30;
-  private static final double k_stopSpeed = 4900;
+  private static final double k_intakeCurrent = 50;
+  private static final double k_stopSpeed = 4750;
   private static final double k_intakeSpeed = 5000;
 
 

@@ -81,7 +81,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.k_DriverControllerPort);
-  private final CommandJoystick m_operatorController = new CommandJoystick(0);
+  private final CommandJoystick m_operatorController = new CommandJoystick(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -131,6 +131,8 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
     m_driverController.povRight().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
 
+    m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
+    m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
 
     // Operator UI Controls
 

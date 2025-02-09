@@ -41,8 +41,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public enum ElevatorPosition {
     L4(70, "Level 4"),
-    L3(43, "Level 3"),
-    L2(28.9, "Level 2"),
+    L3(45, "Level 3"),
+    L2(31, "Level 2"),
     L1(0, "Level 1"),
     RESET(0, "Reset"),
     ALGAE(0, "Algae");
@@ -124,9 +124,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     //Shows data on SmartDashBoard
     double pos = getPosition();
     m_targetPos = m_position.heightInches();
+    double output = m_elevatorMotor.getAppliedOutput();
     SmartDashboard.putNumber("Elevator Raw Position", pos);
     SmartDashboard.putNumber("elevator speed", m_elevatorEncoder.getVelocity());
-    SmartDashboard.putNumber("elevator output", m_elevatorMotor.getAppliedOutput());
+    SmartDashboard.putNumber("elevator output", output);
+    if ((pos < -0.5)){
+      setPower(0);
+      m_elevatorEncoder.setPosition(0);
+    } else if (pos > 73){
+      setPower(0);
+      m_elevatorEncoder.setPosition(72.5);
+    }
     // This method will be called once per scheduler run
   } 
 }

@@ -43,10 +43,10 @@ public class HopperSubsystem extends SubsystemBase {
     m_motor.set(power);
   }
 
-  public Command runHopper() {
+  public Command runHopper(double power) {
 // FIXME: Why not runOnce? You forgot to add the requirement. Better to use Subsyste,runOnce() instead. -Gavin
     return Commands.run(() -> {
-      m_motor.set(-.25);
+      m_motor.set(power);
     }, this);
   }
 
