@@ -19,13 +19,15 @@ public class DriveCommand extends Command {
   private DoubleSupplier m_getY;
   private DoubleSupplier m_getRot;
   private boolean m_slowmode;
+  private boolean m_fieldRelative;
 
   // ArcadeDrive is a means to control a differential drive, so this class is misnamed. -Gavin
-  public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot) {
+  public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot, boolean fieldRelative) {
     m_subsystem = driveSubsystem;
     m_getX = getX;
     m_getY = getY;
     m_getRot = getRot;
+    m_fieldRelative = fieldRelative;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
@@ -50,7 +52,7 @@ public class DriveCommand extends Command {
       y, 
       x, 
       rot, 
-      true, 
+      m_fieldRelative, 
       true
       );
 
@@ -62,7 +64,9 @@ public class DriveCommand extends Command {
   
 
   // Called once the command ends or is interrupted.
-  public void end() {}
+  public void end() {
+    m_subsystem.drive(0, 0, 0, true, true);
+  }
 
   // Returns true when the command should end.
   @Override

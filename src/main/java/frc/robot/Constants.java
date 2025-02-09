@@ -171,8 +171,8 @@ public final class Constants {
     public static final double k_iUP = 0;
     public static final double k_dUp = 0;
     
-    public static final double k_pDown = .005;
-    public static final double k_iDown = 0.00001;
+    public static final double k_pDown = .03;
+    public static final double k_iDown = 0;//0.00001;
     public static final double k_dDown = 0;
     public static final double k_f = .02; // .03;
     public static final double k_ticksToInches = 4.0/2.67;
