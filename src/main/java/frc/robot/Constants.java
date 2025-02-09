@@ -171,8 +171,8 @@ public final class Constants {
     public static final double k_iUP = 0;
     public static final double k_dUp = 0;
     
-    public static final double k_pDown = .02;
-    public static final double k_iDown = 0;
+    public static final double k_pDown = .005;
+    public static final double k_iDown = 0.00001;
     public static final double k_dDown = 0;
     public static final double k_f = .02; // .03;
     public static final double k_ticksToInches = 4.0/2.67;
@@ -288,9 +288,9 @@ public final class Constants {
             .positionConversionFactor(ElevatorConstants.k_ticksToInches);
         elevatorConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pidf(ElevatorConstants.k_pDown, ElevatorConstants.k_iDown, ElevatorConstants.k_dDown, ElevatorConstants.k_f, ClosedLoopSlot.kSlot1)
+            .pidf(ElevatorConstants.k_pDown, ElevatorConstants.k_iDown, ElevatorConstants.k_dDown, 0, ClosedLoopSlot.kSlot1)
             .pidf(ElevatorConstants.k_pUP, ElevatorConstants.k_iUP, ElevatorConstants.k_dUp, ElevatorConstants.k_f, ClosedLoopSlot.kSlot0);
-        coastElevatorConfig.apply(elevatorConfig);
+        //coastElevatorConfig.apply(elevatorConfig);
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
 
@@ -314,16 +314,16 @@ public final class Constants {
       public static final SparkFlexConfig config = new SparkFlexConfig();
       //public static final SparkFlexConfig practiceConfig = new SparkFlexConfig();
 
-      public static SparkFlexConfig coastConfig = new SparkFlexConfig();
+      //public static SparkFlexConfig coastConfig = new SparkFlexConfig();
       //public static SparkFlexConfig coastPracticeConfig = new SparkFlexConfig();
 
       static {
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
         config.closedLoop.pid(RollerConstants.k_coralP, RollerConstants.k_coralI, RollerConstants.k_coralD)
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder).velocityFF(RollerConstants.k_coralF);
-        coastConfig.apply(config);
+        //coastConfig.apply(config);
 
-        coastConfig.idleMode(IdleMode.kCoast);
+        //coastConfig.idleMode(IdleMode.kCoast);
 
         // practiceConfig.apply(config);
         // practiceConfig.follow(RollerConstants.k_coralMotor, false);

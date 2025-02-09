@@ -106,34 +106,38 @@ public class RobotContainer {
       m_driveSubsystem, m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX));
-    m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.stop());
+    m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.holdCoral());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
     // Coral
-    m_driverController.rightBumper().toggleOnTrue(new ScoreCoral(m_coralOuttakeSubsystem));
+    m_driverController.rightBumper().toggleOnTrue(m_coralOuttakeSubsystem.ejectCoral());
     // m_driverController.rightTrigger().toggleOnTrue(
     //   new DriveToPosition(m_driveSubsystem, false)
     //   .until(() -> m_hopperSubsystem.getBeamBreak())
     // );
-    m_driverController.rightTrigger().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem));
+    m_driverController.rightTrigger().toggleOnTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem));
 
     // m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
     // m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
     m_driverController.x().whileTrue(m_elevatorSubsystem.manualMove(false));
     m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(true));
-    m_driverController.a().whileTrue(m_elevatorSubsystem.goToPosition());
-    m_driverController.b().whileTrue(m_elevatorSubsystem.resetPosition());
+    m_driverController.a().onTrue(m_elevatorSubsystem.goToPosition());
+    m_driverController.b().onTrue(m_elevatorSubsystem.resetPosition());
 
-    m_driverController.povUp().whileTrue(new ReefTestCommand(m_driveSubsystem));
+    m_driverController.povUp().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
+    m_driverController.povDown().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
+    m_driverController.povLeft().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
+    m_driverController.povRight().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
+
 
     // Operator UI Controls
 
     // Elevator Position
-    m_L1.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L1));
-    m_L2.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L2));
-    m_L3.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L3));
-    m_L4.onTrue(new SetElevatorPos(m_elevatorSubsystem, ElevatorPosition.L4));
+    m_L1.onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
+    m_L2.onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
+    m_L3.onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
+    m_L4.onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
 
     // Reef Position
     m_reef1.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.ONE));

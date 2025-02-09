@@ -21,10 +21,11 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoPlaceOnReef extends SequentialCommandGroup {
   /** Creates a new AutoPlaceOnReef. */
-  public AutoPlaceOnReef(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, PhotonCamera camera) {
+  public AutoPlaceOnReef(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, PhotonCamera camera, ElevatorPosition level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      elevatorSubsystem.setTargetPos(level),
       new DriveToPosition(driveSubsystem, true)
         .unless(() -> (elevatorSubsystem.getPreset() == ElevatorPosition.L1) || !States.m_autoAim),
       new ParallelCommandGroup(

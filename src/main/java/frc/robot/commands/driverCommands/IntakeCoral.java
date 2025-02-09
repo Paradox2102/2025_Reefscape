@@ -15,8 +15,9 @@ public class IntakeCoral extends Command {
   CoralOuttakeSubsystem m_coSubsystem;
   HopperSubsystem m_hopperSubsystem;
   private Timer m_timer = new Timer();
-  private static final double k_intakeCurrent = 40;
-  private static final double k_intakePower = .4;
+  private static final double k_intakeCurrent = 30;
+  private static final double k_stopSpeed = 1400;
+  private static final double k_intakeSpeed = 1500;
 
 
   public IntakeCoral(CoralOuttakeSubsystem COSubsystem, HopperSubsystem hopperSubsystem) {
@@ -36,7 +37,7 @@ public class IntakeCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_coSubsystem.setPower(k_intakePower);
+    m_coSubsystem.setSpeed(k_intakeSpeed);
     m_hopperSubsystem.setPower(-.4);
   }
 
@@ -49,6 +50,6 @@ public class IntakeCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;//m_coSubsystem.getCurrentDraw() > k_intakeCurrent && m_timer.get() > .1;
+    return m_coSubsystem.getSpeedMotorRPM() < k_stopSpeed && m_timer.get() > .2 && m_coSubsystem.getCurrentDraw() > k_intakeCurrent;
   }
 }

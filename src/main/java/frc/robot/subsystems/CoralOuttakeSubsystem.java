@@ -27,38 +27,45 @@ import frc.robot.Constants.RollerConstants;
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_coralMotor = new SparkFlex(RollerConstants.k_coralMotor, MotorType.kBrushless);
-  //private SparkFlex m_practiceMotor;
+  // private SparkFlex m_practiceMotor;
   private SparkClosedLoopController m_pid;
   private RelativeEncoder m_encoder;
 
-  private static final double k_ejectedCurrent = 40;
+  private static final double k_ejectedCurrent = 30;
   private static final double k_intakeCurrent = 40;
 
   private static final double k_intakePower = .25;
   private static final double k_outtakePower = .5;
+  private static final double k_outtakeSpeed = 1500;
+  private static final double k_l1Speed = 500;
 
-  // I'm still unsure that testing against a current level is going to be reliable here. Also, consider using distance travelled instead of a time. We can talk about how to do that in a Trigger. -Gavin
+  // I'm still unsure that testing against a current level is going to be reliable
+  // here. Also, consider using distance travelled instead of a time. We can talk
+  // about how to do that in a Trigger. -Gavin
   public final Trigger ejectedCoral = new Trigger(
-    () -> getCurrentDraw() < k_ejectedCurrent)
-    .debounce(1, DebounceType.kRising);
+      () -> getCurrentDraw() < k_ejectedCurrent)
+      .debounce(.25, DebounceType.kRising);
 
   /** Creates a new RollerSubsystem. */
   public CoralOuttakeSubsystem() {
     m_coralMotor.configure(MotorConfigs.CoralOuttake.config, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    //m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new SparkFlex(Constants.RollerConstants.k_coralFollower, MotorType.kBrushless);
+    // m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new
+    // SparkFlex(Constants.RollerConstants.k_coralFollower, MotorType.kBrushless);
     if (!Constants.States.m_isCompetitionRobot) {
-    //m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig, ResetMode.kResetSafeParameters,
-        //PersistMode.kPersistParameters);
+      // m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig,
+      // ResetMode.kResetSafeParameters,
+      // PersistMode.kPersistParameters);
     }
     m_pid = m_coralMotor.getClosedLoopController();
     m_encoder = m_coralMotor.getEncoder();
   }
 
   public void setBrakeMode(boolean brake) {
-    m_coralMotor.configure((brake ? MotorConfigs.CoralOuttake.config : MotorConfigs.CoralOuttake.coastConfig), ResetMode.kResetSafeParameters,
-    PersistMode.kPersistParameters);
+    m_coralMotor.configure((brake ? MotorConfigs.CoralOuttake.config : MotorConfigs.CoralOuttake.config),
+        ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
   }
 
   public void setPower(double power) {
@@ -69,7 +76,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     return m_encoder.getVelocity();
   }
 
-  public void setSpeed(double speed){
+  public void setSpeed(double speed) {
     SmartDashboard.putNumber("coral target speed", speed);
     m_pid.setReference(speed, ControlType.kVelocity);
   }
@@ -86,18 +93,32 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   public Command ejectCoral() {
     return Commands.run(() -> {
-      setPower(k_outtakePower);
+      setSpeed(k_outtakeSpeed);
+    }, this).until(ejectedCoral);
+  }
+
+  public Command ejectL1() {
+    return Commands.run(() -> {
+      setSpeed(k_l1Speed);
     }, this).until(ejectedCoral);
   }
 
   public Command stop() {
     return Commands.runOnce(() -> {
-      setSpeed(0);
+      setPower(0);
     }, this);
   }
 
   public Command runOut() {
-    return Commands.run(() -> {setPower(k_intakePower);}, this);
+    return Commands.run(() -> {
+      setPower(k_intakePower);
+    }, this);
+  }
+
+  public Command holdCoral() {
+    return Commands.run(() -> {
+      setPower(-0.05);
+    }, this);
   }
 
   @Override

@@ -33,16 +33,19 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorPosition m_position = ElevatorPosition.L1;
 
   private static final double k_deadzoneInches = 3;
-  private double m_targetPos = 0;
+
+  private double m_targetPos = m_position.heightInches();
 
   public Trigger atPosition = new Trigger(
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
 
   public enum ElevatorPosition {
-    L4(0, "Level 4"),
-    L3(0, "Level 3"),
-    L2(0, "Level 2"),
-    L1(0, "Level 1");
+    L4(70, "Level 4"),
+    L3(43, "Level 3"),
+    L2(28.9, "Level 2"),
+    L1(0, "Level 1"),
+    RESET(0, "Reset"),
+    ALGAE(0, "Algae");
 
     private double m_heightInches;
     private String m_name;
@@ -92,15 +95,20 @@ public class ElevatorSubsystem extends SubsystemBase {
     return m_elevatorEncoder.getPosition();
   }
 
+  public Command setTargetPos(ElevatorPosition pos) {
+    return Commands.runOnce(() -> {setPosition(pos);}, this);
+  }
+
   public Command goToPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(35, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+      m_PID.setReference(m_position.heightInches(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }, this);
   }
 
   public Command resetPosition() {
+    m_position = ElevatorPosition.RESET;
     return Commands.run(() -> {
-      m_PID.setReference(2, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_PID.setReference(0.5, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this);
   }
 
@@ -115,7 +123,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     //Shows data on SmartDashBoard
     double pos = getPosition();
+    m_targetPos = m_position.heightInches();
     SmartDashboard.putNumber("Elevator Raw Position", pos);
+    SmartDashboard.putNumber("elevator speed", m_elevatorEncoder.getVelocity());
+    SmartDashboard.putNumber("elevator output", m_elevatorMotor.getAppliedOutput());
     // This method will be called once per scheduler run
   } 
 }
