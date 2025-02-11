@@ -5,9 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.MotorConfigs.Elevator;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.commands.drive.ReefTestCommand;
+import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.operatorCommands.SetElevatorPos;
 import frc.robot.commands.operatorCommands.SetReefPos;
@@ -129,8 +131,10 @@ public class RobotContainer {
       Commands.either(
         getAutonomousCommand(), // on true
         getAutonomousCommand(), // on false
-        () -> Constants.States.m_autoAim // condition
-      ).andThen(new InstantCommand())
+        () -> Constants.States.m_autoAim || m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
+      ).andThen(
+        new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem)
+      )
     );
     // m_driverController.rightBumper().onTrue(m_elevatorSubsystem.goToPosition());
     m_driverController.leftBumper().onTrue(m_elevatorSubsystem.resetPosition());

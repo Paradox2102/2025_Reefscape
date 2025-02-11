@@ -18,8 +18,8 @@ public class DriveCommand extends Command {
   private DoubleSupplier m_getX;
   private DoubleSupplier m_getY;
   private DoubleSupplier m_getRot;
-  private boolean m_slowmode;
   private boolean m_fieldRelative;
+  private boolean m_slowMode = false;
 
   // ArcadeDrive is a means to control a differential drive, so this class is misnamed. -Gavin
   public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot, boolean fieldRelative) {
@@ -30,6 +30,11 @@ public class DriveCommand extends Command {
     m_fieldRelative = fieldRelative;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
+  }
+
+  public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot, boolean fieldRelative, boolean slowMode) {
+    this(driveSubsystem, getX, getY, getRot, fieldRelative); 
+    m_slowMode = slowMode;
   }
   //
   // Called when the command is initially scheduled.
@@ -44,12 +49,12 @@ public class DriveCommand extends Command {
     double x = -MathUtil.applyDeadband(m_getX.getAsDouble(), Constants.DriveConstants.k_driveDeadband);
     double y = -MathUtil.applyDeadband(m_getY.getAsDouble(), Constants.DriveConstants.k_driveDeadband);
     double rot = oldRot;
-    if (m_slowmode) {
+    if (m_slowMode) {
       x *= .3;
       y *= .3;
     }
     m_subsystem.drive(
-      y, 
+      m_slowMode ? .3 * y : y, 
       x, 
       rot, 
       m_fieldRelative, 
