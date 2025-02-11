@@ -5,14 +5,12 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.MotorConfigs.Elevator;
 import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.drive.DriveToPosition;
-import frc.robot.commands.drive.ReefTestCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
+import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
+import frc.robot.commands.driverCommands.ManualPlaceOnReef;
 import frc.robot.commands.driverCommands.PrepareForClimbCommand;
-import frc.robot.commands.operatorCommands.SetElevatorPos;
 import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -29,7 +27,6 @@ import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -131,8 +128,8 @@ public class RobotContainer {
 
     m_driverController.rightBumper().toggleOnTrue(
       Commands.either(
-        getAutonomousCommand(), // on true
-        getAutonomousCommand(), // on false
+        new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
+        new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
         () -> Constants.States.m_autoAim || m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
       ).andThen(
         new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem)
