@@ -34,7 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private ElevatorPosition m_position = ElevatorPosition.L1;
 
-  private static final double k_deadzoneInches = 3;
+  private static final double k_deadzoneInches = .2;
 
   private double m_targetPos = m_position.heightInches();
 
@@ -109,14 +109,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Command goToPosition() {
     return Commands.run(() -> {
       m_PID.setReference(m_position.heightInches(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
-    }, this);
+    }, this).until(atPosition);
   }
 
   public Command resetPosition() {
-    m_position = ElevatorPosition.RESET;
     return Commands.run(() -> {
-      m_PID.setReference(0.5, ControlType.kPosition, ClosedLoopSlot.kSlot1);
-    }, this);
+      m_PID.setReference(.5, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    }, this).until(() -> getPosition() < k_deadzoneInches);
   }
 
   public Command manualMove(DoubleSupplier up) {

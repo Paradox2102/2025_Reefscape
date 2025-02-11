@@ -53,7 +53,7 @@ public class DriveCommand extends Command {
     m_subsystem.drive(
       m_slowMode ? m_slowModeCoefficient * y : y, 
       m_slowMode ? m_slowModeCoefficient * x : x, 
-      rot, 
+      m_slowMode ? m_slowModeCoefficient * rot : rot, 
       m_fieldRelative, 
       true
       );
@@ -67,7 +67,7 @@ public class DriveCommand extends Command {
 
   // Called once the command ends or is interrupted.
   public void end() {
-    m_subsystem.drive(0, 0, 0, true, true);
+    m_subsystem.drive(0, 0, 0, true, false);
   }
 
   // Returns true when the command should end.

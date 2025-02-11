@@ -4,6 +4,8 @@
 
 package frc.robot.commands.driverCommands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -17,16 +19,19 @@ import frc.robot.subsystems.ElevatorSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
   /** Creates a new BackAwayResetElevator. */
-  public ScoreBackAwayResetElevator(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem) {
+  public ScoreBackAwayResetElevator(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      COSubsystem.ejectCoral(false),
+      // COSubsystem.ejectCoral(false),
       new ParallelDeadlineGroup(
-        new WaitCommand(1)
-        // new DriveCommand(driveSubsystem, () -> -.1, () -> 0, () -> 0, false)
+        new WaitCommand(.3),
+        new DriveCommand(driveSubsystem, () -> 0, () -> -.2, () -> 0, false)
       ),
-      elevatorSubsystem.resetPosition()
+      new ParallelDeadlineGroup(
+        elevatorSubsystem.resetPosition(),
+        new DriveCommand(driveSubsystem, x, y, rot, true)
+      )
     );
   }
 }
