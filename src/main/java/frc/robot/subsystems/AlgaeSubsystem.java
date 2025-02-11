@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -55,6 +56,10 @@ public class AlgaeSubsystem extends SubsystemBase {
 
   public double getPivotPosition() {
     return m_algaeEncoder.getPosition();
+  }
+
+  public Command setPosition(double angle) {
+    return Commands.runOnce(() -> m_pivotPID.setSetpoint(angle));
   }
 
   public Command intake() {
