@@ -11,6 +11,7 @@ import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.commands.drive.ReefTestCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.IntakeCoral;
+import frc.robot.commands.driverCommands.PrepareForClimbCommand;
 import frc.robot.commands.operatorCommands.SetElevatorPos;
 import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
@@ -44,9 +45,9 @@ public class RobotContainer {
   private Constants m_constants = new Constants();
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
- // private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
+ private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
   private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
-  //private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
+  private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
   private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
   private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
@@ -147,6 +148,7 @@ public class RobotContainer {
 
     m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
     m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
+    m_operatorController.button(3).toggleOnTrue(new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem).andThen(m_climberSubsystem.climb(true)));
 
     // Operator UI Controls
 

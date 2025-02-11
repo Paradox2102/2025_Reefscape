@@ -140,6 +140,10 @@ public final class Constants {
     public static final double k_d = .0001;
     public static final double k_f = .02;
     public static final double k_ticksToDegrees = 45.0/1.6;
+
+    public static final double k_resetPositionDegrees = 0;
+    public static final double k_intakePositionDegrees = 0;
+    public static final double k_climbPositionDegrees = 0;
   }
   
   public static final class RollerConstants {
