@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -39,6 +41,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Trigger atPosition = new Trigger(
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
 
+
   public enum ElevatorPosition {
     L4(70, "Level 4"),
     L3(45, "Level 3"),
@@ -70,6 +73,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_followerMotor.configure(MotorConfigs.Elevator.followerConfig, ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
     m_PID = m_elevatorMotor.getClosedLoopController();
+    
   }
 
   public Trigger isL1 = new Trigger (
@@ -115,9 +119,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     }, this);
   }
 
-  public Command manualMove(boolean up) {
+  public Command manualMove(DoubleSupplier up) {
     return Commands.run(() -> {
-      m_elevatorMotor.set(up ? .2 : -.2);
+      double direction = up.getAsDouble();
+      m_elevatorMotor.set(direction > 0 ? .2 : -.2);
     }, this);
   }
 
