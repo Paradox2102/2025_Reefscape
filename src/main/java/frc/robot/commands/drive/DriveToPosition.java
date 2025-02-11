@@ -4,7 +4,6 @@
 
 package frc.robot.commands.drive;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -25,7 +24,6 @@ public class DriveToPosition extends Command {
   double m_currentY = 0;
   double m_currentRot = 0;
 
-  private static final double k_f = 0;
   private static final double k_p = .6;
   private static final double k_i = .2;
   private static final double k_d = 0;//.0007;
