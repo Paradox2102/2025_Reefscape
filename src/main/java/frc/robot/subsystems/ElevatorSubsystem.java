@@ -72,6 +72,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_PID = m_elevatorMotor.getClosedLoopController();
   }
 
+  public Trigger isL1 = new Trigger (
+    () -> m_position == ElevatorPosition.L1);
+
   // FIXME: This should be a command factory. -Gavin
   public void setPosition(ElevatorPosition position) {
     m_position = position;

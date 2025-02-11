@@ -9,7 +9,6 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.commands.drive.ReefTestCommand;
 import frc.robot.commands.driverCommands.IntakeCoral;
-import frc.robot.commands.driverCommands.ScoreCoral;
 import frc.robot.commands.operatorCommands.SetElevatorPos;
 import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
@@ -114,7 +113,7 @@ public class RobotContainer {
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
     // Coral
-    m_driverController.leftTrigger().toggleOnTrue(new ScoreCoral(m_coralOuttakeSubsystem));
+    m_driverController.leftTrigger().toggleOnTrue(m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isL1.getAsBoolean()));
     // m_driverController.rightTrigger().toggleOnTrue(
     //   new DriveToPosition(m_driveSubsystem, false)
     //   .until(() -> m_hopperSubsystem.getBeamBreak())

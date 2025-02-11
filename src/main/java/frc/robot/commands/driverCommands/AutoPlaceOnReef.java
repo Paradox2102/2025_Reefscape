@@ -35,7 +35,7 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
           .unless(() -> (elevatorSubsystem.getPreset() == ElevatorPosition.L1) || !States.m_autoAim),
         elevatorSubsystem.goToPosition().until(elevatorSubsystem.atPosition)
       ),
-      COSubsystem.ejectCoral(),
+      COSubsystem.ejectCoral(level == ElevatorPosition.L1),
       elevatorSubsystem.resetPosition()
     );
   }

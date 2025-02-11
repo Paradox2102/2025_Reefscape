@@ -31,19 +31,17 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   private SparkClosedLoopController m_pid;
   private RelativeEncoder m_encoder;
 
-  private static final double k_ejectedCurrent = 30;
-  private static final double k_intakeCurrent = 40;
+  private static final double k_ejectedCurrent = 20;
 
-  private static final double k_intakePower = .25;
-  private static final double k_outtakePower = .5;
-  private static final double k_outtakeSpeed = 1500;
+  private static final double k_outtakeSpeed = 2500;
+  private static final double k_outtakeDeadband = 500;
   private static final double k_l1Speed = 500;
 
   // I'm still unsure that testing against a current level is going to be reliable
   // here. Also, consider using distance travelled instead of a time. We can talk
   // about how to do that in a Trigger. -Gavin
   public final Trigger ejectedCoral = new Trigger(
-      () -> getCurrentDraw() < k_ejectedCurrent)
+      () -> getCurrentDraw() < k_ejectedCurrent && getSpeedMotorRPM() >= k_outtakeSpeed - k_outtakeDeadband)
       .debounce(.25, DebounceType.kRising);
 
   /** Creates a new RollerSubsystem. */
@@ -91,15 +89,9 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     }, this);
   }
 
-  public Command ejectCoral() {
+  public Command ejectCoral(boolean L1) {
     return Commands.run(() -> {
-      setSpeed(k_outtakeSpeed);
-    }, this).until(ejectedCoral);
-  }
-
-  public Command ejectL1() {
-    return Commands.run(() -> {
-      setSpeed(k_l1Speed);
+      setSpeed(L1 ? k_l1Speed : k_outtakeSpeed);
     }, this).until(ejectedCoral);
   }
 
@@ -111,7 +103,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   public Command runOut() {
     return Commands.run(() -> {
-      setPower(k_intakePower);
+      setPower(.25);
     }, this);
   }
 
