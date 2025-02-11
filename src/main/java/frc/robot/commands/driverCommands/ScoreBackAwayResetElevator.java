@@ -23,8 +23,8 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
     addCommands(
       COSubsystem.ejectCoral(false),
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
-        new DriveCommand(driveSubsystem, () -> -.1, () -> 0, () -> 0, false)
+        new WaitCommand(1)
+        // new DriveCommand(driveSubsystem, () -> -.1, () -> 0, () -> 0, false)
       ),
       elevatorSubsystem.resetPosition()
     );
