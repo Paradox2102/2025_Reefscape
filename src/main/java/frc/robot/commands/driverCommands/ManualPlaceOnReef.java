@@ -19,9 +19,8 @@ public class ManualPlaceOnReef extends ParallelCommandGroup {
   public ManualPlaceOnReef(ElevatorSubsystem elevatorSubsystem, DriveSubsystem driveSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    double slowMode = .3;
     addCommands(
-      new DriveCommand(driveSubsystem, x, y, rot, false, true),
+      new DriveCommand(driveSubsystem, x, y, rot, true, true),
       elevatorSubsystem.goToPosition()
     );
   }

@@ -20,6 +20,7 @@ public class DriveCommand extends Command {
   private DoubleSupplier m_getRot;
   private boolean m_fieldRelative;
   private boolean m_slowMode = false;
+  private final double m_slowModeCoefficient = .3;
 
   // ArcadeDrive is a means to control a differential drive, so this class is misnamed. -Gavin
   public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot, boolean fieldRelative) {
@@ -49,13 +50,9 @@ public class DriveCommand extends Command {
     double x = -MathUtil.applyDeadband(m_getX.getAsDouble(), Constants.DriveConstants.k_driveDeadband);
     double y = -MathUtil.applyDeadband(m_getY.getAsDouble(), Constants.DriveConstants.k_driveDeadband);
     double rot = oldRot;
-    if (m_slowMode) {
-      x *= .3;
-      y *= .3;
-    }
     m_subsystem.drive(
-      m_slowMode ? .3 * y : y, 
-      x, 
+      m_slowMode ? m_slowModeCoefficient * y : y, 
+      m_slowMode ? m_slowModeCoefficient * x : x, 
       rot, 
       m_fieldRelative, 
       true

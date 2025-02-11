@@ -106,7 +106,8 @@ public class RobotContainer {
   private void configureBindings() {
     // Subsystem Default Commands
     m_driveSubsystem.setDefaultCommand(new DriveCommand(
-      m_driveSubsystem, m_driverController::getLeftX, 
+      m_driveSubsystem, 
+      m_driverController::getLeftX, 
       m_driverController::getLeftY, 
       m_driverController::getRightX,
       true));
