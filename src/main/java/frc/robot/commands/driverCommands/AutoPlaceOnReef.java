@@ -27,7 +27,6 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      elevatorSubsystem.setTargetPos(level),
       new DriveToPosition(driveSubsystem, true)
         .unless(() -> (elevatorSubsystem.getPreset() == ElevatorPosition.L1) || !States.m_autoAim),
       new ParallelCommandGroup(
@@ -35,7 +34,7 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
           .unless(() -> (elevatorSubsystem.getPreset() == ElevatorPosition.L1) || !States.m_autoAim),
         elevatorSubsystem.goToPosition().until(elevatorSubsystem.atPosition)
       ),
-      COSubsystem.ejectCoral(level == ElevatorPosition.L1),
+      // COSubsystem.ejectCoral(),
       elevatorSubsystem.resetPosition()
     );
   }
