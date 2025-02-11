@@ -26,6 +26,8 @@ import frc.robot.robotControl.RobotControl;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -123,7 +125,15 @@ public class RobotContainer {
     // m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
     m_driverController.x().whileTrue(m_elevatorSubsystem.manualMove(false));
     m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(true));
-    m_driverController.rightBumper().onTrue(m_elevatorSubsystem.goToPosition());
+
+    m_driverController.rightBumper().onTrue(
+      Commands.either(
+        getAutonomousCommand(), // on true
+        getAutonomousCommand(), // on false
+        () -> Constants.States.m_autoAim // condition
+      ).andThen(new InstantCommand())
+    );
+    // m_driverController.rightBumper().onTrue(m_elevatorSubsystem.goToPosition());
     m_driverController.leftBumper().onTrue(m_elevatorSubsystem.resetPosition());
 
     m_driverController.povUp().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
