@@ -23,7 +23,7 @@ import frc.robot.subsystems.DriveSubsystem.FieldPosition;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.robotControl.RobotControl;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 
 import org.photonvision.PhotonCamera;
 
@@ -130,36 +130,14 @@ public class RobotContainer {
     // m_driverController.x().whileTrue(m_elevatorSubsystem.manualMove(false));
     // m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(true));
 
-    // m_driverController.rightBumper().toggleOnTrue(
-    //   Commands.either(
-    //     new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
-    //     new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
-    //     () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
-    //   )
-    // );
-    // m_driverController.rightBumper().onTrue(
-    //   Commands.either(
-    //     new InstantCommand(),
-    //     new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
-    //     () -> m_getReadyToScore
-    //   )
-    // );
 
-    m_driverController.rightBumper().onTrue(
-      new InstantCommand(
-        () -> {
-          m_getReadyToScore = !m_getReadyToScore;
-          if (m_getReadyToScore) {
-            Commands.either(
-              new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
-              new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
-              () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
-            ).schedule();
-          } else {
-            new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule();
-          }
-        }
-      )
+    m_driverController.rightBumper().toggleOnTrue(
+      new ProxyCommand(() -> Commands.either(
+        // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
+        new InstantCommand(),
+        new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
+        () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
+      )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     );
 
     // m_driverController.rightBumper().onTrue(m_elevatorSubsystem.goToPosition());
