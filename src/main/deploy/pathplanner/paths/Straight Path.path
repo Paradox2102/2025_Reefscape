@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.827545211226851,
-        "y": 4.847993706597221
+        "x": 7.14675,
+        "y": 7.15475
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.782026909722222,
-        "y": 4.072342664930556
-      },
-      "isLocked": false,
-      "linkedName": "Push 1 end"
-    },
-    {
-      "anchor": {
-        "x": 7.749708116319443,
-        "y": 4.041363208912037
-      },
-      "prevControl": {
-        "x": 7.736084026071014,
-        "y": 4.290991701205894
-      },
-      "nextControl": {
-        "x": 7.763332206567873,
-        "y": 3.791734716618183
+        "x": 6.44475,
+        "y": 7.13525
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.827545211226851,
-        "y": 3.101614221643518
+        "x": 5.31375,
+        "y": 7.15475
       },
       "prevControl": {
-        "x": 7.692349537037037,
-        "y": 3.8896686921296295
+        "x": 6.249750000000001,
+        "y": 7.164499999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Push 2 end"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -38.66245636166172
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Push Auto Paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -41.636444967822634
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
