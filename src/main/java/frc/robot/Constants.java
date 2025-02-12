@@ -171,8 +171,8 @@ public final class Constants {
     public static final int k_elevatorMotor = 11;
     public static final int k_elevatorFollower = 12;
 
-    public static final double k_pUP = 1.2;
-    public static final double k_iUP = 0;
+    public static final double k_pUP = 0.8;
+    public static final double k_iUP = 0.005;
     public static final double k_dUp = 0;
     
     public static final double k_pDown = .0075;

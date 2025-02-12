@@ -15,6 +15,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.ClosedLoopSlot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -31,6 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkClosedLoopController m_PID;
 
   private RelativeEncoder m_elevatorEncoder = m_elevatorMotor.getEncoder();
+  private DigitalInput m_switch = new DigitalInput(1);
 
   private ElevatorPosition m_position = ElevatorPosition.L1;
 
@@ -40,6 +42,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Trigger atPosition = new Trigger(
     () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
+
+  public Trigger bottomLimit = new Trigger(
+    () -> m_switch.get());
 
 
   public enum ElevatorPosition {
@@ -132,15 +137,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     double pos = getPosition();
     m_targetPos = m_position.heightInches();
     double output = m_elevatorMotor.getAppliedOutput();
-    SmartDashboard.putNumber("Elevator Raw Position", pos);
+    SmartDashboard.putNumber("Elevator Position", pos);
     SmartDashboard.putNumber("elevator speed", m_elevatorEncoder.getVelocity());
     SmartDashboard.putNumber("elevator output", output);
-    if ((pos < -0.5)){
-      setPower(0);
+    SmartDashboard.putString("Elevator Target", m_position.getName());
+    if (!bottomLimit.getAsBoolean()){
       m_elevatorEncoder.setPosition(0);
     } else if (pos > 73){
       setPower(0);
-      m_elevatorEncoder.setPosition(72.5);
+      m_elevatorEncoder.setPosition(72.5); //if encoder is reading out number 0.5 inch above max travel, set height to max travel
     }
     // This method will be called once per scheduler run
   } 
