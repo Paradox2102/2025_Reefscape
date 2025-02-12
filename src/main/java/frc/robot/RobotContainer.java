@@ -25,6 +25,8 @@ import frc.robot.robotControl.RobotControl;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 
+import java.util.function.DoubleSupplier;
+
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -118,7 +120,7 @@ public class RobotContainer {
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
     // Coral
-    // m_driverController.leftTrigger().toggleOnTrue(new ScoreCoral(m_coralOuttakeSubsystem));
+    m_driverController.leftTrigger().toggleOnTrue(m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isL1));
     // m_driverController.rightTrigger().toggleOnTrue(
     //   new DriveToPosition(m_driveSubsystem, false)
     //   .until(() -> m_hopperSubsystem.getBeamBreak())
@@ -127,8 +129,8 @@ public class RobotContainer {
 
     // m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
     // m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
-    // m_driverController.x().whileTrue(m_elevatorSubsystem.manualMove(false));
-    // m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(true));
+    m_driverController.x().whileTrue(m_elevatorSubsystem.manualMove(() -> 0.5));
+    m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(() -> -0.5));
 
 
     m_driverController.rightBumper().toggleOnTrue(
@@ -140,7 +142,6 @@ public class RobotContainer {
       )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     );
 
-    // m_driverController.rightBumper().onTrue(m_elevatorSubsystem.goToPosition());
     m_driverController.leftBumper().onTrue(m_elevatorSubsystem.resetPosition());
 
     m_driverController.povUp().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));

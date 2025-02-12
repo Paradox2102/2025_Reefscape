@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
@@ -31,17 +33,18 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
   private SparkClosedLoopController m_pid;
   private RelativeEncoder m_encoder;
 
-  private static final double k_ejectedCurrent = 20;
+  private static final double k_ejectedCurrent = 30;
 
   private static final double k_outtakeSpeed = 2500;
   private static final double k_outtakeDeadband = 100;
   private static final double k_l1Speed = 500;
+  private boolean m_isL1 = false;
 
   // I'm still unsure that testing against a current level is going to be reliable
   // here. Also, consider using distance travelled instead of a time. We can talk
   // about how to do that in a Trigger. -Gavin
   public final Trigger ejectedCoral = new Trigger(
-      () -> getCurrentDraw() < k_ejectedCurrent && getSpeedMotorRPM() >= k_outtakeSpeed - k_outtakeDeadband)
+      () -> getCurrentDraw() < k_ejectedCurrent && getSpeedMotorRPM() >= (m_isL1 ? k_l1Speed : k_outtakeSpeed) - k_outtakeDeadband)
       .debounce(.25, DebounceType.kRising);
 
   /** Creates a new RollerSubsystem. */
@@ -89,9 +92,10 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     }, this);
   }
 
-  public Command ejectCoral(boolean L1) {
+  public Command ejectCoral(BooleanSupplier L1) {
+    m_isL1 = L1.getAsBoolean();
     return Commands.run(() -> {
-      setSpeed(L1 ? k_l1Speed : k_outtakeSpeed);
+      setSpeed(m_isL1 ? k_l1Speed : k_outtakeSpeed);
     }, this).until(ejectedCoral);
   }
 
