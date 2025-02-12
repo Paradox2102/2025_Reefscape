@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.52,
-        "y": 0.74
+        "x": 7.5,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9311202441433943,
-        "y": 1.0087784158345454
+        "x": 6.999610836770568,
+        "y": 4.0
       },
       "isLocked": false,
-      "linkedName": "red station"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.109,
-        "y": 2.855
+        "x": 6.5,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 4.443359071136781,
-        "y": 2.40068592507582
+        "x": 7.07704646031329,
+        "y": 4.0
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.92,
-    "maxAcceleration": 6.8,
+    "maxVelocity": 5.74,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 1489.0,
+    "maxAngularAcceleration": 984.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.94539590092295
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Red 4 Paths",
+  "folder": "Leave Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -127.50000000000001
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
