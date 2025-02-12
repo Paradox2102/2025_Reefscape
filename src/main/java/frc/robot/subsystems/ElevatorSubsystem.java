@@ -120,7 +120,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Command manualMove(DoubleSupplier up) {
     return Commands.run(() -> {
-      double direction = up.getAsDouble();
+      double direction = -up.getAsDouble();
       m_elevatorMotor.set(direction > 0 ? .2 : -.2);
     }, this);
   }

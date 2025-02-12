@@ -151,6 +151,7 @@ public class RobotContainer {
     m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
     m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
     // m_operatorController.button(3).toggleOnTrue(new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem).andThen(m_climberSubsystem.climb(true)));
+    m_operatorController.button(11).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
 
     // Operator UI Controls
 
