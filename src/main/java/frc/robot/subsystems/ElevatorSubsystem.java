@@ -48,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(70, "Level 4"),
+    L4(70.2, "Level 4"),
     L3(45, "Level 3"),
     L2(31, "Level 2"),
     L1(19, "Level 1"),
