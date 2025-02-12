@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.827545211226851,
-        "y": 3.101614221643518
+        "x": 7.5,
+        "y": 5.3
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.883215060763888,
-        "y": 4.102681568287036
+        "x": 6.354166512726074,
+        "y": 5.253979827897978
       },
       "isLocked": false,
-      "linkedName": "Push 2 end"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.2455,
-        "y": 4.015249999999999
+        "x": 5.25,
+        "y": 5.1
       },
       "prevControl": {
-        "x": 6.199108217592592,
-        "y": 3.987939163773147
+        "x": 6.257913667859132,
+        "y": 5.155618787896742
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.92,
-    "maxAcceleration": 7.2,
+    "maxVelocity": 5.74,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 984.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Blue 4 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -38.66245636166172
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

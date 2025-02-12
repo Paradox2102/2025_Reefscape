@@ -12,8 +12,8 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import java.io.File;
 
+import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -112,6 +112,13 @@ public final class Constants {
 
     public static final boolean k_GyroReversed = false;
 
+     public static RobotConfig k_pathConfig;{
+    try {
+      k_pathConfig = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }}
   }
 
   public static final class ModuleConstants {

@@ -161,10 +161,10 @@ public class RobotContainer {
     m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
     // m_operatorController.button(3).toggleOnTrue(new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem).andThen(m_climberSubsystem.climb(true)));
     m_operatorController.button(11).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
-    m_operatorController.button(3).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
-    m_operatorController.button(4).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
+    m_operatorController.button(3).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
+    m_operatorController.button(4).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
     m_operatorController.button(5).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
-    m_operatorController.button(6).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
+    m_operatorController.button(6).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
     // Operator UI Controls
 
     // Elevator Position

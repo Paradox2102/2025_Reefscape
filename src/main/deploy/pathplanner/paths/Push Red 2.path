@@ -3,68 +3,73 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.873975409836065,
-        "y": 4.156864754098361
+        "x": 5.25,
+        "y": 2.95
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.642685457718596,
-        "y": 4.577141013895276
-      },
-      "isLocked": false,
-      "linkedName": "Center 1 End"
-    },
-    {
-      "anchor": {
-        "x": 6.025499999999999,
-        "y": 5.585
-      },
-      "prevControl": {
-        "x": 5.746954368467226,
-        "y": 5.618764132742721
-      },
-      "nextControl": {
-        "x": 6.3267621659966755,
-        "y": 5.548482264262777
+        "x": 4.619236730484003,
+        "y": 2.066641582444109
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.025499999999999,
-        "y": 4.0055
+        "x": 1.45,
+        "y": 0.8003073770491801
       },
       "prevControl": {
-        "x": 6.3719827044988,
-        "y": 4.689190591309499
+        "x": 2.0510270252314107,
+        "y": 0.13170588475466516
+      },
+      "nextControl": {
+        "x": 1.018954918032787,
+        "y": 1.279815573770495
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.72,
+        "y": 2.95
+      },
+      "prevControl": {
+        "x": 2.1457991803278684,
+        "y": 2.071004098360655
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center 2 End"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -127.50000000000001
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.92,
-    "maxAcceleration": 6.8,
+    "maxVelocity": 5.74,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 1489.0,
+    "maxAngularAcceleration": 984.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 4.92,
-    "rotation": -98.0
+    "velocity": 0,
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "Center Auto Paths",
+  "folder": "Push Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

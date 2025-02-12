@@ -140,6 +140,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Position", pos);
     SmartDashboard.putNumber("elevator speed", m_elevatorEncoder.getVelocity());
     SmartDashboard.putNumber("elevator output", output);
+    SmartDashboard.putNumber("elevator target height", m_targetPos);
     SmartDashboard.putString("Elevator Target", m_position.getName());
     if (!bottomLimit.getAsBoolean()){
       m_elevatorEncoder.setPosition(0);
