@@ -13,37 +13,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "10 blue"
+            "pathName": "10 left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "blue 9"
+            "pathName": "left 9"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "9 blue"
+            "pathName": "9 left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "blue 8"
+            "pathName": "left 8"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "8 blue"
+            "pathName": "8 left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "blue 11"
+            "pathName": "left 11"
           }
         }
       ]
