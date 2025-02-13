@@ -101,8 +101,8 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     m_driveSubsystem.setTracker(m_tracker);
-    m_autoSelect.addOption("Straight Path", new PathPlannerAuto("Straight Path"));
-    m_autoSelect.addOption("Curve Path", new PathPlannerAuto("Curve Path"));
+    m_autoSelect.addOption("Straight Auto", new PathPlannerAuto("Straight Auto"));
+    m_autoSelect.addOption("Curve Auto", new PathPlannerAuto("Curve Auto"));
     SmartDashboard.putData(m_autoSelect);
     m_robotControl.start();
   }
