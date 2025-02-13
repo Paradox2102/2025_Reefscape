@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.92,
-        "y": 5.2
+        "x": 5.25,
+        "y": 5.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.258328797018803,
-        "y": 5.220011540862752
+        "x": 4.147745901639344,
+        "y": 6.770184426229507
       },
       "isLocked": false,
       "linkedName": null
@@ -20,24 +20,24 @@
         "y": 7.4
       },
       "prevControl": {
-        "x": 0.852810048040887,
-        "y": 7.027986349898634
+        "x": 1.8908131558764953,
+        "y": 7.561525043087604
       },
       "nextControl": {
-        "x": 2.146552692193874,
-        "y": 7.596087898117154
+        "x": 1.5091868441235046,
+        "y": 7.2384749569123965
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.0,
-        "y": 5.25
+        "x": 3.72,
+        "y": 5.1
       },
       "prevControl": {
-        "x": 4.83238747118997,
-        "y": 5.572681220065231
+        "x": 2.7811475409836066,
+        "y": 5.78719262295082
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,29 +47,29 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 127.50000000000001
+      "rotationDegrees": -52.50000000000001
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.74,
-    "maxAcceleration": 4.5,
+    "maxVelocity": 4.92,
+    "maxAcceleration": 7.2,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 984.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "Blue 4 Paths",
+  "folder": "Complex 4 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

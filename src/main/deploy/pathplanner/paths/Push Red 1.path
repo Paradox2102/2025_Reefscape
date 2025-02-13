@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "Push Red Paths",
+  "folder": "Push Complex Paths",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -45.0
+    "velocity": 0.0,
+    "rotation": 135.0
   },
   "useDefaultConstraints": true
 }

@@ -3,15 +3,18 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "Basic 4 Paths",
     "Center Auto Paths",
-    "Left Basic",
-    "Right Basic",
-    "Push Auto Paths",
-    "Push Blue Paths",
-    "Push Red Paths"
+    "Complex 4 Paths",
+    "Leave Paths",
+    "Push Basic Paths",
+    "Push Center Paths",
+    "Push Complex Paths"
   ],
   "autoFolders": [
-    "Basic"
+    "Basic",
+    "Complex",
+    "Center"
   ],
   "defaultMaxVel": 4.92,
   "defaultMaxAccel": 7.2,
