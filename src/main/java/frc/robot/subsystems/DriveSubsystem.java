@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -40,6 +41,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   private FieldPosition m_reefPosition = FieldPosition.ONE;
   private FieldPosition m_source = FieldPosition.SOURCE_RIGHT;
+  public static RobotConfig k_pathConfig;{
+  try {
+    k_pathConfig = RobotConfig.fromGUISettings();
+  } catch (Exception e) {}}
 
   public enum FieldPosition {
     // blue alliance
@@ -145,7 +150,7 @@ public class DriveSubsystem extends SubsystemBase {
             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
         ),
-        Constants.DriveConstants.k_pathConfig, // The robot configuration
+        k_pathConfig, // The robot configuration
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance

@@ -111,14 +111,6 @@ public final class Constants {
     public static final double k_lookAheadTimeSeconds = .2;
 
     public static final boolean k_GyroReversed = false;
-
-     public static RobotConfig k_pathConfig;{
-    try {
-      k_pathConfig = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      // Handle exception as needed
-      e.printStackTrace();
-    }}
   }
 
   public static final class ModuleConstants {
