@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "leave 3"
+            "pathName": "blue 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 red 4"
+            "pathName": "blue 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4 red 5"
+            "pathName": "blue 3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "5 red 2"
+            "pathName": "blue 4"
           }
         }
       ]

@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.873975409836065,
-        "y": 4.156864754098361
+        "x": 3.95,
+        "y": 2.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.642685457718596,
-        "y": 4.577141013895276
-      },
-      "isLocked": false,
-      "linkedName": "Center 1 End"
-    },
-    {
-      "anchor": {
-        "x": 6.025499999999999,
-        "y": 5.585
-      },
-      "prevControl": {
-        "x": 5.746954368467226,
-        "y": 5.618764132742721
-      },
-      "nextControl": {
-        "x": 6.3267621659966755,
-        "y": 5.548482264262777
+        "x": 5.094774590163934,
+        "y": 2.226844262295082
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.025499999999999,
-        "y": 4.0055
+        "x": 7.69610655737705,
+        "y": 3.065983606557377
       },
       "prevControl": {
-        "x": 6.3719827044988,
-        "y": 4.689190591309499
+        "x": 6.638638997682196,
+        "y": 2.386319497503283
+      },
+      "nextControl": {
+        "x": 7.906413520562483,
+        "y": 3.201153800149459
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.9768442622950815,
+        "y": 4.072950819672131
+      },
+      "prevControl": {
+        "x": 7.360450819672131,
+        "y": 3.6893442622950823
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center 2 End"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -49,22 +49,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.92,
-    "maxAcceleration": 6.8,
+    "maxVelocity": 5.74,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 1489.0,
+    "maxAngularAcceleration": 984.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 4.92,
-    "rotation": -98.0
+    "velocity": 0,
+    "rotation": -45.0
   },
   "reversed": false,
-  "folder": "Center Auto Paths",
+  "folder": "Push Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

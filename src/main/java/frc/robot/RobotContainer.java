@@ -29,6 +29,10 @@ import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -53,6 +57,7 @@ public class RobotContainer {
   private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   private final RobotControl m_robotControl = new RobotControl();
+
   
   // Triggers are self-registering. It's not necessary to store them in a variable if you're only using them once. Putting the button binding next to the command binding might make the code easier to read because you can more easily see what command each button is connected to. -Gavin
   private final Trigger m_L1 = new Trigger(()->m_robotControl.checkButton(1));
@@ -89,12 +94,15 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.k_DriverControllerPort);
   private final CommandJoystick m_operatorController = new CommandJoystick(1);
+  SendableChooser<Command> m_autoSelect = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
     m_driveSubsystem.setTracker(m_tracker);
+    m_autoSelect.addOption("Straight Path", new PathPlannerAuto("Straight Path"));
+    SmartDashboard.putData(m_autoSelect);
     m_robotControl.start();
   }
 
@@ -153,10 +161,10 @@ public class RobotContainer {
     m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
     // m_operatorController.button(3).toggleOnTrue(new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem).andThen(m_climberSubsystem.climb(true)));
     m_operatorController.button(11).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
-    m_operatorController.button(3).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
-    m_operatorController.button(4).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
+    m_operatorController.button(3).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
+    m_operatorController.button(4).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
     m_operatorController.button(5).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
-    m_operatorController.button(6).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
+    m_operatorController.button(6).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
     // Operator UI Controls
 
     // Elevator Position
@@ -216,6 +224,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return m_autoSelect.getSelected();
   }
 }

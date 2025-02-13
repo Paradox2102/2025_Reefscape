@@ -5,6 +5,11 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.pathplanner.lib.util.PIDConstants;
@@ -30,18 +35,16 @@ import frc.robot.Constants;
 import frc.robot.ParadoxField;
 import frc.robot.PositionTrackerPose;
 import frc.utils.SwerveUtils;
-
-import java.util.List;
-import java.util.Optional;
 import java.util.function.BooleanSupplier;
-
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 public class DriveSubsystem extends SubsystemBase {
 
   private FieldPosition m_reefPosition = FieldPosition.ONE;
   private FieldPosition m_source = FieldPosition.SOURCE_RIGHT;
+  public static RobotConfig k_pathConfig;{
+  try {
+    k_pathConfig = RobotConfig.fromGUISettings();
+  } catch (Exception e) {}}
 
   public enum FieldPosition {
     // blue alliance
@@ -135,35 +138,35 @@ public class DriveSubsystem extends SubsystemBase {
     m_orientPID.enableContinuousInput(-180, 180);
     m_orientPID.setIZone(Constants.DriveConstants.k_rotateIZone);
 
-    // AutoBuilder.configure(
-    //     this::getPose, // Robot pose supplier
-    //     this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-    //     this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //     (speeds, feedforwards) -> driveWithChassisSpeedRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE
-    //                                                           // ChassisSpeeds. Also optionally outputs individual
-    //                                                           // module feedforwards
-    //     new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
-    //                                     // drive trains
-    //         new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    //         new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-    //     ),
-    //     Constants.DriveConstants.k_pathConfig, // The robot configuration
-    //     () -> {
-    //       // Boolean supplier that controls when the path will be mirrored for the red
-    //       // alliance
-    //       // This will flip the path being followed to the red side of the field.
-    //       // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    AutoBuilder.configure(
+        this::getPose, // Robot pose supplier
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, feedforwards) -> driveWithChassisSpeedRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE
+                                                              // ChassisSpeeds. Also optionally outputs individual
+                                                              // module feedforwards
+        new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
+                                        // drive trains
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+        ),
+        k_pathConfig, // The robot configuration
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //       var alliance = DriverStation.getAlliance();
-    //       if (alliance.isPresent()) {
-    //         return alliance.get() == DriverStation.Alliance.Red;
-    //       }
-    //       return false;
-    //     },
-    //     this // Reference to this subsystem to set requirements
-    // );
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
 
-    // PathPlannerLogging.setLogActivePathCallback((poses) -> m_field.getObject("path").setPoses(poses));
+    PathPlannerLogging.setLogActivePathCallback((poses) -> m_field.getObject("path").setPoses(poses));
   }
 
   public Command setReefPosition(FieldPosition position) {
