@@ -43,13 +43,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right 6"
+            "pathName": "right 2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Basic",
   "choreoAuto": false
 }
