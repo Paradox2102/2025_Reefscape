@@ -101,9 +101,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     m_driveSubsystem.setTracker(m_tracker);
-    m_autoSelect.addOption("Straight Auto", new PathPlannerAuto("Straight Auto"));
-    m_autoSelect.addOption("Curve Auto", new PathPlannerAuto("Curve Auto"));
-    SmartDashboard.putData(m_autoSelect);
+    updateAutoChooser();
     m_robotControl.start();
   }
 
@@ -216,6 +214,13 @@ public class RobotContainer {
 
   public boolean getThrottle() {
     return m_operatorController.getThrottle() > 0;
+  }
+
+  private void updateAutoChooser() {
+    m_autoSelect.addOption("Straight Auto", new PathPlannerAuto("Straight Auto"));
+    m_autoSelect.addOption("Curve Auto", new PathPlannerAuto("Curve Auto"));
+    m_autoSelect.addOption("Left Basic", new PathPlannerAuto("Left Basic"));
+    SmartDashboard.putData(m_autoSelect);
   }
 
   /**

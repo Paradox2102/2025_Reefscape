@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.92,
+    "maxVelocity": 4.9,
     "maxAcceleration": 7.2,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
