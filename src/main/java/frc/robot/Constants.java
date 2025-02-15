@@ -10,15 +10,11 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
-import java.io.File;
-
-import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -35,12 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public final class Constants {
   public Constants() {
-    File f = new File("home/lvuser/practice");
-    SmartDashboard.putString("Robot Name", "Practice Bot");
-    if (false) { // !f.exists()
-      SmartDashboard.putString("Robot Name", "Comp Bot");
-      States.m_isCompetitionRobot = true;
-    }
+
   }
 
   public static final class States {
@@ -131,39 +122,27 @@ public final class Constants {
         / k_DrivingMotorReduction;
   }
 
-  public static final class PivotConstants {
+  public static final class AlgaeConstants {
     public static final int k_pivotMotor = 10;
-    
-    public static final double k_p = .005;
-    public static final double k_i = .011;
-    public static final double k_d = .0001;
-    public static final double k_f = .02;
-    public static final double k_ticksToDegrees = 45.0/1.6;
-
-    public static final double k_resetPositionDegrees = 0;
-    public static final double k_intakePositionDegrees = 0;
-    public static final double k_climbPositionDegrees = 0;
+    public static final int k_algaeMotor = 9;
   }
   
-  public static final class RollerConstants {
+  public static final class COConstants {
     public static final int k_coralMotor = 14;
-    //public static final int k_coralFollower = 15;
     
-    public static final double k_coralP = 0.00005;
-    public static final double k_coralI = 0.0000001;
-    public static final double k_coralD = 0;
-    public static final double k_coralF = 0.00018;
-    public static final double k_coralTicksToDegrees = 1;
+    public static final double k_p = 0.00005;
+    public static final double k_i = 0.0000001;
+    public static final double k_d = 0;
+    public static final double k_f = 0.00018;
+  }
 
-    public static final int k_algaeMotor = 9;
-    
-    public static final double k_algaeP = 0;
-    public static final double k_algaeI = 0;
-    public static final double k_algaeD = 0;
-    public static final double k_algaeF = 0;
-    public static final double k_algaeTicksToDegrees = 1;
-
+  public static final class HopperConstants {
     public static final int k_hopperMotor = 13;
+
+    public static final double k_p = 0;
+    public static final double k_i = 0;
+    public static final double k_d = 0;
+    public static final double k_f = 0;
   }
 
   public static final class ElevatorConstants {
@@ -277,19 +256,19 @@ public final class Constants {
     }
 
     public static final class Elevator {
-      public static final SparkFlexConfig elevatorConfig = new SparkFlexConfig();
+      public static final SparkFlexConfig leaderConfig = new SparkFlexConfig();
       public static final SparkFlexConfig followerConfig = new SparkFlexConfig();
 
       public static SparkFlexConfig coastElevatorConfig = new SparkFlexConfig();
       public static SparkFlexConfig coastFollowerConfig = new SparkFlexConfig();
 
       static {
-        elevatorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        leaderConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
         followerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
       
-        elevatorConfig.encoder
+        leaderConfig.encoder
             .positionConversionFactor(ElevatorConstants.k_ticksToInches);
-        elevatorConfig.closedLoop
+        leaderConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pidf(ElevatorConstants.k_pDown, ElevatorConstants.k_iDown, ElevatorConstants.k_dDown, 0, ClosedLoopSlot.kSlot1)
             .pidf(ElevatorConstants.k_pUP, ElevatorConstants.k_iUP, ElevatorConstants.k_dUp, ElevatorConstants.k_f, ClosedLoopSlot.kSlot0);
@@ -307,9 +286,10 @@ public final class Constants {
 
       static {
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
-        config.absoluteEncoder
-            .positionConversionFactor(1)
-            .velocityConversionFactor(1);
+        config.closedLoop
+          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+          .pid(HopperConstants.k_p, HopperConstants.k_i, HopperConstants.k_d)
+          .velocityFF(HopperConstants.k_f);
       }
     }
 
@@ -322,8 +302,8 @@ public final class Constants {
 
       static {
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
-        config.closedLoop.pid(RollerConstants.k_coralP, RollerConstants.k_coralI, RollerConstants.k_coralD)
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder).velocityFF(RollerConstants.k_coralF);
+        config.closedLoop.pid(COConstants.k_p, COConstants.k_i, COConstants.k_d)
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder).velocityFF(COConstants.k_f);
         //coastConfig.apply(config);
 
         //coastConfig.idleMode(IdleMode.kCoast);
@@ -338,34 +318,24 @@ public final class Constants {
         }
         
         public static final class Algae {
-      public static final SparkFlexConfig pivotConfig = new SparkFlexConfig();
-      public static final SparkFlexConfig rollerConfig = new SparkFlexConfig();
+          public static final SparkFlexConfig pivotConfig = new SparkFlexConfig();
+          public static final SparkFlexConfig rollerConfig = new SparkFlexConfig();
 
-      public static SparkFlexConfig coastAlgaeConfig = new SparkFlexConfig();
-      public static SparkFlexConfig coastRoller = new SparkFlexConfig();
+          public static SparkFlexConfig coastAlgaeConfig = new SparkFlexConfig();
+          public static SparkFlexConfig coastRoller = new SparkFlexConfig();
 
-      static {
-        pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(35);
-        pivotConfig.encoder.positionConversionFactor(PivotConstants.k_ticksToDegrees);
-        pivotConfig.absoluteEncoder
-            .positionConversionFactor(PivotConstants.k_ticksToDegrees)
-            .velocityConversionFactor(PivotConstants.k_ticksToDegrees);
-        coastAlgaeConfig.apply(pivotConfig);
+          static {
+            pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(35);
+            coastAlgaeConfig.apply(pivotConfig);
 
-        coastAlgaeConfig.idleMode(IdleMode.kCoast);
+            coastAlgaeConfig.idleMode(IdleMode.kCoast);
 
 
-        rollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
-        rollerConfig.absoluteEncoder
-            .positionConversionFactor(RollerConstants.k_algaeTicksToDegrees)
-            .velocityConversionFactor(RollerConstants.k_algaeTicksToDegrees);
-        rollerConfig.closedLoop
-             .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-             .pid(RollerConstants.k_algaeP, RollerConstants.k_algaeI, RollerConstants.k_algaeD);
-        coastRoller.apply(rollerConfig);
-  
-        coastRoller.idleMode(IdleMode.kCoast);
-      }
+            rollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+            coastRoller.apply(rollerConfig);
+      
+            coastRoller.idleMode(IdleMode.kCoast);
+          }
 
     }
   }

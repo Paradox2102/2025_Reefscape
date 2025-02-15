@@ -9,22 +9,18 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConfigs;
-import frc.robot.Constants.PivotConstants;
 
 public class AlgaeSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_pivotMotor = new SparkFlex(Constants.PivotConstants.k_pivotMotor, MotorType.kBrushless);
-  private SparkFlex m_rollerMotor = new SparkFlex(Constants.RollerConstants.k_algaeMotor, MotorType.kBrushless);
+  private SparkFlex m_pivotMotor = new SparkFlex(Constants.AlgaeConstants.k_pivotMotor, MotorType.kBrushless);
+  private SparkFlex m_rollerMotor = new SparkFlex(Constants.AlgaeConstants.k_algaeMotor, MotorType.kBrushless);
 
   private static final double k_pivotPower = .1;
-
-  private static final PIDController m_pivotPID = new PIDController(PivotConstants.k_p, PivotConstants.k_i, PivotConstants.k_d);
 
   private boolean m_retracted = true;
 

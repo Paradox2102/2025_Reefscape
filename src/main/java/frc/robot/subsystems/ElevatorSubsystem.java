@@ -74,7 +74,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
-    m_elevatorMotor.configure(MotorConfigs.Elevator.elevatorConfig, ResetMode.kResetSafeParameters,
+    m_elevatorMotor.configure(MotorConfigs.Elevator.leaderConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
     m_followerMotor.configure(MotorConfigs.Elevator.followerConfig, ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
@@ -91,7 +91,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setBrakeMode(boolean brake) {
-    m_elevatorMotor.configure((brake ? MotorConfigs.Elevator.elevatorConfig : MotorConfigs.Elevator.coastElevatorConfig), ResetMode.kResetSafeParameters,
+    m_elevatorMotor.configure((brake ? MotorConfigs.Elevator.leaderConfig : MotorConfigs.Elevator.coastElevatorConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
   }
 

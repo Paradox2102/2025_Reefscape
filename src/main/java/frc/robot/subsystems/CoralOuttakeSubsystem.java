@@ -22,11 +22,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConfigs;
-import frc.robot.Constants.RollerConstants;
+import frc.robot.Constants.COConstants;
 
 public class CoralOuttakeSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_coralMotor = new SparkFlex(RollerConstants.k_coralMotor, MotorType.kBrushless);
+  private SparkFlex m_coralMotor = new SparkFlex(COConstants.k_coralMotor, MotorType.kBrushless);
   // private SparkFlex m_practiceMotor;
   private SparkClosedLoopController m_pid;
   private RelativeEncoder m_encoder;

@@ -39,6 +39,7 @@ public class IntakeCoral extends Command {
   public void initialize() {
     m_elevatorSubsystem.resetPosition();
     m_algaeSubsystem.setPivotPosition(true);
+    m_hopperSubsystem.intake();
     m_timer.reset();
     m_timer.start();
   }
@@ -47,7 +48,6 @@ public class IntakeCoral extends Command {
   @Override
   public void execute() {
     m_coSubsystem.setSpeed(k_intakeSpeed);
-    m_hopperSubsystem.setPower(-.5);
   }
 
   // Called once the command ends or is interrupted.

@@ -7,10 +7,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
-import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
-import frc.robot.commands.driverCommands.PrepareForClimbCommand;
 import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -25,7 +23,6 @@ import frc.robot.robotControl.RobotControl;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 
-import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
 
@@ -47,7 +44,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private Constants m_constants = new Constants();
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
  private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
@@ -80,8 +76,6 @@ public class RobotContainer {
 
   private final Trigger m_leftSource = new Trigger(()->m_robotControl.checkButton(17));
   private final Trigger m_rightSource = new Trigger(()->m_robotControl.checkButton(18));
-
-  private boolean m_getReadyToScore = false;
 
   // private final Trigger m_win = new Trigger(()->m_robotControl.checkButton(19));
 

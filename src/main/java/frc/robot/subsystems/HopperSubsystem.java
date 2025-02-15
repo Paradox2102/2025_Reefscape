@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -19,8 +21,12 @@ import frc.robot.Constants.MotorConfigs;
 
 public class HopperSubsystem extends SubsystemBase {
   // motor
-  private SparkFlex m_motor = new SparkFlex(Constants.RollerConstants.k_hopperMotor, MotorType.kBrushless);
+  private SparkFlex m_motor = new SparkFlex(Constants.HopperConstants.k_hopperMotor, MotorType.kBrushless);
   DigitalInput m_beamBreak = new DigitalInput(0);
+
+  private SparkClosedLoopController m_PID = m_motor.getClosedLoopController();
+
+  private static final double k_intakeRPM = 5000;
 
   //absoulte encoder
 
@@ -43,8 +49,11 @@ public class HopperSubsystem extends SubsystemBase {
     m_motor.set(power);
   }
 
+  public void intake() {
+    m_PID.setReference(k_intakeRPM, ControlType.kVelocity);
+  }
+
   public Command runHopper(double power) {
-// FIXME: Why not runOnce? You forgot to add the requirement. Better to use Subsyste,runOnce() instead. -Gavin
     return Commands.run(() -> {
       m_motor.set(power);
     }, this);
