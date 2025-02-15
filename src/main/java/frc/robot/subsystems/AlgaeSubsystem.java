@@ -4,15 +4,12 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,74 +22,74 @@ public class AlgaeSubsystem extends SubsystemBase {
   private SparkFlex m_pivotMotor = new SparkFlex(Constants.PivotConstants.k_pivotMotor, MotorType.kBrushless);
   private SparkFlex m_rollerMotor = new SparkFlex(Constants.RollerConstants.k_algaeMotor, MotorType.kBrushless);
 
-  private static final double k_intakePower = -.5;
-  private static final double k_outtakePower = .5;
-  private static final double k_holdAlgaePower = 0;
-
-  private static final double k_resetPositionDegrees = 0;
-  private static final double k_intakePositionDegrees = 65;
-  private static final double k_outtakePositionDegrees = 0;
-  private static double k_balanceAngle = 0;
+  private static final double k_pivotPower = .1;
 
   private static final PIDController m_pivotPID = new PIDController(PivotConstants.k_p, PivotConstants.k_i, PivotConstants.k_d);
 
-  private RelativeEncoder m_algaeEncoder = m_pivotMotor.getEncoder();
+  private boolean m_retracted = true;
+
+  private RollerStates m_rollerState = RollerStates.HOLD;
+
+  private enum RollerStates {
+    INTAKE(-.5),
+    OUTTAKE(.5),
+    HOLD(0);
+
+    private double m_power;
+
+    private RollerStates(double power) {
+      m_power = power;
+    }
+
+    public double power() {
+      return m_power;
+    }
+  }
 
   /** Creates a new RollerSubsystem. */
   public AlgaeSubsystem() {
     m_pivotMotor.configure(MotorConfigs.Algae.pivotConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
+    m_rollerMotor.configure(MotorConfigs.Algae.rollerConfig, ResetMode.kResetSafeParameters, 
         PersistMode.kPersistParameters);
   }
 
   public void setBrakeMode(boolean brake) {
     m_pivotMotor.configure((brake ? MotorConfigs.Algae.pivotConfig : MotorConfigs.Algae.coastAlgaeConfig), ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
+    m_rollerMotor.configure((brake ? MotorConfigs.Algae.rollerConfig : MotorConfigs.Algae.coastAlgaeConfig), ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
   }
 
-  public void setPower(double power) {
-    m_pivotMotor.set(power);
-  }
-
-  public double getPivotPosition() {
-    return m_algaeEncoder.getPosition();
-  }
-
-  public Command setPosition(double angle) {
-    return Commands.runOnce(() -> m_pivotPID.setSetpoint(angle));
+  public void setPivotPosition(boolean retracted) {
+    m_retracted = retracted;
   }
 
   public Command intake() {
-    // FIXME: Why not runOnce? -Gavin
-    return Commands.run(() -> {
-      m_rollerMotor.set(k_intakePower);
-      m_pivotPID.setSetpoint(k_intakePositionDegrees);
-    }, this);
+    return Commands.runOnce(() -> {
+      m_rollerState = RollerStates.INTAKE;
+      setPivotPosition(true);
+    }, this).handleInterrupt(() -> reset()
+    );
   }
 
   public Command outtake() {
-    // FIXME: Why not runOnce? -Gavin
-    return Commands.run(() -> {
-      m_rollerMotor.set(k_outtakePower);
-      m_pivotPID.setSetpoint(k_outtakePositionDegrees);
-    }, this);
+    return Commands.runOnce(() -> {
+      m_rollerState = RollerStates.OUTTAKE;
+      setPivotPosition(false);
+    }, this).handleInterrupt(() -> reset()
+    );
   }
 
-  public Command reset() {
-    // FIXME: Why not runOnce? -Gavin
-    return Commands.run(() -> {
-      m_rollerMotor.set(k_holdAlgaePower);
-      m_pivotPID.setSetpoint(k_resetPositionDegrees);
-    }, this);
+  public void reset() {
+    m_retracted = true;
+    m_rollerState = RollerStates.HOLD;
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Raw Algae Position", getPivotPosition());
     // This method will be called once per scheduler run
-    double currentAngle = getPivotPosition();
-    double feedForward = Math.sin(Math.toRadians(k_balanceAngle - currentAngle)) * PivotConstants.k_f;
-      // might fix floor slamming problem
-    feedForward += MathUtil.applyDeadband(m_pivotPID.calculate(currentAngle), 0);
-    m_pivotMotor.set(feedForward);
+    m_pivotMotor.set(m_retracted ? k_pivotPower : -k_pivotPower);
+    m_rollerMotor.set(m_rollerState.power());
   }
 }

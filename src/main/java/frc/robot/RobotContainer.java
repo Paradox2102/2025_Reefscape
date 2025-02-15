@@ -50,9 +50,9 @@ public class RobotContainer {
   private Constants m_constants = new Constants();
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-//  private AlgaeSubsystem m_algaeSubsystem = Constants.States.m_isCompetitionRobot ? new AlgaeSubsystem() : null;
+ private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
   private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
-  // private ClimberSubsystem m_climberSubsystem = Constants.States.m_isCompetitionRobot ? new ClimberSubsystem() : null;
+  private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
   private ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
@@ -132,12 +132,10 @@ public class RobotContainer {
     //   new DriveToPosition(m_driveSubsystem, false)
     //   .until(() -> m_hopperSubsystem.getBeamBreak())
     // );
-    m_driverController.rightTrigger().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem));
+    m_driverController.rightTrigger().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
 
     // m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
     // m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
-    m_driverController.x().whileTrue(m_elevatorSubsystem.manualMove(() -> 0.5));
-    m_driverController.y().whileTrue(m_elevatorSubsystem.manualMove(() -> -0.5));
 
 
     m_driverController.rightBumper().toggleOnTrue(

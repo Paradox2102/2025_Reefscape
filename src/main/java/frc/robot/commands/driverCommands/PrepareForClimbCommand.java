@@ -4,6 +4,7 @@
 
 package frc.robot.commands.driverCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -12,12 +13,13 @@ import frc.robot.subsystems.ClimberSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PrepareForClimbCommand extends ParallelCommandGroup {
-  private final double m_algaePosition = 0;
   /** Creates a new PrepareForClimbCommand. */
   public PrepareForClimbCommand(AlgaeSubsystem algae, ClimberSubsystem climber) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(algae.setPosition(m_algaePosition),
-    climber.climb(false));
+    addCommands(
+      new InstantCommand(() -> algae.setPivotPosition(false)),
+      climber.climb(false)
+    );
   }
 }

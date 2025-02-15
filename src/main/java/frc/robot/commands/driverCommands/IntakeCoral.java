@@ -6,7 +6,9 @@ package frc.robot.commands.driverCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -14,15 +16,20 @@ public class IntakeCoral extends Command {
   /** Creates a new IntakeCoral. */
   CoralOuttakeSubsystem m_coSubsystem;
   HopperSubsystem m_hopperSubsystem;
+  ElevatorSubsystem m_elevatorSubsystem;
+  AlgaeSubsystem m_algaeSubsystem;
+
   private Timer m_timer = new Timer();
   private static final double k_intakeCurrent = 50;
-  private static final double k_stopSpeed = 4750;
+  private static final double k_stopSpeed = 4000;
   private static final double k_intakeSpeed = 5000;
 
 
-  public IntakeCoral(CoralOuttakeSubsystem COSubsystem, HopperSubsystem hopperSubsystem) {
+  public IntakeCoral(CoralOuttakeSubsystem COSubsystem, HopperSubsystem hopperSubsystem, ElevatorSubsystem elevatorSubsystem, AlgaeSubsystem algaeSubsystem) {
     m_coSubsystem = COSubsystem;
     m_hopperSubsystem = hopperSubsystem;
+    m_elevatorSubsystem = elevatorSubsystem;
+    m_algaeSubsystem = algaeSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_coSubsystem, m_hopperSubsystem);
   }
@@ -30,6 +37,8 @@ public class IntakeCoral extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_elevatorSubsystem.resetPosition();
+    m_algaeSubsystem.setPivotPosition(true);
     m_timer.reset();
     m_timer.start();
   }

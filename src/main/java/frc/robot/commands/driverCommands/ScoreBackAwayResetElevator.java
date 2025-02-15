@@ -6,6 +6,8 @@ package frc.robot.commands.driverCommands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -13,6 +15,7 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,9 +27,13 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       COSubsystem.ejectCoral(elevatorSubsystem.isL1),
-      new ParallelDeadlineGroup(
-        new WaitCommand(.3),
-        new DriveCommand(driveSubsystem, () -> 0, () -> -.2, () -> 0, false)
+      new ConditionalCommand(
+        new ParallelDeadlineGroup(
+          new WaitCommand(.3),
+          new DriveCommand(driveSubsystem, () -> 0, () -> -.2, () -> 0, false)
+        ),
+        new InstantCommand(),
+        () -> elevatorSubsystem.getPreset() == ElevatorPosition.L4
       ),
       new ParallelDeadlineGroup(
         elevatorSubsystem.resetPosition(),
