@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
+import frc.robot.commands.driverCommands.AutoIntake;
+import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
 import frc.robot.commands.operatorCommands.SetReefPos;
@@ -20,7 +22,6 @@ import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.DriveSubsystem.FieldPosition;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.robotControl.RobotControl;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 
 
@@ -126,7 +127,7 @@ public class RobotContainer {
     //   new DriveToPosition(m_driveSubsystem, false)
     //   .until(() -> m_hopperSubsystem.getBeamBreak())
     // );
-    m_driverController.rightTrigger().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
+    m_driverController.rightTrigger().toggleOnTrue(new AutoIntake(m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
 
     // m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
     // m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
@@ -134,8 +135,7 @@ public class RobotContainer {
 
     m_driverController.rightBumper().toggleOnTrue(
       new ProxyCommand(() -> Commands.either(
-        // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
-        new InstantCommand(),
+        new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
         new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
         () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
       )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
