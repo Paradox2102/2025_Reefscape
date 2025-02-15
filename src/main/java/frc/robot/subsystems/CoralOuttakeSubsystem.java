@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.Constants.MotorConfigs;
 import frc.robot.Constants.COConstants;
 
@@ -50,13 +49,6 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     m_coralMotor.configure(MotorConfigs.CoralOuttake.config, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
-    // m_practiceMotor = Constants.States.m_isCompetitionRobot ? null : new
-    // SparkFlex(Constants.RollerConstants.k_coralFollower, MotorType.kBrushless);
-    if (!Constants.States.m_isCompetitionRobot) {
-      // m_practiceMotor.configure(MotorConfigs.CoralOuttake.practiceConfig,
-      // ResetMode.kResetSafeParameters,
-      // PersistMode.kPersistParameters);
-    }
     m_pid = m_coralMotor.getClosedLoopController();
     m_encoder = m_coralMotor.getEncoder();
   }

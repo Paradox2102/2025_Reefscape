@@ -9,8 +9,8 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.AutoIntake;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
-import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
+import frc.robot.commands.driverCommands.PrepareForClimbCommand;
 import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -121,18 +121,12 @@ public class RobotContainer {
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
+    // Algae
+    m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
+    m_driverController.leftBumper().whileTrue(m_algaeSubsystem.outtake());
+
     // Coral
-    m_driverController.leftTrigger().toggleOnTrue(m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isL1));
-    // m_driverController.rightTrigger().toggleOnTrue(
-    //   new DriveToPosition(m_driveSubsystem, false)
-    //   .until(() -> m_hopperSubsystem.getBeamBreak())
-    // );
     m_driverController.rightTrigger().toggleOnTrue(new AutoIntake(m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
-
-    // m_driverController.a().whileTrue(m_coralOuttakeSubsystem.runOut());
-    // m_driverController.b().whileTrue(m_hopperSubsystem.runHopper());
-
-
     m_driverController.rightBumper().toggleOnTrue(
       new ProxyCommand(() -> Commands.either(
         new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
@@ -141,7 +135,11 @@ public class RobotContainer {
       )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     );
 
-    m_driverController.leftBumper().onTrue(m_elevatorSubsystem.resetPosition());
+    // Climb
+    m_driverController.a().toggleOnTrue(
+      new ProxyCommand(() -> new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem))
+        .finallyDo(() -> m_climberSubsystem.climb(false).schedule())
+    );
 
     m_driverController.povUp().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
     m_driverController.povDown().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
@@ -151,11 +149,12 @@ public class RobotContainer {
     m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
     m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
     // m_operatorController.button(3).toggleOnTrue(new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem).andThen(m_climberSubsystem.climb(true)));
-    m_operatorController.button(11).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
+    m_operatorController.button(8).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
     m_operatorController.button(3).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
     m_operatorController.button(4).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
     m_operatorController.button(5).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
     m_operatorController.button(6).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
+    
     // Operator UI Controls
 
     // Elevator Position
@@ -184,24 +183,6 @@ public class RobotContainer {
 
     // Win Button!!!
     // m_win.onTrue(new InstantCommand());
-
-    // put algae & climber commands here
-    if (Constants.States.m_isCompetitionRobot) {
-      // Climb
-      // m_testStick.button(1).whileTrue(m_climberSubsystem.climb(false));
-      // m_testStick.button(2).whileTrue(m_climberSubsystem.climb(true));
-      // m_testStick.button(3).whileTrue(m_climberSubsystem.runOut());
-      // m_testStick.button(4).whileTrue(m_climberSubsystem.runIn());
-
-      // // Algae
-      // m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
-      // m_driverController.leftBumper().toggleOnTrue(m_algaeSubsystem.outtake());
-
-
-      //default commands
-      // m_climberSubsystem.setDefaultCommand(m_climberSubsystem.stop());
-      // m_algaeSubsystem.setDefaultCommand(m_algaeSubsystem.reset());
-    }
   }
 
   public boolean getThrottle() {

@@ -54,9 +54,9 @@ public class ClimberSubsystem extends SubsystemBase {
     return m_encoder.getPosition();
   }
 
-  public Command climb(boolean up) {
+  public Command climb(boolean extend) {
     return Commands.run(() -> {
-      setAngle(up ? ClimberConstants.k_returnPosition : ClimberConstants.k_extendPosition);
+      setAngle(extend ? ClimberConstants.k_extendPosition : ClimberConstants.k_returnPosition);
     }, this);
   }
 
