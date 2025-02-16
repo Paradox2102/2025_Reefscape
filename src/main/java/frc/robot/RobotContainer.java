@@ -9,6 +9,7 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.AutoIntake;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
+import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
 import frc.robot.commands.driverCommands.PrepareForClimbCommand;
 import frc.robot.commands.operatorCommands.SetReefPos;
@@ -138,6 +139,7 @@ public class RobotContainer {
         () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
       )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     );
+    m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
 
     // Climb
     m_driverController.a().toggleOnTrue(
