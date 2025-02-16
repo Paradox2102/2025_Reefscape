@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 
 import org.photonvision.PhotonCamera;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -98,6 +99,7 @@ public class RobotContainer {
     configureBindings();
     m_driveSubsystem.setTracker(m_tracker);
     updateAutoChooser();
+    addNamedCommands();
     m_robotControl.start();
   }
 
@@ -199,6 +201,19 @@ public class RobotContainer {
     m_autoSelect.addOption("Left Basic", new PathPlannerAuto("Left Basic"));
     m_autoSelect.addOption("Left 4 Complex", new PathPlannerAuto("Left 4 Complex"));
     SmartDashboard.putData(m_autoSelect);
+  }
+
+  private void addNamedCommands() {
+    NamedCommands.registerCommand("Deploy Elevator", m_elevatorSubsystem.goToPosition());
+    NamedCommands.registerCommand("Reset Elevator", m_elevatorSubsystem.resetPosition());
+    NamedCommands.registerCommand("Set L1", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
+    NamedCommands.registerCommand("Set L2", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
+    NamedCommands.registerCommand("Set L3", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
+    NamedCommands.registerCommand("Set L4", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
+    NamedCommands.registerCommand("Intake Corals", new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
+    NamedCommands.registerCommand("Score Coral", m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isL1));
+    NamedCommands.registerCommand("Intake Algae", m_algaeSubsystem.intake());
+    NamedCommands.registerCommand("Outtake Algae", m_algaeSubsystem.outtake());
   }
 
   /**
