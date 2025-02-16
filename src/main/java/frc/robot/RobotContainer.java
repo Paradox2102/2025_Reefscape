@@ -124,6 +124,10 @@ public class RobotContainer {
     // Algae
     m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
     m_driverController.leftBumper().whileTrue(m_algaeSubsystem.outtake());
+    m_driverController.b().toggleOnTrue(
+      m_elevatorSubsystem.goToAlgaePosition()
+        .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
+    );
 
     // Coral
     m_driverController.rightTrigger().toggleOnTrue(new AutoIntake(m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
@@ -148,12 +152,10 @@ public class RobotContainer {
 
     m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
     m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
-    // m_operatorController.button(3).toggleOnTrue(new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem).andThen(m_climberSubsystem.climb(true)));
     m_operatorController.button(8).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
-    m_operatorController.button(3).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
-    m_operatorController.button(4).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
-    m_operatorController.button(5).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
-    m_operatorController.button(6).onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
+
+    m_operatorController.button(7).onTrue(m_elevatorSubsystem.setAlgaePosition(ElevatorPosition.ALGAE_HIGH));
+    m_operatorController.button(9).onTrue(m_elevatorSubsystem.setAlgaePosition(ElevatorPosition.ALGAE_LOW));
     
     // Operator UI Controls
 

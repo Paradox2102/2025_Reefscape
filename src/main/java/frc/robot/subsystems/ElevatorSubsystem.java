@@ -35,6 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private DigitalInput m_switch = new DigitalInput(1);
 
   private ElevatorPosition m_position = ElevatorPosition.L1;
+  private ElevatorPosition m_algaePosition = ElevatorPosition.ALGAE_LOW;
 
   private static final double k_deadzoneInches = .2;
 
@@ -112,9 +113,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Commands.runOnce(() -> {setPosition(pos);}, this);
   }
 
+  public Command setAlgaePosition(ElevatorPosition pos) {
+    return Commands.runOnce(() -> {m_algaePosition = pos;}, this);
+  }
+
   public Command goToPosition() {
     return Commands.run(() -> {
       m_PID.setReference(m_position.heightInches(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    }, this).until(atPosition);
+  }
+
+  public Command goToAlgaePosition() {
+    return Commands.run(() -> {
+      m_PID.setReference(m_algaePosition.heightInches(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }, this).until(atPosition);
   }
 
