@@ -149,6 +149,12 @@ public class RobotContainer {
         .finallyDo(() -> m_climberSubsystem.climb(false).schedule())
     );
 
+    // Hopper Pivot
+    m_driverController.y().whileTrue(
+      new RunCommand(() -> m_algaeSubsystem.setPivotPosition(false))
+        .handleInterrupt(() -> m_algaeSubsystem.setPivotPosition(true))
+    );
+
     m_driverController.povUp().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
     m_driverController.povDown().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
     m_driverController.povLeft().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));

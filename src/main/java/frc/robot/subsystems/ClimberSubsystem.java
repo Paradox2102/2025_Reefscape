@@ -4,11 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -23,15 +21,16 @@ public class ClimberSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_leadMotor = new SparkFlex(ClimberConstants.k_climberMotor, MotorType.kBrushless);
   private SparkFlex m_followMotor = new SparkFlex(ClimberConstants.k_climberFollower, MotorType.kBrushless);
-  private SparkClosedLoopController m_pid;
   private RelativeEncoder m_encoder;
+
+  private static final double k_deadzone = 5;
+  private double m_targetPos = 0;
 
   /** Creates a new PivotSubsystem. */
   public ClimberSubsystem() {
     m_leadMotor.configure(MotorConfigs.Climber.config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_followMotor.configure(MotorConfigs.Climber.followConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_encoder = m_leadMotor.getEncoder();
-    m_pid = m_leadMotor.getClosedLoopController();
   }
 
   public void setBrakeMode(boolean brake) {
@@ -46,17 +45,13 @@ public class ClimberSubsystem extends SubsystemBase {
     m_leadMotor.set(power);
   }
 
-  public void setAngle(double degrees) {
-    m_pid.setReference(degrees, ControlType.kPosition);
-  }
-
   public double getAngle(){
     return m_encoder.getPosition();
   }
 
   public Command climb(boolean extend) {
-    return Commands.run(() -> {
-      setAngle(extend ? ClimberConstants.k_extendPosition : ClimberConstants.k_returnPosition);
+    return Commands.runOnce(() -> {
+      m_targetPos = extend ? ClimberConstants.k_extendPosition : ClimberConstants.k_returnPosition;
     }, this);
   }
 
@@ -84,10 +79,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("climber angle", getAngle());
-    //m_leadMotor.set(power);
-    //System.out.println(power);
-    //System.out.println(getAngle());
-    // This method will be called once per scheduler run
+    double angle = getAngle();
+    SmartDashboard.putNumber("climber angle", angle);
+    if (k_deadzone < Math.abs(m_targetPos - angle)) {
+      setPower(Math.signum(m_targetPos - angle));
+    }
   }
 }
