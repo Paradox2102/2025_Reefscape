@@ -129,6 +129,7 @@ public class DriveSubsystem extends SubsystemBase {
       new Translation2d(-.298, .298), new Translation2d(-.298, -.298));
 
   PositionTrackerPose m_tracker;
+  private boolean m_targetsVisible = false;
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -226,11 +227,16 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    m_targetsVisible = false;
+    for(var result : m_tracker.getEstimatedGlobalPose()){
+      if (result.isPresent()){
+        m_targetsVisible = true;
+      }
+    }
     SmartDashboard.putNumber("Heading", getHeadingInDegrees());
     SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
     SmartDashboard.putString("Source Position", m_source.getName());
-    SmartDashboard.putBoolean("Do we see a target", m_tracker.getFLCameraUnreadResults().size() > 0);
+    SmartDashboard.putBoolean("Do we see a target", m_targetsVisible);
 
     // SmartDashboard.putNumber("Rotate Error",
     // getRotationDistanceFromTargetError());

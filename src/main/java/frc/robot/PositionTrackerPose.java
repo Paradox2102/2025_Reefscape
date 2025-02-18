@@ -1,5 +1,6 @@
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,25 +34,34 @@ public class PositionTrackerPose {
   private DriveSubsystem m_driveSubsystem;
   private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   private PhotonCamera m_cameraFL;
+  private PhotonCamera m_cameraBL;
   private PhotonCamera m_cameraBR;
-  private PhotonPoseEstimator m_photon1;
-
-  private PhotonPoseEstimator m_photon2;
+  private PhotonPoseEstimator m_photonFL;
+  private PhotonPoseEstimator m_photonBL;
+  private PhotonPoseEstimator m_photonBR;
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
   private final Field2d m_testField = new Field2d();
 
   public PositionTrackerPose(double x, double y,
-                             DriveSubsystem driveSubsystem, PhotonCamera cameraFL, PhotonCamera cameraBR) {
+      DriveSubsystem driveSubsystem, PhotonCamera cameraFL, PhotonCamera cameraBL, PhotonCamera cameraBR) {
     super();
     m_driveSubsystem = driveSubsystem;
-    // Let's have arrays of cameras and estimators, please. Much easier to update when we change the number of cameras. Same with their names and transforms. -Gavin
+    // Let's have arrays of cameras and estimators, please. Much easier to update
+    // when we change the number of cameras. Same with their names and transforms.
+    // -Gavin
     m_cameraFL = cameraFL;
     m_cameraBR = cameraBR;
-    m_photon1 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(-0.267, -0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(225))));
-    m_photon1.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-    m_photon2 = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(45))));
-    m_photon2.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    m_cameraBL = cameraBL;
+    m_photonFL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
+        new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(45))));
+    m_photonFL.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    m_photonBL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
+        new Translation3d(-0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(135))));
+    m_photonBL.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    m_photonBR = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
+        new Translation3d(-0.267, -0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(225))));
+    m_photonBR.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
     m_poseEstimator = new SwerveDrivePoseEstimator(
         m_driveSubsystem.getSwerve(), m_driveSubsystem.getGyroRotation2d(),
@@ -64,7 +74,9 @@ public class PositionTrackerPose {
     SmartDashboard.putData("photon pose", m_testField);
   }
 
-  public Pose2d getPose2d() { return m_poseEstimator.getEstimatedPosition(); }
+  public Pose2d getPose2d() {
+    return m_poseEstimator.getEstimatedPosition();
+  }
 
   public void setPose(Pose2d pose) {
     m_poseEstimator.resetPosition(
@@ -75,69 +87,79 @@ public class PositionTrackerPose {
   }
 
   // FIXME: delete next 2 functions
-  public List<PhotonPipelineResult> getFLCameraUnreadResults() {
-    return m_cameraFL.getAllUnreadResults();
-  }
+  // public List<PhotonPipelineResult> getFLCameraUnreadResults() {
+  // return m_cameraFL.getAllUnreadResults();
+  // }
 
-  /*TESTING CLASSES! DO NOT USE */
+  /* TESTING CLASSES! DO NOT USE */
   // public Optional<EstimatedRobotPose> getPhoton1Pose() {
-  //   Optional<EstimatedRobotPose> visionEst = Optional.empty();
-  //   for (var change : m_camera1.getAllUnreadResults()) {
-  //     visionEst = m_photon1.update(change);
-  //   }
-  //   return visionEst;
+  // Optional<EstimatedRobotPose> visionEst = Optional.empty();
+  // for (var change : m_camera1.getAllUnreadResults()) {
+  // visionEst = m_photonFL.update(change);
+  // }
+  // return visionEst;
   // }
 
   // private double m_lastTimestamp = 0;
 
-  // private Optional<EstimatedRobotPose> photon2Update(PhotonPipelineResult result){
-  //   if(Math.abs(m_lastTimestamp - result.getTimestampSeconds()) < 1e-6) {
-  //     System.out.println("timestamp is the same");
-  //   }
-  //   return m_photon2.update(result);
+  // private Optional<EstimatedRobotPose> photon2Update(PhotonPipelineResult
+  // result){
+  // if(Math.abs(m_lastTimestamp - result.getTimestampSeconds()) < 1e-6) {
+  // System.out.println("timestamp is the same");
+  // }
+  // return m_photon2.update(result);
   // }
 
   // public Optional<EstimatedRobotPose> getPhoton2Pose() {
-  //   Optional<EstimatedRobotPose> visionEst = Optional.empty();
-  //   List<PhotonPipelineResult> results = m_camera2.getAllUnreadResults();
-  //   if(results.size() > 0){
-  //     //System.out.println(results.get(0).hasTargets());
-  //     //System.out.println(results.get(0).getTimestampSeconds());
-  //     if(results.get(0).hasTargets()){
-  //       //System.out.println(m_photon2.update(results.get(0)).isPresent());
-  //       visionEst = photon2Update(results.get(0));
-  //     }
-  //   }
-  //   // for (var change : results) {
-  //   //   visionEst = m_photon2.update(change);
-  //   // }
-  //   return visionEst;
+  // Optional<EstimatedRobotPose> visionEst = Optional.empty();
+  // List<PhotonPipelineResult> results = m_camera2.getAllUnreadResults();
+  // if(results.size() > 0){
+  // //System.out.println(results.get(0).hasTargets());
+  // //System.out.println(results.get(0).getTimestampSeconds());
+  // if(results.get(0).hasTargets()){
+  // //System.out.println(m_photon2.update(results.get(0)).isPresent());
+  // visionEst = photon2Update(results.get(0));
+  // }
+  // }
+  // // for (var change : results) {
+  // // visionEst = m_photon2.update(change);
+  // // }
+  // return visionEst;
   // }
 
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-    Optional<EstimatedRobotPose> visionEst = Optional.empty();
+  public List<Optional<EstimatedRobotPose>> getEstimatedGlobalPose() {
+    Optional<EstimatedRobotPose> visionEstFL = Optional.empty();
+    Optional<EstimatedRobotPose> visionEstBL = Optional.empty();
+    Optional<EstimatedRobotPose> visionEstBR = Optional.empty();
+    List<Optional<EstimatedRobotPose>> visionEsts = new ArrayList<>(0);
     for (var change : m_cameraFL.getAllUnreadResults()) {
-      visionEst = m_photon1.update(change);
+      visionEstFL = m_photonFL.update(change);
     }
-
+    visionEsts.add(visionEstFL);
+    for (var change : m_cameraBL.getAllUnreadResults()) {
+      visionEstBL = m_photonBL.update(change);
+    }
+    visionEsts.add(visionEstBL);
     for (var change : m_cameraBR.getAllUnreadResults()) {
-      visionEst = m_photon2.update(change);
+      visionEstBR = m_photonBR.update(change);
     }
-    return visionEst;
+    visionEsts.add(visionEstBR);
+    return visionEsts;
   }
 
   public void displayRobotPosWithCamera() {
-    Optional<EstimatedRobotPose> results = getEstimatedGlobalPose();
-    //System.out.println(results.isPresent());
-    if (results.isPresent()) {
-      SmartDashboard.putNumber("photon2 x", results.get().estimatedPose.toPose2d().getX());
-      SmartDashboard.putNumber("photon2 y", results.get().estimatedPose.toPose2d().getY());
-      SmartDashboard.putNumber("photon2 angle", results.get().estimatedPose.toPose2d().getRotation().getDegrees());
-      m_testField.setRobotPose(results.get().estimatedPose.toPose2d());
+    List<Optional<EstimatedRobotPose>> results = getEstimatedGlobalPose();
+    // System.out.println(results.isPresent());
+    for (var est : results) {
+      if (est.isPresent()) {
+        SmartDashboard.putNumber("photon2 x", est.get().estimatedPose.toPose2d().getX());
+        SmartDashboard.putNumber("photon2 y", est.get().estimatedPose.toPose2d().getY());
+        SmartDashboard.putNumber("photon2 angle", est.get().estimatedPose.toPose2d().getRotation().getDegrees());
+        m_testField.setRobotPose(est.get().estimatedPose.toPose2d());
+      }
     }
   }
 
-  
   public static class PositionContainer {
     public double x, y;
 
@@ -147,34 +169,37 @@ public class PositionTrackerPose {
     }
   }
 
-  //private boolean m_front = true;
+  // private boolean m_front = true;
 
   public void update() {
-    m_photon1.setReferencePose(getPose2d());
-    m_photon2.setReferencePose(getPose2d());
+    m_photonFL.setReferencePose(getPose2d());
+    m_photonBR.setReferencePose(getPose2d());
 
     Rotation2d gyroRotation = m_driveSubsystem.getGyroRotation2d();
     SwerveModulePosition[] modules = m_driveSubsystem.getModulePosition();
     m_poseEstimator.update(gyroRotation, modules);
 
     var visionEst = getEstimatedGlobalPose();
-    visionEst.ifPresent(
-      est -> {
-        m_poseEstimator.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds);
-      }
-    );
+    for (var result : visionEst) {
+      result.ifPresent(
+          est -> {
+            m_poseEstimator.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds);
+          });
+    }
 
     // try {
-    //   if(camera1Result.get(0).hasTargets() && camera1Result.get(0).getTimestampSeconds() != m_timestamp1){
-    //     m_poseEstimator.addVisionMeasurement(
-    //       m_photon1.update(camera1Result.get(0)).get().estimatedPose.toPose2d(), 
-    //       camera1Result.get(0).getTimestampSeconds());
-    //   }
-    //   if(camera2Result.get(0).hasTargets() && camera2Result.get(0).getTimestampSeconds() != m_timestamp2){
-    //     m_poseEstimator.addVisionMeasurement(
-    //       m_photon2.update(camera2Result.get(0)).get().estimatedPose.toPose2d(), 
-    //       camera2Result.get(0).getTimestampSeconds());
-    //   }
+    // if(camera1Result.get(0).hasTargets() &&
+    // camera1Result.get(0).getTimestampSeconds() != m_timestamp1){
+    // m_poseEstimator.addVisionMeasurement(
+    // m_photonFL.update(camera1Result.get(0)).get().estimatedPose.toPose2d(),
+    // camera1Result.get(0).getTimestampSeconds());
+    // }
+    // if(camera2Result.get(0).hasTargets() &&
+    // camera2Result.get(0).getTimestampSeconds() != m_timestamp2){
+    // m_poseEstimator.addVisionMeasurement(
+    // m_photon2.update(camera2Result.get(0)).get().estimatedPose.toPose2d(),
+    // camera2Result.get(0).getTimestampSeconds());
+    // }
     // } catch (Exception e) {}
   }
 }
