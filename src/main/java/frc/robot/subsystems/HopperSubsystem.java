@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -22,11 +23,12 @@ import frc.robot.Constants.MotorConfigs;
 public class HopperSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_motor = new SparkFlex(Constants.HopperConstants.k_hopperMotor, MotorType.kBrushless);
-  DigitalInput m_beamBreak = new DigitalInput(0);
+  private RelativeEncoder m_encoder;
+  DigitalInput m_beamBreak = new DigitalInput(1);
 
   private SparkClosedLoopController m_PID = m_motor.getClosedLoopController();
 
-  private static final double k_intakeRPM = 5000;
+  private static final double k_intakeRPM = 3000;
 
   //absoulte encoder
 
@@ -34,6 +36,7 @@ public class HopperSubsystem extends SubsystemBase {
   public HopperSubsystem() {
     m_motor.configure(MotorConfigs.Hopper.config, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
+    m_encoder = m_motor.getEncoder();
   }
 
   public void setBrakeMode(boolean brake) {
@@ -69,9 +72,14 @@ public class HopperSubsystem extends SubsystemBase {
     return m_motor.getOutputCurrent();
   }
 
+  public double getSpeed() {
+    return m_encoder.getVelocity();
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Hopper Current", getCurrentDraw());
+    SmartDashboard.putNumber("Hopper Speed", getSpeed());
     // This method will be called once per scheduler run
   }
 }

@@ -82,7 +82,7 @@ public class ClimberSubsystem extends SubsystemBase {
     double angle = getAngle();
     SmartDashboard.putNumber("climber angle", angle);
     if (k_deadzone < Math.abs(m_targetPos - angle)) {
-      setPower(Math.signum(m_targetPos - angle));
+      //setPower(Math.signum(m_targetPos - angle));
     }
   }
 }

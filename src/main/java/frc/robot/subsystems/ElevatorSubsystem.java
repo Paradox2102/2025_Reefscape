@@ -32,7 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkClosedLoopController m_PID;
 
   private RelativeEncoder m_elevatorEncoder = m_elevatorMotor.getEncoder();
-  private DigitalInput m_switch = new DigitalInput(1);
+  private DigitalInput m_switch = new DigitalInput(0);
 
   private ElevatorPosition m_position = ElevatorPosition.L1;
   private ElevatorPosition m_algaePosition = ElevatorPosition.ALGAE_LOW;
