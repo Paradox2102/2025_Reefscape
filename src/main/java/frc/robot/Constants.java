@@ -144,12 +144,12 @@ public final class Constants {
     public static final int k_elevatorMotor = 11;
     public static final int k_elevatorFollower = 12;
 
-    public static final double k_pUP = 0.8;
-    public static final double k_iUP = 0.000001;
+    public static final double k_pUP = 0.1;
+    public static final double k_iUP = 0;//0.0000005;
     public static final double k_dUp = 0;
     
     public static final double k_pDown = .0075;
-    public static final double k_iDown = 0.000002;
+    public static final double k_iDown = 0.00001;
     public static final double k_dDown = 0;
     public static final double k_f = .02; // .03;
     public static final double k_ticksToInches = 4.0/2.67;

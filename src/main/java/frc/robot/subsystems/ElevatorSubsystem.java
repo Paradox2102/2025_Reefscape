@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(70.2, "Level 4"),
+    L4(50, "Level 4"), // 70.2
     L3(45, "Level 3"),
     L2(31, "Level 2"),
     L1(19, "Level 1"),
@@ -156,7 +156,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putString("Elevator Target", m_position.getName());
     if (!bottomLimit.getAsBoolean()){
       m_elevatorEncoder.setPosition(0);
-    } else if (pos > 73){
+    } else if (pos > 73) {
       setPower(0);
       m_elevatorEncoder.setPosition(72.5); //if encoder is reading out number 0.5 inch above max travel, set height to max travel
     }

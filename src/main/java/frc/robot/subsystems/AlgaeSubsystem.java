@@ -20,7 +20,8 @@ public class AlgaeSubsystem extends SubsystemBase {
   private SparkFlex m_pivotMotor = new SparkFlex(Constants.AlgaeConstants.k_pivotMotor, MotorType.kBrushless);
   private SparkFlex m_rollerMotor = new SparkFlex(Constants.AlgaeConstants.k_algaeMotor, MotorType.kBrushless);
 
-  private static final double k_pivotPower = .1;
+  private static final double k_downPower = 1;
+  private static final double k_upPower = -.5;
 
   private boolean m_retracted = true;
 
@@ -85,7 +86,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //m_pivotMotor.set(m_retracted ? k_pivotPower : -k_pivotPower);
+    // m_pivotMotor.set(m_retracted ? k_upPower : k_downPower);
     //m_rollerMotor.set(m_rollerState.power());
   }
 }
