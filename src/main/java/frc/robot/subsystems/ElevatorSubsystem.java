@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(50, "Level 4"), // 70.2
+    L4(70.2, "Level 4"), // 70.2
     L3(45, "Level 3"),
     L2(31, "Level 2"),
     L1(19, "Level 1"),
@@ -119,19 +119,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Command goToPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(m_position.heightInches(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
+      m_PID.setReference(m_position.heightInches(), ControlType.kMAXMotionPositionControl);
     }, this).until(atPosition);
   }
 
   public Command goToAlgaePosition() {
     return Commands.run(() -> {
-      m_PID.setReference(m_algaePosition.heightInches(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
+      m_PID.setReference(m_algaePosition.heightInches(), ControlType.kMAXMotionPositionControl);
     }, this).until(atPosition);
   }
 
   public Command resetPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(.5, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_PID.setReference(0, ControlType.kMAXMotionPositionControl);
     }, this).until(() -> getPosition() < k_deadzoneInches);
   }
 

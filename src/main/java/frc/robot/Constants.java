@@ -6,6 +6,7 @@ package frc.robot;
 
 // import com.pathplanner.lib.config.RobotConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
@@ -144,14 +145,10 @@ public final class Constants {
     public static final int k_elevatorMotor = 11;
     public static final int k_elevatorFollower = 12;
 
-    public static final double k_pUP = 0.1;
-    public static final double k_iUP = 0;//0.0000005;
-    public static final double k_dUp = 0;
-    
-    public static final double k_pDown = .0075;
-    public static final double k_iDown = 0.00001;
-    public static final double k_dDown = 0;
-    public static final double k_f = .02; // .03;
+    public static final double k_p = 0.3;
+    public static final double k_i = 0;//0.0000005;
+    public static final double k_d = 0.01;
+
     public static final double k_ticksToInches = 4.0/2.67;
   }
 
@@ -265,8 +262,11 @@ public final class Constants {
             .positionConversionFactor(ElevatorConstants.k_ticksToInches);
         leaderConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pidf(ElevatorConstants.k_pDown, ElevatorConstants.k_iDown, ElevatorConstants.k_dDown, 0, ClosedLoopSlot.kSlot1)
-            .pidf(ElevatorConstants.k_pUP, ElevatorConstants.k_iUP, ElevatorConstants.k_dUp, ElevatorConstants.k_f, ClosedLoopSlot.kSlot0);
+            .pid(ElevatorConstants.k_p, ElevatorConstants.k_i, ElevatorConstants.k_d);
+        leaderConfig.closedLoop.maxMotion
+          .maxVelocity(6000)
+          .maxAcceleration(12000)
+          .allowedClosedLoopError(.5);
         //coastElevatorConfig.apply(elevatorConfig);
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
