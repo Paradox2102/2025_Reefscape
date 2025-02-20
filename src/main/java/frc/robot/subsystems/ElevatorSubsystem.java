@@ -42,7 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double m_targetPos = m_position.heightInches();
 
   public Trigger atPosition = new Trigger(
-    () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
+    () -> Math.abs(getPosition() - m_position.heightInches()) < k_deadzoneInches);
 
   public Trigger bottomLimit = new Trigger(
     () -> m_switch.get());

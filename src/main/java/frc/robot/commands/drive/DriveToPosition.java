@@ -27,7 +27,7 @@ public class DriveToPosition extends Command {
   private static final double k_p = .3;
   private static final double k_i = .2;//.02;
   private static final double k_d = 0;//.02;
-  private static final double k_deadzoneMeters = .05;
+  private static final double k_deadzoneMeters = .04;
 
   PIDController m_xPID = new PIDController(k_p, k_i, k_d);
   PIDController m_yPID = new PIDController(k_p, k_i, k_d);
@@ -98,8 +98,8 @@ public class DriveToPosition extends Command {
         Math.abs(m_xPos - m_currentX) < k_deadzoneMeters
         && 
         Math.abs(m_yPos - m_currentY) < k_deadzoneMeters
-        &&
-        Math.abs(m_rotationDegrees - m_currentRot) < Constants.DriveConstants.k_rotateDeadzone
+        // &&
+        // Math.abs(m_rotationDegrees - m_currentRot) < Constants.DriveConstants.k_rotateDeadzone
       );
   }
 }
