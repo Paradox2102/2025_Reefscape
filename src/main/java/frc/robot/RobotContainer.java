@@ -128,8 +128,8 @@ public class RobotContainer {
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
 
     // Algae
-    m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
-    m_driverController.leftBumper().whileTrue(m_algaeSubsystem.outtake());
+    m_driverController.leftTrigger().toggleOnTrue(m_algaeSubsystem.intake().handleInterrupt(() -> m_algaeSubsystem.reset()));
+    m_driverController.leftBumper().onTrue(m_algaeSubsystem.outtake());
     m_driverController.b().toggleOnTrue(
       m_elevatorSubsystem.goToAlgaePosition()
         .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
