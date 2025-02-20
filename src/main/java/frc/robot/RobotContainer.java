@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.AutoIntake;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
@@ -152,10 +153,12 @@ public class RobotContainer {
     );
 
     // Hopper Pivot
-    m_driverController.y().whileTrue(
-      new RunCommand(() -> m_algaeSubsystem.setPivotPosition(false))
-        .handleInterrupt(() -> m_algaeSubsystem.setPivotPosition(true))
-    );
+    // m_driverController.y().whileTrue(
+    //   new RunCommand(() -> m_algaeSubsystem.setPivotPosition(false))
+    //     .handleInterrupt(() -> m_algaeSubsystem.setPivotPosition(true))
+    // );
+
+    m_driverController.y().whileTrue(new DriveToPosition(m_driveSubsystem, true));
 
     m_driverController.povUp().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
     m_driverController.povDown().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));

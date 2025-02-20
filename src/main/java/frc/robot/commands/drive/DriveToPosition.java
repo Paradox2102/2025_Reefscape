@@ -24,10 +24,10 @@ public class DriveToPosition extends Command {
   double m_currentY = 0;
   double m_currentRot = 0;
 
-  private static final double k_p = .6;
-  private static final double k_i = .2;
-  private static final double k_d = 0;//.0007;
-  private static final double k_deadzoneMeters = .1;
+  private static final double k_p = .3;
+  private static final double k_i = .2;//.02;
+  private static final double k_d = 0;//.02;
+  private static final double k_deadzoneMeters = 0;
 
   PIDController m_xPID = new PIDController(k_p, k_i, k_d);
   PIDController m_yPID = new PIDController(k_p, k_i, k_d);
@@ -35,6 +35,8 @@ public class DriveToPosition extends Command {
   boolean m_goToReef = true;
 
   public DriveToPosition(DriveSubsystem driveSubsystem, boolean goToReef) {
+    m_xPID.setIZone(.15);
+    m_yPID.setIZone(.15);
     m_subsystem = driveSubsystem;
     m_goToReef = goToReef;
     m_tracker = m_subsystem.getTracker();
@@ -79,7 +81,7 @@ public class DriveToPosition extends Command {
     // xVelocity = MathUtil.applyDeadband(xVelocity, .07);
     // yVelocity = MathUtil.applyDeadband(yVelocity, .07);
 
-    m_subsystem.drive(xVelocity, -yVelocity, 0, true, true);
+    m_subsystem.drive(xVelocity, -yVelocity, rotVelocity, true, true);
   }
 
   // Called once the command ends or is interrupted.

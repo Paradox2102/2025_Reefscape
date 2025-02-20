@@ -52,10 +52,10 @@ public final class Constants {
     public static final double k_BLChassisAngularOffset = Math.PI;
     public static final double k_BRChassisAngularOffset = Math.PI / 2;
 
-    public static double k_FLOffset = 4.309 + k_FLChassisAngularOffset;
-    public static double k_FROffset = 4.193 + k_FRChassisAngularOffset;
-    public static double k_BLOffset = 2.097 + k_BLChassisAngularOffset;
-    public static double k_BROffset = 6.239 + k_BRChassisAngularOffset;
+    public static double k_FLOffset = 4.211 + k_FLChassisAngularOffset;
+    public static double k_FROffset = 1.943 + k_FRChassisAngularOffset;
+    public static double k_BLOffset = 2.225 + k_BLChassisAngularOffset;
+    public static double k_BROffset = 1.992 + k_BRChassisAngularOffset;
 
     // SPARK MAX CAN IDs
     public static final int k_FRTurningMotor = 2; // 2
