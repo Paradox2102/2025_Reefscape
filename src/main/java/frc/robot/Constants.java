@@ -184,6 +184,7 @@ public final class Constants {
         double drivingFactor = ModuleConstants.k_WheelDiameterMeters * Math.PI
             / ModuleConstants.k_DrivingMotorReduction;
         double turningFactor = 2 * Math.PI;
+        double turningFactorRelative = turningFactor / 5.5;
         double drivingVelocityFeedForward = 1 / ModuleConstants.k_DriveWheelFreeSpeedRps;
 
         drivingConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(50);
@@ -204,8 +205,11 @@ public final class Constants {
             .inverted(true)
             .positionConversionFactor(turningFactor) // radians
             .velocityConversionFactor(turningFactor / 60.0); // radians per second
+        turningConfig.encoder
+            .positionConversionFactor(turningFactorRelative) // radians
+            .velocityConversionFactor(turningFactorRelative / 60.0); // radians per second
         turningConfig.closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             // These are example gains you may need to them for your own robot!
             .pid(1, 0, 0)
             .outputRange(-1, 1)
@@ -215,7 +219,7 @@ public final class Constants {
             // longer route.
             .positionWrappingEnabled(true)
             // FIXME: turningFactor is only coincidentally the right value here because the encoder is in revolutions. With a different encoder, this would be wrong. -Gavin 
-            .positionWrappingInputRange(0, turningFactor);
+            .positionWrappingInputRange(0, turningFactorRelative);
         coastDriveConfig.apply(drivingConfig);
         coastTurnConfig.apply(turningConfig);
         

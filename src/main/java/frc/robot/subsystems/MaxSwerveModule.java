@@ -25,7 +25,8 @@ public class MaxSwerveModule {
   private final SparkMax m_turnMotor;
 
   private final RelativeEncoder m_driveEncoder;
-  private final AbsoluteEncoder m_turnEncoder;
+  private final AbsoluteEncoder m_turnEncoderAbsolute;
+  private final RelativeEncoder m_turnEncoder;
 
   private final SparkClosedLoopController m_drivePID;
   private final SparkClosedLoopController m_turnPID;
@@ -44,7 +45,8 @@ public class MaxSwerveModule {
     m_turnMotor = new SparkMax(turningCANId, MotorType.kBrushless);
 
     m_driveEncoder = m_driveMotor.getEncoder();
-    m_turnEncoder = m_turnMotor.getAbsoluteEncoder();
+    m_turnEncoderAbsolute = m_turnMotor.getAbsoluteEncoder();
+    m_turnEncoder = m_turnMotor.getEncoder();
 
     m_drivePID = m_driveMotor.getClosedLoopController();
     m_turnPID = m_turnMotor.getClosedLoopController();
@@ -57,6 +59,7 @@ public class MaxSwerveModule {
     m_turnMotor.configure(MotorConfigs.SwerveModule.turningConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
 
+    m_turnEncoder.setPosition(m_turnEncoderAbsolute.getPosition());
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turnEncoder.getPosition());
     m_driveEncoder.setPosition(0);
