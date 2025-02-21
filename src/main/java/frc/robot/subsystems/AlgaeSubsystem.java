@@ -63,18 +63,18 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public Command intake() {
-    return Commands.runOnce(() -> {
+    return Commands.run(() -> {
       m_rollerState = RollerStates.INTAKE;
-      setPivotPosition(true);
+      setPivotPosition(false);
     }, this).handleInterrupt(() -> reset()
     );
   }
 
   public Command outtake() {
-    return Commands.runOnce(() -> {
+    return Commands.run(() -> {
       m_rollerState = RollerStates.OUTTAKE;
       setPivotPosition(false);
-    }, this).handleInterrupt(() -> reset()
+    }, this).finallyDo(() -> reset()
     );
   }
 

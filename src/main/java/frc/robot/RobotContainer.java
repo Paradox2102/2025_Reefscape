@@ -129,7 +129,7 @@ public class RobotContainer {
 
     // Algae
     m_driverController.leftTrigger().toggleOnTrue(m_algaeSubsystem.intake());
-    m_driverController.leftBumper().onTrue(m_algaeSubsystem.outtake());
+    m_driverController.leftBumper().whileTrue(m_algaeSubsystem.outtake());
     // m_driverController.b().toggleOnTrue(
     //   m_elevatorSubsystem.goToAlgaePosition()
     //     .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
