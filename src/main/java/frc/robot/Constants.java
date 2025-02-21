@@ -53,10 +53,10 @@ public final class Constants {
     public static final double k_BLChassisAngularOffset = Math.PI;
     public static final double k_BRChassisAngularOffset = Math.PI / 2;
 
-    public static double k_FLOffset = 4.309 + k_FLChassisAngularOffset;
-    public static double k_FROffset = 4.193 + k_FRChassisAngularOffset;
-    public static double k_BLOffset = 2.097 + k_BLChassisAngularOffset;
-    public static double k_BROffset = 6.239 + k_BRChassisAngularOffset;
+    public static double k_FLOffset = 4.211 + k_FLChassisAngularOffset;
+    public static double k_FROffset = 1.925 + k_FRChassisAngularOffset;
+    public static double k_BLOffset = 2.201 + k_BLChassisAngularOffset;
+    public static double k_BROffset = 1.992 + k_BRChassisAngularOffset;
 
     // SPARK MAX CAN IDs
     public static final int k_FRTurningMotor = 2; // 2
@@ -98,6 +98,10 @@ public final class Constants {
     public static final double k_lookAheadTimeSeconds = .2;
 
     public static final boolean k_GyroReversed = false;
+
+    public static final double k_trackWidth = 0.273;
+    public static final double k_wheelBase = 0.273;
+    public static final double k_driveBaseRadius = Math.hypot(k_trackWidth / 2.0, k_wheelBase / 2.0);
   }
 
   public static final class ModuleConstants {
@@ -107,8 +111,7 @@ public final class Constants {
     public static final int k_DrivingMotorPinionTeeth = 12;
 
     // Calculations required for driving motor conversion factors and feed forward
-    // FIXME: Integer division!!! -Gavin
-    public static final double k_DrivingMotorFreeSpeedRps = 6784 / 60;
+    public static final double k_DrivingMotorFreeSpeedRps = 6784.0 / 60.0;
     public static final double k_WheelDiameterMeters = 0.0762;
     public static final double k_WheelCircumferenceMeters = k_WheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
@@ -156,13 +159,14 @@ public final class Constants {
     public static final int k_climberMotor = 16;
     public static final int k_climberFollower = 17;
 
-    public static final double k_p = 0.5;
+    public static final double k_p = 0.005;
     public static final double k_i = 0;
     public static final double k_d = 0;
     public static final double k_f = 0;
-    public static final double k_ticksToDegrees = 1;
-    public static double k_extendPosition = 90;
-    public static double k_returnPosition = -150;
+    public static final double k_ticksToDegrees = 360;
+    public static final double k_resetPosition = 20;
+    public static double k_extendPosition = 290;
+    public static double k_returnPosition = 110;
   }
 
 
@@ -230,12 +234,12 @@ public final class Constants {
       static {
 
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
-        config.encoder
+        config.absoluteEncoder
               .positionConversionFactor(ClimberConstants.k_ticksToDegrees);
         config.closedLoop
-          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+          .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
           .pid(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d)
-          .positionWrappingInputRange(ClimberConstants.k_returnPosition, ClimberConstants.k_extendPosition);
+          .positionWrappingInputRange(0, 360);
         followConfig.apply(config);
         followConfig.follow(ClimberConstants.k_climberMotor, true);
 

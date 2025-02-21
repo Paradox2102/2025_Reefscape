@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.MotorConfigs;
 
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -122,5 +123,10 @@ public class MaxSwerveModule {
 
   public void spin() {
     m_turnMotor.set(.05);
+  }
+
+  public double getWheelRadiusCharacterizationPosition(){
+    double drivingFactor = ModuleConstants.k_WheelDiameterMeters * Math.PI / ModuleConstants.k_DrivingMotorReduction;
+    return (m_driveEncoder.getPosition() / drivingFactor) * 2 * Math.PI;
   }
 }

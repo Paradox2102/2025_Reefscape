@@ -54,7 +54,7 @@ public class PositionTrackerPose {
     m_cameraBR = cameraBR;
     m_cameraBL = cameraBL;
     m_photonFL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
-        new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(45))));
+        new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(0), Math.toRadians(0))));
     m_photonFL.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     m_photonBL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
         new Translation3d(-0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(135))));

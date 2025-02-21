@@ -42,17 +42,17 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double m_targetPos = m_position.heightInches();
 
   public Trigger atPosition = new Trigger(
-    () -> getPosition() - m_position.heightInches() < k_deadzoneInches);
+    () -> Math.abs(getPosition() - m_position.heightInches()) < k_deadzoneInches);
 
   public Trigger bottomLimit = new Trigger(
     () -> m_switch.get());
 
 
   public enum ElevatorPosition {
-    L4(70.2, "Level 4"), // 70.2
-    L3(45, "Level 3"),
-    L2(31, "Level 2"),
-    L1(19, "Level 1"),
+    L4(69.4, "Level 4"), // 70.2
+    L3(43.85, "Level 3"),
+    L2(30.48, "Level 2"),
+    L1(20, "Level 1"),
     RESET(0, "Reset"),
     ALGAE_HIGH(0, "Algae High"),
     ALGAE_LOW(0, "Algae Low");

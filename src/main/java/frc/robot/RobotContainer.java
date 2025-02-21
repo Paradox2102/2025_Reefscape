@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.AutoIntake;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
@@ -85,8 +86,7 @@ public class RobotContainer {
   private PhotonCamera m_cameraFL = new PhotonCamera("fl_camera");
   private PhotonCamera m_cameraBL = new PhotonCamera("bl_camera");
   private PhotonCamera m_cameraBR = new PhotonCamera("br_camera");
-  private PhotonCamera m_alignCamera = new PhotonCamera("align_camera");
-  //private PhotonCamera m_alignCamera = new PhotonCamera("align");
+  //private PhotonCamera m_alignCamera = new PhotonCamera("align_camera");
   public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, m_cameraFL, m_cameraBL, m_cameraBR);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -125,14 +125,15 @@ public class RobotContainer {
     m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.holdCoral());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(0.02), m_elevatorSubsystem));
+    m_algaeSubsystem.setDefaultCommand(new RunCommand(() -> m_algaeSubsystem.reset(), m_algaeSubsystem));
 
     // Algae
-    m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake());
+    m_driverController.leftTrigger().toggleOnTrue(m_algaeSubsystem.intake());
     m_driverController.leftBumper().whileTrue(m_algaeSubsystem.outtake());
-    m_driverController.b().toggleOnTrue(
-      m_elevatorSubsystem.goToAlgaePosition()
-        .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
-    );
+    // m_driverController.b().toggleOnTrue(
+    //   m_elevatorSubsystem.goToAlgaePosition()
+    //     .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
+    // );
 
     // Coral
     m_driverController.rightTrigger().toggleOnTrue(new AutoIntake(m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
@@ -146,16 +147,20 @@ public class RobotContainer {
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
 
     // Climb
-    m_driverController.a().toggleOnTrue(
-      new ProxyCommand(() -> new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem))
-        .finallyDo(() -> m_climberSubsystem.climb(false).schedule())
-    );
+    // m_driverController.a().toggleOnTrue(
+    //   new ProxyCommand(() -> new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem))
+    //     .finallyDo(() -> m_climberSubsystem.climb(false).schedule())
+    // );
+    m_driverController.a().whileTrue(m_climberSubsystem.runOut());
+    m_driverController.b().whileTrue(m_climberSubsystem.runIn());
 
     // Hopper Pivot
-    m_driverController.y().whileTrue(
-      new RunCommand(() -> m_algaeSubsystem.setPivotPosition(false))
-        .handleInterrupt(() -> m_algaeSubsystem.setPivotPosition(true))
-    );
+    // m_driverController.y().whileTrue(
+    //   new RunCommand(() -> m_algaeSubsystem.setPivotPosition(false))
+    //     .handleInterrupt(() -> m_algaeSubsystem.setPivotPosition(true))
+    // );
+
+    m_driverController.y().whileTrue(new DriveToPosition(m_driveSubsystem, true));
 
     m_driverController.povUp().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
     m_driverController.povDown().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
@@ -200,7 +205,7 @@ public class RobotContainer {
   }
 
   public boolean getThrottle() {
-    return m_operatorController.getThrottle() > 0;
+    return m_operatorController.getThrottle() < 0;
   }
 
   private void updateAutoChooser() {
@@ -218,7 +223,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Set L2", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
     NamedCommands.registerCommand("Set L3", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
     NamedCommands.registerCommand("Set L4", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
-    NamedCommands.registerCommand("Intake Corals", new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
+    NamedCommands.registerCommand("Intake Coral", new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
     NamedCommands.registerCommand("Score Coral", m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isL1));
     NamedCommands.registerCommand("Intake Algae", m_algaeSubsystem.intake());
     NamedCommands.registerCommand("Outtake Algae", m_algaeSubsystem.outtake());

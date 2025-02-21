@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -21,16 +24,15 @@ public class ClimberSubsystem extends SubsystemBase {
   // motor
   private SparkFlex m_leadMotor = new SparkFlex(ClimberConstants.k_climberMotor, MotorType.kBrushless);
   private SparkFlex m_followMotor = new SparkFlex(ClimberConstants.k_climberFollower, MotorType.kBrushless);
-  private RelativeEncoder m_encoder;
-
-  private static final double k_deadzone = 5;
-  private double m_targetPos = 0;
+  private AbsoluteEncoder m_encoder;
+  private SparkClosedLoopController m_pid;
 
   /** Creates a new PivotSubsystem. */
   public ClimberSubsystem() {
     m_leadMotor.configure(MotorConfigs.Climber.config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_followMotor.configure(MotorConfigs.Climber.followConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_encoder = m_leadMotor.getEncoder();
+    m_encoder = m_leadMotor.getAbsoluteEncoder();
+    m_pid = m_leadMotor.getClosedLoopController();
   }
 
   public void setBrakeMode(boolean brake) {
@@ -51,7 +53,13 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public Command climb(boolean extend) {
     return Commands.runOnce(() -> {
-      m_targetPos = extend ? ClimberConstants.k_extendPosition : ClimberConstants.k_returnPosition;
+      m_pid.setReference(extend ? ClimberConstants.k_extendPosition : ClimberConstants.k_returnPosition, ControlType.kPosition);
+    }, this);
+  }
+
+  public Command reset() {
+    return Commands.runOnce(() -> {
+      m_pid.setReference(ClimberConstants.k_resetPosition, ControlType.kPosition);
     }, this);
   }
 
@@ -81,8 +89,5 @@ public class ClimberSubsystem extends SubsystemBase {
   public void periodic() {
     double angle = getAngle();
     SmartDashboard.putNumber("climber angle", angle);
-    if (k_deadzone < Math.abs(m_targetPos - angle)) {
-      //setPower(Math.signum(m_targetPos - angle));
-    }
   }
 }

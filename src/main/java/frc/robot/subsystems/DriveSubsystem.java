@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -32,14 +33,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.ParadoxField;
 import frc.robot.PositionTrackerPose;
 import frc.utils.SwerveUtils;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.function.BooleanSupplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private FieldPosition m_reefPosition = FieldPosition.ONE;
+  private FieldPosition m_reefPosition = FieldPosition.SEVEN;
   private FieldPosition m_source = FieldPosition.SOURCE_RIGHT;
   public static RobotConfig k_pathConfig;{
   try {
@@ -54,7 +59,7 @@ public class DriveSubsystem extends SubsystemBase {
     FOUR(new Pose2d(new Translation2d(3.96, 2.82), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.55, 5.25), Rotation2d.fromDegrees(60)), false, "4"),
     FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.84, 5.1), Rotation2d.fromDegrees(60)), true, "5"),
     SIX(new Pose2d(new Translation2d(3.17, 3.86), Rotation2d.fromDegrees(180)), new Pose2d(new Translation2d(14.37, 4.19), Rotation2d.fromDegrees(0)), false, "6"),
-    SEVEN(new Pose2d(new Translation2d(3.17, 4.17), Rotation2d.fromDegrees(180)), new Pose2d(new Translation2d(14.37, 3.85), Rotation2d.fromDegrees(0)), true, "7"),
+    SEVEN(new Pose2d(new Translation2d(3.17, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(14.37, 3.85), Rotation2d.fromDegrees(0)), true, "7"),
     EIGHT(new Pose2d(new Translation2d(3.69, 5.09), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.84, 2.98), Rotation2d.fromDegrees(-60)), false, "8"),
     NINE(new Pose2d(new Translation2d(3.96, 5.23), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.55, 2.81), Rotation2d.fromDegrees(-60)), true, "9"),
     TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(12.57, 2.81), Rotation2d.fromDegrees(-120)), false, "10"),
@@ -130,6 +135,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   PositionTrackerPose m_tracker;
   private boolean m_targetsVisible = false;
+
+
+  //Wheel Calibration
+  private static final double k_wheelRadiusMaxVelocity = 0.25; // Rad/Sec
+  private static final double k_wheelRadiusRampRate = 0.05; // Rad/Sec^2
+  private final  MaxSwerveModule[] modules = new MaxSwerveModule[]{m_frontLeft, m_frontRight, m_backLeft, m_backRight};
+
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -242,15 +254,15 @@ public class DriveSubsystem extends SubsystemBase {
     // getRotationDistanceFromTargetError());
     // // Update the odometry in the periodic block
     SmartDashboard.putNumber("Turn FR Radians",
-        m_frontRight.getPosition().angle.getRadians()); /// Math.PI);
+        m_frontRight.getPosition().angle.getRadians());
     SmartDashboard.putNumber(
         "Turn FL Radians",
-        m_frontLeft.getPosition().angle.getRadians()); // - (Math.PI / 2)) / Math.PI);
+        m_frontLeft.getPosition().angle.getRadians());
     SmartDashboard.putNumber(
         "Turn BR Radians",
-        m_backRight.getPosition().angle.getRadians()); // + (Math.PI / 2)) / Math.PI);
+        m_backRight.getPosition().angle.getRadians());
     SmartDashboard.putNumber(
-        "Turn BL Radians", m_backLeft.getPosition().angle.getRadians()); // + (Math.PI)) / Math.PI);
+        "Turn BL Radians", m_backLeft.getPosition().angle.getRadians());
     SmartDashboard.putNumber("Gyro Angle", ParadoxField.normalizeAngle(-m_gyro.getYaw().getValueAsDouble()));
     // spin robot very fast for many rotations eventually back to the original
     // angle, look at the gyro angle and see the offset
@@ -261,18 +273,18 @@ public class DriveSubsystem extends SubsystemBase {
     Pose2d currentPos = m_tracker.getPose2d();
     //m_tracker.displayRobotPosWithCamera();
 
-    double yaw = ParadoxField.normalizeAngle(m_gyro.getYaw().getValueAsDouble());
-    if (m_setGyroZero) {
-      // FIXME: I think this calculation is wrong becauuse it neglects that fact that yaw is clockwise positive. Also, we shouldn't be trying to zero the gyro ourselves, as the PoseEstimator already takes care of this. And it's unsed.  - Gavin
-      m_gyroZero = ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw);
-      m_setGyroZero = false;
-    }
-    SmartDashboard.putNumber("Gyro offset",
-        ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw - m_gyroZero));
-    SmartDashboard.putNumber("Gyro Zero", m_gyroZero);
-    SmartDashboard.putNumber("Gyro", yaw);
-    SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw));
-    SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
+    // double yaw = ParadoxField.normalizeAngle(m_gyro.getYaw().getValueAsDouble());
+    // if (m_setGyroZero) {
+    //   // FIXME: I think this calculation is wrong becauuse it neglects that fact that yaw is clockwise positive. Also, we shouldn't be trying to zero the gyro ourselves, as the PoseEstimator already takes care of this. And it's unsed.  - Gavin
+    //   m_gyroZero = ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw);
+    //   m_setGyroZero = false;
+    // }
+    // SmartDashboard.putNumber("Gyro offset",
+    //     ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw - m_gyroZero));
+    // SmartDashboard.putNumber("Gyro Zero", m_gyroZero);
+    // SmartDashboard.putNumber("Gyro", yaw);
+    // SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw));
+    // SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
     SmartDashboard.putNumber("Robot X", currentPos.getX());
     SmartDashboard.putNumber("Robot Y", currentPos.getY());
 
@@ -521,5 +533,89 @@ public class DriveSubsystem extends SubsystemBase {
   public double getHeadingInDegrees() {
     double angle = m_tracker.getPose2d().getRotation().getDegrees();
     return ParadoxField.normalizeAngle(angle);
+  }
+
+  public static Command wheelRadiusCharacterization(DriveSubsystem drive) {
+    SlewRateLimiter limiter = new SlewRateLimiter(k_wheelRadiusRampRate);
+    WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
+
+    return Commands.parallel(
+        // Drive control sequence
+        Commands.sequence(
+            // Reset acceleration limiter
+            Commands.runOnce(
+                () -> {
+                  limiter.reset(0.0);
+                }),
+
+            // Turn in place, accelerating up to full speed
+            Commands.run(
+                () -> {
+                  double speed = limiter.calculate(k_wheelRadiusMaxVelocity);
+                  drive.driveWithChassisSpeedRobotRelative(new ChassisSpeeds(0.0, 0.0, speed));
+                },
+                drive)),
+
+        // Measurement sequence
+        Commands.sequence(
+            // Wait for modules to fully orient before starting measurement
+            Commands.waitSeconds(1.0),
+
+            // Record starting measurement
+            Commands.runOnce(
+                () -> {
+                  state.positions = drive.getWheelRadiusCharacterizationPositions();
+                  state.lastAngle = drive.getGyroRotation2d();
+                  state.gyroDelta = 0.0;
+                }),
+
+            //Update gyro delta
+            Commands.run(
+                    () -> {
+                      var rotation = drive.getGyroRotation2d();
+                      state.gyroDelta += Math.abs(rotation.minus(state.lastAngle).getRadians());
+                      state.lastAngle = rotation;
+                    })
+
+                // When cancelled, calculate and print results
+                .finallyDo(
+                    () -> {
+                      double[] positions = drive.getWheelRadiusCharacterizationPositions();
+                      double wheelDelta = 0.0;
+                      for (int i = 0; i < 4; i++) {
+                        wheelDelta += Math.abs(positions[i] - state.positions[i]) / 4.0;
+                      }
+                      double wheelRadius =
+                          (state.gyroDelta * DriveConstants.k_driveBaseRadius) / wheelDelta;
+
+                      NumberFormat formatter = new DecimalFormat("#0.000");
+                      System.out.println(
+                          "********** Wheel Radius Characterization Results **********");
+                      System.out.println(
+                          "\tWheel Delta: " + formatter.format(wheelDelta) + " radians");
+                      System.out.println(
+                          "\tGyro Delta: " + formatter.format(state.gyroDelta) + " radians");
+                      System.out.println(
+                          "\tWheel Radius: "
+                              + formatter.format(wheelRadius)
+                              + " meters, "
+                              + formatter.format(Units.metersToInches(wheelRadius))
+                              + " inches");
+                    })));
+  }
+  
+  private static class WheelRadiusCharacterizationState {
+    double[] positions = new double[4];
+    Rotation2d lastAngle = new Rotation2d();
+    double gyroDelta = 0.0;
+  }
+
+  public double[] getWheelRadiusCharacterizationPositions() {
+    
+    double[] values = new double[4];
+    for (int i = 0; i < 4; i++) {
+      values[i] = modules[i].getWheelRadiusCharacterizationPosition();
+    }
+    return values;
   }
 }

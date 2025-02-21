@@ -63,18 +63,18 @@ public class AlgaeSubsystem extends SubsystemBase {
   }
 
   public Command intake() {
-    return Commands.runOnce(() -> {
+    return Commands.run(() -> {
       m_rollerState = RollerStates.INTAKE;
-      setPivotPosition(true);
+      setPivotPosition(false);
     }, this).handleInterrupt(() -> reset()
     );
   }
 
   public Command outtake() {
-    return Commands.runOnce(() -> {
+    return Commands.run(() -> {
       m_rollerState = RollerStates.OUTTAKE;
       setPivotPosition(false);
-    }, this).handleInterrupt(() -> reset()
+    }, this).finallyDo(() -> reset()
     );
   }
 
@@ -86,7 +86,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // m_pivotMotor.set(m_retracted ? k_upPower : k_downPower);
-    //m_rollerMotor.set(m_rollerState.power());
+    m_pivotMotor.set(m_retracted ? k_upPower : k_downPower);
+    m_rollerMotor.set(m_rollerState.power());
   }
 }
