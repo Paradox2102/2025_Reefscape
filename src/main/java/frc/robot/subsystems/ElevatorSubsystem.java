@@ -49,9 +49,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(50, "Level 4"), // 70.2
-    L3(45, "Level 3"),
-    L2(31, "Level 2"),
+    L4(70.2, "Level 4"), // 70.2
+    L3(44.3, "Level 3"),
+    L2(30.4, "Level 2"),
     L1(19, "Level 1"),
     RESET(0, "Reset"),
     ALGAE_HIGH(0, "Algae High"),
