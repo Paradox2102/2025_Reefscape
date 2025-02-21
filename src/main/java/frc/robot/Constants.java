@@ -97,6 +97,10 @@ public final class Constants {
     public static final double k_lookAheadTimeSeconds = .2;
 
     public static final boolean k_GyroReversed = false;
+
+    public static final double k_trackWidth = 0.273;
+    public static final double k_wheelBase = 0.273;
+    public static final double k_driveBaseRadius = Math.hypot(k_trackWidth / 2.0, k_wheelBase / 2.0);
   }
 
   public static final class ModuleConstants {
@@ -106,8 +110,7 @@ public final class Constants {
     public static final int k_DrivingMotorPinionTeeth = 12;
 
     // Calculations required for driving motor conversion factors and feed forward
-    // FIXME: Integer division!!! -Gavin
-    public static final double k_DrivingMotorFreeSpeedRps = 6784 / 60;
+    public static final double k_DrivingMotorFreeSpeedRps = 6784.0 / 60.0;
     public static final double k_WheelDiameterMeters = 0.0762;
     public static final double k_WheelCircumferenceMeters = k_WheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15

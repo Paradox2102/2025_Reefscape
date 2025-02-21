@@ -136,8 +136,12 @@ public class DriveSubsystem extends SubsystemBase {
   PositionTrackerPose m_tracker;
   private boolean m_targetsVisible = false;
 
+
+  //Wheel Calibration
   private static final double k_wheelRadiusMaxVelocity = 0.25; // Rad/Sec
   private static final double k_wheelRadiusRampRate = 0.05; // Rad/Sec^2
+  private final  MaxSwerveModule[] modules = new MaxSwerveModule[]{m_frontLeft, m_frontRight, m_backLeft, m_backRight};
+
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -582,7 +586,7 @@ public class DriveSubsystem extends SubsystemBase {
                         wheelDelta += Math.abs(positions[i] - state.positions[i]) / 4.0;
                       }
                       double wheelRadius =
-                          (state.gyroDelta * DriveConstants.driveBaseRadius) / wheelDelta;
+                          (state.gyroDelta * DriveConstants.k_driveBaseRadius) / wheelDelta;
 
                       NumberFormat formatter = new DecimalFormat("#0.000");
                       System.out.println(
@@ -606,4 +610,12 @@ public class DriveSubsystem extends SubsystemBase {
     double gyroDelta = 0.0;
   }
 
+  public double[] getWheelRadiusCharacterizationPositions() {
+    
+    double[] values = new double[4];
+    for (int i = 0; i < 4; i++) {
+      values[i] = modules[i].getWheelRadiusCharacterizationPosition();
+    }
+    return values;
+  }
 }
