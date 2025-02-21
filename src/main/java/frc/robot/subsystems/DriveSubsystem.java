@@ -250,6 +250,10 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putString("Source Position", m_source.getName());
     SmartDashboard.putBoolean("Do we see a target", m_targetsVisible);
 
+    // Check with relative direction (delete me)
+    SmartDashboard.putNumber("Turn FR Radians Absolute",
+        m_frontRight.getPositionAbsolute().angle.getRadians());
+
     // SmartDashboard.putNumber("Rotate Error",
     // getRotationDistanceFromTargetError());
     // // Update the odometry in the periodic block
