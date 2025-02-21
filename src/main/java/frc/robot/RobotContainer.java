@@ -203,7 +203,7 @@ public class RobotContainer {
   }
 
   public boolean getThrottle() {
-    return m_operatorController.getThrottle() > 0;
+    return m_operatorController.getThrottle() < 0;
   }
 
   private void updateAutoChooser() {

@@ -24,7 +24,7 @@ public class DriveToPosition extends Command {
   double m_currentY = 0;
   double m_currentRot = 0;
 
-  private static final double k_p = .3;
+  private static final double k_p = .7;
   private static final double k_i = .2;//.02;
   private static final double k_d = 0;//.02;
   private static final double k_deadzoneMeters = .04;
