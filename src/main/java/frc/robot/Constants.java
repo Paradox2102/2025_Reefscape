@@ -219,7 +219,7 @@ public final class Constants {
             // longer route.
             .positionWrappingEnabled(true)
             // FIXME: turningFactor is only coincidentally the right value here because the encoder is in revolutions. With a different encoder, this would be wrong. -Gavin 
-            .positionWrappingInputRange(0, turningFactorRelative);
+            .positionWrappingInputRange(0, 2 * Math.PI);
         coastDriveConfig.apply(drivingConfig);
         coastTurnConfig.apply(turningConfig);
         
