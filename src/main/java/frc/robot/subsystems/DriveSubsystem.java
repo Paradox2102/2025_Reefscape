@@ -11,6 +11,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.MathUtil;
 // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.pathplanner.lib.util.PIDConstants;
 // import com.pathplanner.lib.util.ReplanningConfig;
@@ -41,6 +42,8 @@ import frc.utils.SwerveUtils;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -215,17 +218,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   // FIXME: Any interface that takes or receives an angle should be using Rotation2d. This protects us from confusing degrees and radians. - Gavin
   // FIXME: This might be better bundled as a method that takes rotation supplier and returns a double supplier. That way it can have its own PIDController. - Gavin
-  public double orientPID(double setpoint) {
+  public double orientPID(Rotation2d targetRot) {
+    double setpointDegrees = targetRot.getDegrees();
     double heading = getHeadingInDegrees();
-    double rot = m_orientPID.calculate(heading, setpoint);
+    double rot = m_orientPID.calculate(heading, setpointDegrees);
 
-    // rot += (Constants.DriveConstants.k_rotateF * Math.signum(rot));
-    // return Math.abs(heading) < Constants.DriveConstants.k_rotateDeadzone ? 0
-    // : rot;
-    // FIXME: Should use MathUtil.clamp here. - Gavin
-    rot = Math.abs(rot) > Constants.DriveConstants.k_maxRotInput
-        ? Constants.DriveConstants.k_maxRotInput * Math.signum(rot)
-        : rot;
+    rot = MathUtil.clamp(rot, -Constants.DriveConstants.k_maxRotInput,
+        Constants.DriveConstants.k_maxRotInput);
     return rot;
   }
 
@@ -292,6 +291,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_field.setRobotPose(m_tracker.getPose2d());
     m_tracker.update();
+  }
+
+  public Rotation2d getRotationalDistanceFromReef() {
+    return m_reefPosition.targetPose().minus(m_tracker.getPose2d()).getTranslation().getAngle();
   }
 
   /**

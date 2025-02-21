@@ -6,6 +6,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -17,7 +18,7 @@ public class DriveToPosition extends Command {
   DriveSubsystem m_subsystem;
   double m_xPos;
   double m_yPos;
-  double m_rotationDegrees = 0;
+  Rotation2d m_rotation = new Rotation2d();
   PositionTrackerPose m_tracker;
 
   double m_currentX = 0;
@@ -50,7 +51,7 @@ public class DriveToPosition extends Command {
     Pose2d pose = m_goToReef ? m_subsystem.getReefPosition().targetPose() : m_subsystem.getSourcePosition();
     m_xPID.setSetpoint(pose.getX());
     m_yPID.setSetpoint(pose.getY());
-    m_rotationDegrees = pose.getRotation().getDegrees();
+    m_rotation = pose.getRotation();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -63,7 +64,7 @@ public class DriveToPosition extends Command {
 
     double xVelocity = m_xPID.calculate(m_currentX);
     double yVelocity = m_yPID.calculate(m_currentY);
-    double rotVelocity = m_subsystem.orientPID(m_rotationDegrees);
+    double rotVelocity = m_subsystem.orientPID(m_rotation);
 
     // xVelocity += k_f * Math.signum(xVelocity);
     // yVelocity += k_f * Math.signum(yVelocity);
@@ -99,7 +100,7 @@ public class DriveToPosition extends Command {
         && 
         Math.abs(m_yPos - m_currentY) < k_deadzoneMeters
         &&
-        Math.abs(m_rotationDegrees - m_currentRot) < Constants.DriveConstants.k_rotateDeadzone
+        Math.abs(m_rotation.getDegrees() - m_currentRot) < Constants.DriveConstants.k_rotateDeadzone
       );
   }
 }

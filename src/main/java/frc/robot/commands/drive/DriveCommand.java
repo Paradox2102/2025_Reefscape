@@ -22,7 +22,6 @@ public class DriveCommand extends Command {
   private boolean m_slowMode = false;
   private final double m_slowModeCoefficient = .3;
 
-  // ArcadeDrive is a means to control a differential drive, so this class is misnamed. -Gavin
   public DriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot, boolean fieldRelative) {
     m_subsystem = driveSubsystem;
     m_getX = getX;
