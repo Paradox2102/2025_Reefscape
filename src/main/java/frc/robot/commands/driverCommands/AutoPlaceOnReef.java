@@ -19,8 +19,8 @@ public class AutoPlaceOnReef extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveToPosition(driveSubsystem, true)
-      // elevatorSubsystem.goToPosition().until(elevatorSubsystem.atPosition)
+      new DriveToPosition(driveSubsystem, true),
+      elevatorSubsystem.goToPosition().until(elevatorSubsystem.atPosition)
     );
   }
 }

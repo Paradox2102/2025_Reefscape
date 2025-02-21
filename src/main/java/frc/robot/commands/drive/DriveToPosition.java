@@ -98,8 +98,8 @@ public class DriveToPosition extends Command {
         Math.abs(m_xPos - m_currentX) < k_deadzoneMeters
         && 
         Math.abs(m_yPos - m_currentY) < k_deadzoneMeters
-        // &&
-        // Math.abs(m_rotationDegrees - m_currentRot) < Constants.DriveConstants.k_rotateDeadzone
+        &&
+        Math.abs(m_rotationDegrees - m_currentRot) < Constants.DriveConstants.k_rotateDeadzone
       );
   }
 }
