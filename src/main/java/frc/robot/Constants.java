@@ -53,8 +53,8 @@ public final class Constants {
     public static final double k_BRChassisAngularOffset = Math.PI / 2;
 
     public static double k_FLOffset = 4.211 + k_FLChassisAngularOffset;
-    public static double k_FROffset = 1.943 + k_FRChassisAngularOffset;
-    public static double k_BLOffset = 2.225 + k_BLChassisAngularOffset;
+    public static double k_FROffset = 1.925 + k_FRChassisAngularOffset;
+    public static double k_BLOffset = 2.201 + k_BLChassisAngularOffset;
     public static double k_BROffset = 1.992 + k_BRChassisAngularOffset;
 
     // SPARK MAX CAN IDs
@@ -159,13 +159,14 @@ public final class Constants {
     public static final int k_climberMotor = 16;
     public static final int k_climberFollower = 17;
 
-    public static final double k_p = 0.5;
+    public static final double k_p = 0.005;
     public static final double k_i = 0;
     public static final double k_d = 0;
     public static final double k_f = 0;
-    public static final double k_ticksToDegrees = 1;
-    public static double k_extendPosition = 90;
-    public static double k_returnPosition = -150;
+    public static final double k_ticksToDegrees = 360;
+    public static final double k_resetPosition = 20;
+    public static double k_extendPosition = 290;
+    public static double k_returnPosition = 110;
   }
 
 
@@ -233,12 +234,12 @@ public final class Constants {
       static {
 
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
-        config.encoder
+        config.absoluteEncoder
               .positionConversionFactor(ClimberConstants.k_ticksToDegrees);
         config.closedLoop
-          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+          .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
           .pid(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d)
-          .positionWrappingInputRange(ClimberConstants.k_returnPosition, ClimberConstants.k_extendPosition);
+          .positionWrappingInputRange(0, 360);
         followConfig.apply(config);
         followConfig.follow(ClimberConstants.k_climberMotor, true);
 

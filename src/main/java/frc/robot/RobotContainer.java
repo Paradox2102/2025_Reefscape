@@ -86,8 +86,7 @@ public class RobotContainer {
   private PhotonCamera m_cameraFL = new PhotonCamera("fl_camera");
   private PhotonCamera m_cameraBL = new PhotonCamera("bl_camera");
   private PhotonCamera m_cameraBR = new PhotonCamera("br_camera");
-  private PhotonCamera m_alignCamera = new PhotonCamera("align_camera");
-  //private PhotonCamera m_alignCamera = new PhotonCamera("align");
+  //private PhotonCamera m_alignCamera = new PhotonCamera("align_camera");
   public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, m_cameraFL, m_cameraBL, m_cameraBR);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -126,14 +125,15 @@ public class RobotContainer {
     m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.holdCoral());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
     m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(Constants.ElevatorConstants.k_f), m_elevatorSubsystem));
+    m_algaeSubsystem.setDefaultCommand(new RunCommand(() -> m_algaeSubsystem.reset(), m_algaeSubsystem));
 
     // Algae
-    m_driverController.leftTrigger().toggleOnTrue(m_algaeSubsystem.intake().handleInterrupt(() -> m_algaeSubsystem.reset()));
+    m_driverController.leftTrigger().toggleOnTrue(m_algaeSubsystem.intake());
     m_driverController.leftBumper().onTrue(m_algaeSubsystem.outtake());
-    m_driverController.b().toggleOnTrue(
-      m_elevatorSubsystem.goToAlgaePosition()
-        .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
-    );
+    // m_driverController.b().toggleOnTrue(
+    //   m_elevatorSubsystem.goToAlgaePosition()
+    //     .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
+    // );
 
     // Coral
     m_driverController.rightTrigger().toggleOnTrue(new AutoIntake(m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
@@ -147,10 +147,12 @@ public class RobotContainer {
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
 
     // Climb
-    m_driverController.a().toggleOnTrue(
-      new ProxyCommand(() -> new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem))
-        .finallyDo(() -> m_climberSubsystem.climb(false).schedule())
-    );
+    // m_driverController.a().toggleOnTrue(
+    //   new ProxyCommand(() -> new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem))
+    //     .finallyDo(() -> m_climberSubsystem.climb(false).schedule())
+    // );
+    m_driverController.a().whileTrue(m_climberSubsystem.runOut());
+    m_driverController.b().whileTrue(m_climberSubsystem.runIn());
 
     // Hopper Pivot
     // m_driverController.y().whileTrue(

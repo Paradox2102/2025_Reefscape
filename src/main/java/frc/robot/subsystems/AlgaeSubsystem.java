@@ -86,7 +86,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // m_pivotMotor.set(m_retracted ? k_upPower : k_downPower);
-    //m_rollerMotor.set(m_rollerState.power());
+    m_pivotMotor.set(m_retracted ? k_upPower : k_downPower);
+    m_rollerMotor.set(m_rollerState.power());
   }
 }
