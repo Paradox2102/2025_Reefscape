@@ -37,7 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorPosition m_position = ElevatorPosition.L1;
   private ElevatorPosition m_algaePosition = ElevatorPosition.ALGAE_LOW;
 
-  private static final double k_deadzoneInches = .2;
+  private static final double k_deadzoneInches = 5;
 
   private double m_targetPos = m_position.heightInches();
 
@@ -131,7 +131,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Command resetPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(0, ControlType.kMAXMotionPositionControl);
+      m_PID.setReference(0, ControlType.kPosition);
     }, this).until(() -> getPosition() < k_deadzoneInches);
   }
 

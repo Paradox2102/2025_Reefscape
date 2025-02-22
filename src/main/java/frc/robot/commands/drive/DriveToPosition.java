@@ -28,7 +28,7 @@ public class DriveToPosition extends Command {
   private static final double k_p = .7;
   private static final double k_i = .2;//.02;
   private static final double k_d = 0;//.02;
-  private static final double k_deadzoneMeters = .04;
+  private static final double k_deadzoneMeters = .005;
 
   PIDController m_xPID = new PIDController(k_p, k_i, k_d);
   PIDController m_yPID = new PIDController(k_p, k_i, k_d);
@@ -40,6 +40,8 @@ public class DriveToPosition extends Command {
     m_yPID.setIZone(.15);
     m_subsystem = driveSubsystem;
     m_goToReef = goToReef;
+    m_xPos = m_subsystem.getReefPosition().targetPose().getX();
+    m_yPos = m_subsystem.getReefPosition().targetPose().getY();
     m_tracker = m_subsystem.getTracker();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -88,6 +90,7 @@ public class DriveToPosition extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("DriveToPosition End");
     m_subsystem.drive(0, 0, 0, true, false);
   }
 
@@ -100,7 +103,7 @@ public class DriveToPosition extends Command {
         && 
         Math.abs(m_yPos - m_currentY) < k_deadzoneMeters
         &&
-        Math.abs(m_rotation.getDegrees() - m_currentRot) < Constants.DriveConstants.k_rotateDeadzone
+        Math.abs(m_rotation.getDegrees() - m_currentRot) < 100//UConstants.DriveConstants.k_rotateDeadzone
       );
   }
 }
