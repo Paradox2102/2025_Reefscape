@@ -52,10 +52,6 @@ public class DriveFaceReefCommand extends Command {
       m_fieldRelative, 
       true
       );
-
-    
-    // m_swerve.setModuleStates(m_defaultState);
-    // System.out.println(String.format("x=%f, y=%f, rot=%f, isFieldRelative=%b", x, y, rot, isFieldRelative)); 
   }
   
   

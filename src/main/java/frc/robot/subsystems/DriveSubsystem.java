@@ -42,8 +42,6 @@ import frc.utils.SwerveUtils;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -55,19 +53,34 @@ public class DriveSubsystem extends SubsystemBase {
   } catch (Exception e) {}}
 
   public enum FieldPosition {
-    // blue alliance
-    ONE(new Pose2d(new Translation2d(5.81, 3.86), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(11.75, 4.19), Rotation2d.fromDegrees(180)), true, "1"),
-    TWO(new Pose2d(new Translation2d(5.27, 2.98), Rotation2d.fromDegrees(-60)), new Pose2d(new Translation2d(12.26, 5.1), Rotation2d.fromDegrees(120)), false, "2"),
-    THREE(new Pose2d(new Translation2d(5.01, 2.82), Rotation2d.fromDegrees(-60)), new Pose2d(new Translation2d(12.57, 5.25), Rotation2d.fromDegrees(120)), true, "3"),
-    FOUR(new Pose2d(new Translation2d(3.96, 2.82), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.55, 5.25), Rotation2d.fromDegrees(60)), false, "4"),
-    FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.84, 5.1), Rotation2d.fromDegrees(60)), true, "5"),
-    SIX(new Pose2d(new Translation2d(3.17, 3.86), Rotation2d.fromDegrees(180)), new Pose2d(new Translation2d(14.37, 4.19), Rotation2d.fromDegrees(0)), false, "6"),
-    SEVEN(new Pose2d(new Translation2d(3.3, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(14.37, 3.85), Rotation2d.fromDegrees(0)), true, "7"),
-    EIGHT(new Pose2d(new Translation2d(3.69, 5.09), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.84, 2.98), Rotation2d.fromDegrees(-60)), false, "8"),
-    NINE(new Pose2d(new Translation2d(3.96, 5.23), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.55, 2.81), Rotation2d.fromDegrees(-60)), true, "9"),
-    TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(12.57, 2.81), Rotation2d.fromDegrees(-120)), false, "10"),
-    ELEVEN(new Pose2d(new Translation2d(5.27, 5.09), Rotation2d.fromDegrees(60)), new Pose2d(new Translation2d(12.26, 2.98), Rotation2d.fromDegrees(-120)), true, "11"),
-    TWELVE(new Pose2d(new Translation2d(5.81, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(11.75, 3.85), Rotation2d.fromDegrees(180)), false, "12"),
+
+    // For facing reef
+    ONE(new Pose2d(new Translation2d(5.81, 3.86), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(12.30, 4.18), Rotation2d.fromDegrees(180)), true, "1"),
+    TWO(new Pose2d(new Translation2d(5.27, 2.98), Rotation2d.fromDegrees(-60)), new Pose2d(new Translation2d(12.61, 4.60), Rotation2d.fromDegrees(120)), false, "2"),
+    THREE(new Pose2d(new Translation2d(5.01, 2.82), Rotation2d.fromDegrees(-60)), new Pose2d(new Translation2d(12.81, 4.77), Rotation2d.fromDegrees(120)), true, "3"),
+    FOUR(new Pose2d(new Translation2d(3.96, 2.82), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.33, 4.73), Rotation2d.fromDegrees(60)), false, "4"),
+    FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.59, 4.58), Rotation2d.fromDegrees(60)), true, "5"),
+    SIX(new Pose2d(new Translation2d(3.17, 3.86), Rotation2d.fromDegrees(180)), new Pose2d(new Translation2d(13.78, 4.18), Rotation2d.fromDegrees(0)), false, "6"),
+    SEVEN(new Pose2d(new Translation2d(3.3, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(13.78, 3.86), Rotation2d.fromDegrees(0)), true, "7"),
+    EIGHT(new Pose2d(new Translation2d(3.69, 5.09), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.59, 3.47), Rotation2d.fromDegrees(-60)), false, "8"),
+    NINE(new Pose2d(new Translation2d(3.96, 5.23), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.31, 3.28), Rotation2d.fromDegrees(-60)), true, "9"),
+    TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(12.81, 3.28), Rotation2d.fromDegrees(-120)), false, "10"),
+    ELEVEN(new Pose2d(new Translation2d(5.27, 5.09), Rotation2d.fromDegrees(60)), new Pose2d(new Translation2d(12.61, 3.47), Rotation2d.fromDegrees(-120)), true, "11"),
+    TWELVE(new Pose2d(new Translation2d(5.81, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(12.30, 3.86), Rotation2d.fromDegrees(180)), false, "12"),
+
+    // For driving to reef
+    // ONE(new Pose2d(new Translation2d(5.81, 3.86), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(11.75, 4.19), Rotation2d.fromDegrees(180)), true, "1"),
+    // TWO(new Pose2d(new Translation2d(5.27, 2.98), Rotation2d.fromDegrees(-60)), new Pose2d(new Translation2d(12.26, 5.1), Rotation2d.fromDegrees(120)), false, "2"),
+    // THREE(new Pose2d(new Translation2d(5.01, 2.82), Rotation2d.fromDegrees(-60)), new Pose2d(new Translation2d(12.57, 5.25), Rotation2d.fromDegrees(120)), true, "3"),
+    // FOUR(new Pose2d(new Translation2d(3.96, 2.82), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.55, 5.25), Rotation2d.fromDegrees(60)), false, "4"),
+    // FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.84, 5.1), Rotation2d.fromDegrees(60)), true, "5"),
+    // SIX(new Pose2d(new Translation2d(3.17, 3.86), Rotation2d.fromDegrees(180)), new Pose2d(new Translation2d(14.37, 4.19), Rotation2d.fromDegrees(0)), false, "6"),
+    // SEVEN(new Pose2d(new Translation2d(3.3, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(14.37, 3.85), Rotation2d.fromDegrees(0)), true, "7"),
+    // EIGHT(new Pose2d(new Translation2d(3.69, 5.09), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.84, 2.98), Rotation2d.fromDegrees(-60)), false, "8"),
+    // NINE(new Pose2d(new Translation2d(3.96, 5.23), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.55, 2.81), Rotation2d.fromDegrees(-60)), true, "9"),
+    // TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(12.57, 2.81), Rotation2d.fromDegrees(-120)), false, "10"),
+    // ELEVEN(new Pose2d(new Translation2d(5.27, 5.09), Rotation2d.fromDegrees(60)), new Pose2d(new Translation2d(12.26, 2.98), Rotation2d.fromDegrees(-120)), true, "11"),
+    // TWELVE(new Pose2d(new Translation2d(5.81, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(11.75, 3.85), Rotation2d.fromDegrees(180)), false, "12"),
     SOURCE_RIGHT(new Pose2d(new Translation2d(1.7, .65), Rotation2d.fromDegrees(127.5)), new Pose2d(new Translation2d(16.3, 7.1), Rotation2d.fromDegrees(-127.5)), false, "Right"),
     SOURCE_LEFT(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(-127.5)), new Pose2d(new Translation2d(16.3, 0.95), Rotation2d.fromDegrees(127.5)),false, "Left");
 

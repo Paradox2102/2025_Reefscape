@@ -4,8 +4,10 @@
 
 package frc.robot.commands.driverCommands;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.Constants;
+import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
@@ -23,7 +25,11 @@ public class AutoIntake extends ParallelDeadlineGroup {
     // addCommands().
     super(new IntakeCoral(coralOuttakeSubsystem, hopperSubsystem, elevatorSubsystem, algaeSubsystem));
     addCommands(
-      new DriveToPosition(driveSubsystem, false).unless(() -> !Constants.States.m_autoAim)
+      new ConditionalCommand(
+        new DriveToPosition(driveSubsystem, true),
+        new DriveCommand(driveSubsystem, null, null, null, true),
+        () -> Constants.States.m_autoAim
+      )
     );
   }
 }

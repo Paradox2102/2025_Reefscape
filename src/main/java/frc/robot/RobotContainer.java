@@ -139,7 +139,7 @@ public class RobotContainer {
     // );
 
     // Coral
-    m_driverController.rightTrigger().toggleOnTrue(new AutoIntake(m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
+    m_driverController.rightTrigger().toggleOnTrue(new AutoIntake(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX,m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
     m_driverController.rightBumper().toggleOnTrue(
       new ProxyCommand(() -> Commands.either(
         new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
