@@ -28,7 +28,7 @@ public class DriveToPosition extends Command {
   private static final double k_p = .7;
   private static final double k_i = .2;//.02;
   private static final double k_d = 0;//.02;
-  private static final double k_deadzoneMeters = .005;
+  private static final double k_deadzoneMeters = .015;
 
   PIDController m_xPID = new PIDController(k_p, k_i, k_d);
   PIDController m_yPID = new PIDController(k_p, k_i, k_d);
