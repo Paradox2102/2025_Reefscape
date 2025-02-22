@@ -85,9 +85,10 @@ public class MaxSwerveModule {
   public SwerveModulePosition getPosition() {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
+    double position =  ((m_turnEncoder.getPosition() % Math.PI) + Math.PI) % Math.PI;
     return new SwerveModulePosition(
         m_driveEncoder.getPosition(),
-        new Rotation2d(m_turnEncoder.getPosition() - m_chassisAngularOffset));
+        new Rotation2d(position - m_chassisAngularOffset));
   }
 
 public SwerveModulePosition getPositionAbsolute() {
