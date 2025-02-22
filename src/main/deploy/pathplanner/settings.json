@@ -16,8 +16,8 @@
     "Complex",
     "Center"
   ],
-  "defaultMaxVel": 1.0,
-  "defaultMaxAccel": 1.0,
+  "defaultMaxVel": 4.92,
+  "defaultMaxAccel": 6.7,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,

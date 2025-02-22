@@ -141,8 +141,8 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   //Wheel Calibration
-  private static final double k_wheelRadiusMaxVelocity = 0.25; // Rad/Sec
-  private static final double k_wheelRadiusRampRate = 0.05; // Rad/Sec^2
+  private static final double k_wheelRadiusMaxVelocity = 2; // Rad/Sec
+  private static final double k_wheelRadiusRampRate = 0.25; // Rad/Sec^2
   private final  MaxSwerveModule[] modules = new MaxSwerveModule[]{m_frontLeft, m_frontRight, m_backLeft, m_backRight};
 
 
@@ -538,7 +538,7 @@ public class DriveSubsystem extends SubsystemBase {
     return ParadoxField.normalizeAngle(angle);
   }
 
-  public static Command wheelRadiusCharacterization(DriveSubsystem drive) {
+  public Command wheelRadiusCharacterization(DriveSubsystem drive) {
     SlewRateLimiter limiter = new SlewRateLimiter(k_wheelRadiusRampRate);
     WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
 
