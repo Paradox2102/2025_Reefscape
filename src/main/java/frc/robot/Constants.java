@@ -214,8 +214,7 @@ public final class Constants {
             // to 10 degrees will go through 0 rather than the other direction which is a
             // longer route.
             .positionWrappingEnabled(true)
-            // FIXME: turningFactor is only coincidentally the right value here because the encoder is in revolutions. With a different encoder, this would be wrong. -Gavin 
-            .positionWrappingInputRange(0, turningFactor);
+            .positionWrappingInputRange(0, 2 * Math.PI);
         coastDriveConfig.apply(drivingConfig);
         coastTurnConfig.apply(turningConfig);
         

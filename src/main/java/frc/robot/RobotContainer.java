@@ -179,6 +179,7 @@ public class RobotContainer {
     // Hopper Pivot
     // m_driverController.y().whileTrue(
     //   new RunCommand(() -> m_algaeSubsystem.setPivotPosition(false))
+    //     .alongWith(m_elevatorSubsystem.resetPosition())
     //     .handleInterrupt(() -> m_algaeSubsystem.setPivotPosition(true))
     // );
 
