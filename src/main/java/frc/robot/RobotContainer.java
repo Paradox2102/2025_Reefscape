@@ -9,6 +9,7 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveFaceReefCommand;
 import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
+import frc.robot.commands.driverCommands.SemiAutoPlaceOnReef;
 import frc.robot.commands.driverCommands.AutoIntake;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
@@ -25,8 +26,8 @@ import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.DriveSubsystem.FieldPosition;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.robotControl.RobotControl;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
 
+import java.util.Set;
 
 import org.photonvision.PhotonCamera;
 
@@ -37,6 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -140,14 +142,31 @@ public class RobotContainer {
 
     // Coral
     m_driverController.rightTrigger().toggleOnTrue(new AutoIntake(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX,m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
+    // m_driverController.rightBumper().toggleOnTrue(
+    //   new ProxyCommand(() -> Commands.either(
+    //     new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
+    //     new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
+    //     () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
+    //   )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
+    // );
     m_driverController.rightBumper().toggleOnTrue(
-      new ProxyCommand(() -> Commands.either(
-        new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
-        new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
-        () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
-      )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
-    );
-    m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
+      new DeferredCommand(
+        () -> Commands.either(
+            new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
+            // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
+            new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, 
+              m_driverController::getLeftX, 
+              m_driverController::getLeftY, 
+              m_driverController::getRightX), // on false
+            () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
+        ),
+        Set.of(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem)
+      ).andThen(new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, 
+              m_driverController::getLeftX, 
+              m_driverController::getLeftY, 
+              m_driverController::getRightX))
+      );
+      m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
 
     // Climb
     // m_driverController.a().toggleOnTrue(
