@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -209,10 +210,14 @@ public class RobotContainer {
   }
 
   private void updateAutoChooser() {
+    m_autoSelect.addOption("Nothing", new InstantCommand());
     m_autoSelect.addOption("Straight Auto", new PathPlannerAuto("Straight Auto"));
     m_autoSelect.addOption("Curve Auto", new PathPlannerAuto("Curve Auto"));
     m_autoSelect.addOption("Left Basic", new PathPlannerAuto("Left Basic"));
-    m_autoSelect.addOption("Left 4 Complex", new PathPlannerAuto("Left 4 Complex"));
+    m_autoSelect.addOption("Left 4 Complex", new InstantCommand());
+    m_autoSelect.addOption("Right Basic", new PathPlannerAuto("Right Basic"));
+    m_autoSelect.addOption("Center Processor", new PathPlannerAuto("Center Processor Auto"));
+    m_autoSelect.addOption("Wheel Calibration", m_driveSubsystem.wheelRadiusCharacterization(m_driveSubsystem));
     SmartDashboard.putData(m_autoSelect);
   }
 
