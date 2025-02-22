@@ -62,7 +62,7 @@ public class DriveSubsystem extends SubsystemBase {
     FOUR(new Pose2d(new Translation2d(3.96, 2.82), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.55, 5.25), Rotation2d.fromDegrees(60)), false, "4"),
     FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(13.84, 5.1), Rotation2d.fromDegrees(60)), true, "5"),
     SIX(new Pose2d(new Translation2d(3.17, 3.86), Rotation2d.fromDegrees(180)), new Pose2d(new Translation2d(14.37, 4.19), Rotation2d.fromDegrees(0)), false, "6"),
-    SEVEN(new Pose2d(new Translation2d(3.17, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(14.37, 3.85), Rotation2d.fromDegrees(0)), true, "7"),
+    SEVEN(new Pose2d(new Translation2d(3.19, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(14.37, 3.85), Rotation2d.fromDegrees(0)), true, "7"),
     EIGHT(new Pose2d(new Translation2d(3.69, 5.09), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.84, 2.98), Rotation2d.fromDegrees(-60)), false, "8"),
     NINE(new Pose2d(new Translation2d(3.96, 5.23), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(13.55, 2.81), Rotation2d.fromDegrees(-60)), true, "9"),
     TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(12.57, 2.81), Rotation2d.fromDegrees(-120)), false, "10"),
