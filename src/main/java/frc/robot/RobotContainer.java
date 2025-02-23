@@ -152,8 +152,8 @@ public class RobotContainer {
     m_driverController.rightBumper().toggleOnTrue(
       new DeferredCommand(
         () -> Commands.either(
-            new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
-            // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
+            // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
+            new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
             new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, 
               m_driverController::getLeftX, 
               m_driverController::getLeftY, 
