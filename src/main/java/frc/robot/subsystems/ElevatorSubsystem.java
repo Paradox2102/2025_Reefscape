@@ -37,7 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorPosition m_position = ElevatorPosition.L1;
   private ElevatorPosition m_algaePosition = ElevatorPosition.ALGAE_LOW;
 
-  private static final double k_deadzoneInches = 5;
+  private static final double k_deadzoneInches = 0.5;
 
   private double m_targetPos = m_position.heightInches();
 
@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(69.4, "Level 4"), // 70.2
+    L4(72.5, "Level 4"), // 70.2
     L3(44.85, "Level 3"),
     L2(30.48, "Level 2"),
     L1(20, "Level 1"),
@@ -119,19 +119,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Command goToPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(m_position.heightInches(), ControlType.kMAXMotionPositionControl);
+      m_PID.setReference(m_position.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }, this).until(atPosition);
   }
 
   public Command goToAlgaePosition() {
     return Commands.run(() -> {
-      m_PID.setReference(m_algaePosition.heightInches(), ControlType.kMAXMotionPositionControl);
+      m_PID.setReference(m_algaePosition.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }, this).until(atPosition);
   }
 
   public Command resetPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(0, ControlType.kPosition);
+      m_PID.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this).until(() -> getPosition() < k_deadzoneInches);
   }
 
@@ -154,12 +154,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("elevator output", output);
     SmartDashboard.putNumber("elevator target height", m_targetPos);
     SmartDashboard.putString("Elevator Target", m_position.getName());
-    if (!bottomLimit.getAsBoolean()){
-      m_elevatorEncoder.setPosition(0);
-    } else if (pos > 73) {
-      setPower(0);
-      m_elevatorEncoder.setPosition(72.5); //if encoder is reading out number 0.5 inch above max travel, set height to max travel
-    }
+    // if (!bottomLimit.getAsBoolean()){
+    //   m_elevatorEncoder.setPosition(0);
+    // } else if (pos > 73) {
+    //   setPower(0);
+    //   m_elevatorEncoder.setPosition(72.5); //if encoder is reading out number 0.5 inch above max travel, set height to max travel
+    // }
     // This method will be called once per scheduler run
   } 
 }
