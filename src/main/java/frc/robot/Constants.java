@@ -53,10 +53,10 @@ public final class Constants {
     public static final double k_BLChassisAngularOffset = Math.PI;
     public static final double k_BRChassisAngularOffset = Math.PI / 2;
 
-    public static double k_FLOffset = 4.211 + k_FLChassisAngularOffset;
-    public static double k_FROffset = 1.925 + k_FRChassisAngularOffset;
-    public static double k_BLOffset = 2.201 + k_BLChassisAngularOffset;
-    public static double k_BROffset = 1.992 + k_BRChassisAngularOffset;
+    public static double k_FLOffset = 4.18 + k_FLChassisAngularOffset;
+    public static double k_FROffset = 1.94 + k_FRChassisAngularOffset;
+    public static double k_BLOffset = 2.22 + k_BLChassisAngularOffset;
+    public static double k_BROffset = 1.98 + k_BRChassisAngularOffset;
 
     // SPARK MAX CAN IDs
     public static final int k_FRTurningMotor = 2; // 2
@@ -148,9 +148,12 @@ public final class Constants {
     public static final int k_elevatorMotor = 11;
     public static final int k_elevatorFollower = 12;
 
-    public static final double k_p = 0.3;
+    public static final double k_p = 0.5;
     public static final double k_i = 0;//0.0000005;
-    public static final double k_d = 0.01;
+    public static final double k_d = 0.05;
+
+    public static final double k_downP = 0.05;
+    public static final double k_downI = 0.000001;
 
     public static final double k_ticksToInches = 4.0/2.67;
   }
@@ -265,7 +268,8 @@ public final class Constants {
             .positionConversionFactor(ElevatorConstants.k_ticksToInches);
         leaderConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pid(ElevatorConstants.k_p, ElevatorConstants.k_i, ElevatorConstants.k_d);
+            .pid(ElevatorConstants.k_p, ElevatorConstants.k_i, ElevatorConstants.k_d, ClosedLoopSlot.kSlot0)
+            .p(ElevatorConstants.k_downP, ClosedLoopSlot.kSlot1);
         leaderConfig.closedLoop.maxMotion
           .maxVelocity(6000)
           .maxAcceleration(12000)

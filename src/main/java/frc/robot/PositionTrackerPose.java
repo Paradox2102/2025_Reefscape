@@ -185,6 +185,7 @@ public class PositionTrackerPose {
           est -> {
             m_poseEstimator.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds);
           });
+      //m_testField.setRobotPose(result.get().estimatedPose.toPose2d());
     }
 
     // try {
