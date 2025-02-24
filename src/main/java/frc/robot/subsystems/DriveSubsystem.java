@@ -45,7 +45,7 @@ import java.util.function.BooleanSupplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private FieldPosition m_reefPosition = FieldPosition.FIVE;
+  private FieldPosition m_reefPosition = FieldPosition.THREE;
   private FieldPosition m_source = FieldPosition.SOURCE_RIGHT;
   public static RobotConfig k_pathConfig;{
   try {
