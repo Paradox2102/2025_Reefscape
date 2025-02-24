@@ -5,21 +5,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Set L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deploy Elevator"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Towards Path"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Back Path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Off Path"
+            "name": "Score Coral"
           }
         }
       ]

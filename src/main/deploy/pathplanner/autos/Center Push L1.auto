@@ -17,6 +17,18 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Set L1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deploy Elevator"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Push 3"
@@ -25,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Place L1"
+            "name": "Score Coral"
           }
         },
         {

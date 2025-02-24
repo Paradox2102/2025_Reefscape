@@ -91,8 +91,9 @@ public class RobotContainer {
   private PhotonCamera m_cameraFL = new PhotonCamera("fl_camera");
   private PhotonCamera m_cameraBL = new PhotonCamera("bl_camera");
   private PhotonCamera m_cameraBR = new PhotonCamera("br_camera");
+  private PhotonCamera m_cameraFR = new PhotonCamera("fr_camera");
   //private PhotonCamera m_alignCamera = new PhotonCamera("align_camera");
-  public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, m_cameraFL, m_cameraBL, m_cameraBR);
+  public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, m_cameraFL, m_cameraFR, m_cameraBL, m_cameraBR);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -246,7 +247,7 @@ public class RobotContainer {
     m_autoSelect.addOption("Left Basic", new PathPlannerAuto("Left Basic"));
     m_autoSelect.addOption("Left 4 Complex", new InstantCommand());
     m_autoSelect.addOption("Right Basic", new PathPlannerAuto("Right Basic"));
-    m_autoSelect.addOption("Center Processor", new PathPlannerAuto("Center Processor Auto"));
+    m_autoSelect.addOption("Center L4", new PathPlannerAuto("Center 1 Auto"));
     m_autoSelect.addOption("Wheel Calibration", m_driveSubsystem.wheelRadiusCharacterization(m_driveSubsystem));
     SmartDashboard.putData(m_autoSelect);
   }
@@ -262,6 +263,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Score Coral", m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isL1));
     NamedCommands.registerCommand("Intake Algae", m_algaeSubsystem.intake());
     NamedCommands.registerCommand("Outtake Algae", m_algaeSubsystem.outtake());
+    NamedCommands.registerCommand("Remove Algae", m_elevatorSubsystem.goToAlgaePosition());
   }
 
   /**

@@ -112,7 +112,7 @@ public final class Constants {
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double k_DrivingMotorFreeSpeedRps = 6784.0 / 60.0;
-    public static final double k_WheelDiameterMeters = 0.0762;
+    public static final double k_WheelDiameterMeters = 0.064;
     public static final double k_WheelCircumferenceMeters = k_WheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
     // teeth on the bevel pinion
@@ -148,12 +148,12 @@ public final class Constants {
     public static final int k_elevatorMotor = 11;
     public static final int k_elevatorFollower = 12;
 
-    public static final double k_p = 0.5;
-    public static final double k_i = 0;//0.0000005;
-    public static final double k_d = 0.05;
+    public static final double k_p = 0.8;
+    public static final double k_i = 0.000001;
+    public static final double k_d = 0.001;
 
-    public static final double k_downP = 0.05;
-    public static final double k_downI = 0.000001;
+    public static final double k_downP = 0.02;
+    public static final double k_downI = 0.00001;
 
     public static final double k_ticksToInches = 4.0/2.67;
   }
@@ -269,11 +269,12 @@ public final class Constants {
         leaderConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.k_p, ElevatorConstants.k_i, ElevatorConstants.k_d, ClosedLoopSlot.kSlot0)
-            .p(ElevatorConstants.k_downP, ClosedLoopSlot.kSlot1);
+            .p(ElevatorConstants.k_downP, ClosedLoopSlot.kSlot1)
+            .i(ElevatorConstants.k_downI, ClosedLoopSlot.kSlot1);
         leaderConfig.closedLoop.maxMotion
           .maxVelocity(6000)
           .maxAcceleration(12000)
-          .allowedClosedLoopError(.5);
+          .allowedClosedLoopError(0.5);
         //coastElevatorConfig.apply(elevatorConfig);
 
         coastElevatorConfig.idleMode(IdleMode.kCoast);
