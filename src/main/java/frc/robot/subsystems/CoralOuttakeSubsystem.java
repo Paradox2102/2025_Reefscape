@@ -84,7 +84,6 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   public Command ejectCoral(BooleanSupplier L1) {
     m_isL1 = L1.getAsBoolean();
-    System.out.println("yahoo");
     return Commands.run(() -> {
       setSpeed(m_isL1 ? k_l1Speed : k_outtakeSpeed);
     }, this).until(ejectedCoral);

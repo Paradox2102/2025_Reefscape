@@ -22,7 +22,7 @@ public class SemiAutoPlaceOnReef extends ParallelCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DriveFaceReefCommand(driveSubsystem, x, y, true),
-      elevatorSubsystem.goToPosition().until(elevatorSubsystem.atPosition)
+      elevatorSubsystem.goToPosition()
     );
   }
 }

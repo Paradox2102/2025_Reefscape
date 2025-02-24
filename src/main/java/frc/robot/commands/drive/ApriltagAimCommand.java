@@ -5,6 +5,7 @@
 package frc.robot.commands.drive;
 
 import java.util.List;
+import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -22,6 +23,9 @@ public class ApriltagAimCommand extends Command {
   private double m_dist = 0;
   private static final double k_ldist = 0;
   private static final double k_rdist = 0;
+  DoubleSupplier m_joystickLeftY = () -> 0;
+  DoubleSupplier m_joystickLeftX = () -> 0;
+
   /** Creates a new ApriltagAimCommand. */
   public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem, boolean left) {
     m_camera = camera;
@@ -33,6 +37,12 @@ public class ApriltagAimCommand extends Command {
       m_dist = k_rdist;
     }
     addRequirements(m_subsystem);
+  }
+
+  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem, boolean left, DoubleSupplier joystickLeftY, DoubleSupplier joystickLeftX) {
+    this(camera, subsystem, left);
+    m_joystickLeftY = joystickLeftY;
+    m_joystickLeftX = joystickLeftX;
   }
 
   // Called when the command is initially scheduled.
@@ -58,12 +68,14 @@ public class ApriltagAimCommand extends Command {
     }
     SmartDashboard.putNumber("tag x", x);
     SmartDashboard.putNumber("tag x dist", horizDist);
-    //m_subsystem.drive(0, horizDist/2, 0, false, false);
+    double move = Math.sqrt(Math.pow(m_joystickLeftY.getAsDouble(), 2) + Math.pow(m_joystickLeftX.getAsDouble(), 2));
+    m_subsystem.drive(move, horizDist/2, 0, false, true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_subsystem.drive(0, 0, 0, false, false);
   }
 
   // Returns true when the command should end.

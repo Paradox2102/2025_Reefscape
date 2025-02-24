@@ -27,6 +27,24 @@ public class ClimberSubsystem extends SubsystemBase {
   private AbsoluteEncoder m_encoder;
   private SparkClosedLoopController m_pid;
 
+  private ClimberState m_state = ClimberState.RESET;
+
+  public enum ClimberState {
+    RESET(0),
+    EXTEND(0),
+    CLIMB(0);
+
+    double position;
+
+    ClimberState(double position) {
+      this.position = position;
+    }
+
+    public double position() {
+      return position;
+    }
+  }
+
   /** Creates a new PivotSubsystem. */
   public ClimberSubsystem() {
     m_leadMotor.configure(MotorConfigs.Climber.config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -51,15 +69,9 @@ public class ClimberSubsystem extends SubsystemBase {
     return m_encoder.getPosition();
   }
 
-  public Command climb(boolean extend) {
+  public Command setPosition(ClimberState state) {
     return Commands.runOnce(() -> {
-      m_pid.setReference(extend ? ClimberConstants.k_extendPosition : ClimberConstants.k_returnPosition, ControlType.kPosition);
-    }, this);
-  }
-
-  public Command reset() {
-    return Commands.runOnce(() -> {
-      m_pid.setReference(ClimberConstants.k_resetPosition, ControlType.kPosition);
+      m_pid.setReference(state.position(), ControlType.kPosition);
     }, this);
   }
 

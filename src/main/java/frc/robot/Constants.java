@@ -237,7 +237,8 @@ public final class Constants {
 
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
         config.absoluteEncoder
-              .positionConversionFactor(ClimberConstants.k_ticksToDegrees);
+              .positionConversionFactor(ClimberConstants.k_ticksToDegrees)
+              .zeroOffset(0);
         config.closedLoop
           .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
           .pid(ClimberConstants.k_p, ClimberConstants.k_i, ClimberConstants.k_d)

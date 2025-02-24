@@ -6,15 +6,11 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.drive.DriveFaceReefCommand;
-import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.SemiAutoPlaceOnReef;
 import frc.robot.commands.driverCommands.AutoIntake;
-import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
-import frc.robot.commands.driverCommands.PrepareForClimbCommand;
 import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -23,11 +19,10 @@ import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.ClimberSubsystem.ClimberState;
 import frc.robot.subsystems.DriveSubsystem.FieldPosition;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 import frc.robot.robotControl.RobotControl;
-
-import java.util.Set;
 
 import org.photonvision.PhotonCamera;
 
@@ -38,7 +33,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -180,17 +174,19 @@ public class RobotContainer {
     // Climb
     // m_driverController.a().toggleOnTrue(
     //   new ProxyCommand(() -> new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem))
-    //     .finallyDo(() -> m_climberSubsystem.climb(false).schedule())
+    //     .finallyDo(() -> m_climberSubsystem.setPosition(ClimberState.CLIMB).schedule())
     // );
     m_driverController.a().whileTrue(m_climberSubsystem.runOut());
     m_driverController.b().whileTrue(m_climberSubsystem.runIn());
 
     // Hopper Pivot
-    // m_driverController.y().whileTrue(
-    //   new RunCommand(() -> m_algaeSubsystem.setPivotPosition(false))
-    //     .alongWith(m_elevatorSubsystem.resetPosition())
-    //     .handleInterrupt(() -> m_algaeSubsystem.setPivotPosition(true))
-    // );
+    m_driverController.y()
+      .onTrue(new InstantCommand(() -> m_algaeSubsystem.setPivotPosition(false)))
+      .onFalse(
+        new InstantCommand(() -> m_algaeSubsystem.setPivotPosition(true))
+          .alongWith(m_elevatorSubsystem.resetPosition())
+          .alongWith(m_climberSubsystem.setPosition(ClimberState.RESET))
+      );
 
     //m_driverController.y().whileTrue(new DriveToPosition(m_driveSubsystem, true));
 
