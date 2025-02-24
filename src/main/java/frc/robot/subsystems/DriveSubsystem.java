@@ -81,8 +81,8 @@ public class DriveSubsystem extends SubsystemBase {
     // TEN(new Pose2d(new Translation2d(5.01, 5.23), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(12.57, 2.81), Rotation2d.fromDegrees(-120)), false, "10"),
     // ELEVEN(new Pose2d(new Translation2d(5.27, 5.09), Rotation2d.fromDegrees(60)), new Pose2d(new Translation2d(12.26, 2.98), Rotation2d.fromDegrees(-120)), true, "11"),
     // TWELVE(new Pose2d(new Translation2d(5.81, 4.17), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(11.75, 3.85), Rotation2d.fromDegrees(180)), false, "12"),
-    SOURCE_RIGHT(new Pose2d(new Translation2d(1.7, .65), Rotation2d.fromDegrees(127.5)), new Pose2d(new Translation2d(16.3, 7.1), Rotation2d.fromDegrees(-127.5)), false, "Right"),
-    SOURCE_LEFT(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(-127.5)), new Pose2d(new Translation2d(16.3, 0.95), Rotation2d.fromDegrees(127.5)),false, "Left");
+    SOURCE_RIGHT(new Pose2d(new Translation2d(1.7, .65), Rotation2d.fromDegrees(52.5)), new Pose2d(new Translation2d(16.3, 7.1), Rotation2d.fromDegrees(-52.5)), false, "Right"),
+    SOURCE_LEFT(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(52.5)), new Pose2d(new Translation2d(16.3, 0.95), Rotation2d.fromDegrees(52.5)),false, "Left");
 
     private Pose2d m_bluePose;
     private Pose2d m_redPose;
