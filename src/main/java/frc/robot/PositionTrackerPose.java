@@ -34,9 +34,11 @@ public class PositionTrackerPose {
   private DriveSubsystem m_driveSubsystem;
   private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   private PhotonCamera m_cameraFL;
+  private PhotonCamera m_cameraFR;
   private PhotonCamera m_cameraBL;
   private PhotonCamera m_cameraBR;
   private PhotonPoseEstimator m_photonFL;
+  private PhotonPoseEstimator m_photonFR;
   private PhotonPoseEstimator m_photonBL;
   private PhotonPoseEstimator m_photonBR;
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
@@ -44,18 +46,22 @@ public class PositionTrackerPose {
   private final Field2d m_testField = new Field2d();
 
   public PositionTrackerPose(double x, double y,
-      DriveSubsystem driveSubsystem, PhotonCamera cameraFL, PhotonCamera cameraBL, PhotonCamera cameraBR) {
+      DriveSubsystem driveSubsystem, PhotonCamera cameraFL, PhotonCamera cameraFR, PhotonCamera cameraBL, PhotonCamera cameraBR) {
     super();
     m_driveSubsystem = driveSubsystem;
     // Let's have arrays of cameras and estimators, please. Much easier to update
     // when we change the number of cameras. Same with their names and transforms.
     // -Gavin
     m_cameraFL = cameraFL;
+    // m_cameraFR = cameraFR;
     m_cameraBR = cameraBR;
     m_cameraBL = cameraBL;
     m_photonFL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
         new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(0), Math.toRadians(0))));
     m_photonFL.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    // m_photonFR = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
+    //   new Translation3d(-0.267, 0.267, 0.223), new Rotation3d(Math.toRadians(270), Math.toRadians(0), Math.toRadians(0))));
+    // m_photonFR.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     m_photonBL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
         new Translation3d(-0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(135))));
     m_photonBL.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -129,6 +135,7 @@ public class PositionTrackerPose {
 
   public List<Optional<EstimatedRobotPose>> getEstimatedGlobalPose() {
     Optional<EstimatedRobotPose> visionEstFL = Optional.empty();
+    // Optional<EstimatedRobotPose> visionEstFR = Optional.empty();
     Optional<EstimatedRobotPose> visionEstBL = Optional.empty();
     Optional<EstimatedRobotPose> visionEstBR = Optional.empty();
     List<Optional<EstimatedRobotPose>> visionEsts = new ArrayList<>(0);
@@ -136,6 +143,10 @@ public class PositionTrackerPose {
       visionEstFL = m_photonFL.update(change);
     }
     visionEsts.add(visionEstFL);
+    // for (var change : m_cameraFR.getAllUnreadResults()) {
+    //   visionEstFR = m_photonFR.update(change);
+    // }
+    // visionEsts.add(visionEstFR);
     for (var change : m_cameraBL.getAllUnreadResults()) {
       visionEstBL = m_photonBL.update(change);
     }

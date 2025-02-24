@@ -129,6 +129,6 @@ public class MaxSwerveModule {
 
   public double getWheelRadiusCharacterizationPosition(){
     //return wheel radians 
-    return m_driveEncoder.getPosition();
+    return m_driveEncoder.getPosition() / (ModuleConstants.k_WheelDiameterMeters);
   }
 }
