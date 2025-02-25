@@ -263,6 +263,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake Algae", m_algaeSubsystem.intake());
     NamedCommands.registerCommand("Outtake Algae", m_algaeSubsystem.outtake());
     NamedCommands.registerCommand("Remove Algae", m_elevatorSubsystem.goToAlgaePosition());
+    NamedCommands.registerCommand("Stop Coral", m_coralOuttakeSubsystem.stop().alongWith(m_hopperSubsystem.stop()));
   }
 
   /**
