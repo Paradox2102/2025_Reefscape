@@ -130,11 +130,11 @@ public class RobotContainer {
 
     // Algae
     m_driverController.leftTrigger().toggleOnTrue(m_algaeSubsystem.intake()
-      .alongWith(new RunCommand(() -> m_hopperSubsystem.runHopper(1), m_hopperSubsystem))
+      .alongWith(m_hopperSubsystem.runHopper(1))
     );
     m_driverController.leftBumper().whileTrue(
       m_algaeSubsystem.outtake()
-        .alongWith(new RunCommand(() -> m_hopperSubsystem.runHopper(-1), m_hopperSubsystem))
+        .alongWith(m_hopperSubsystem.runHopper(-1))
       );
     m_driverController.b().toggleOnTrue(
       m_elevatorSubsystem.goToAlgaePosition()
