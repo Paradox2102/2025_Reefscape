@@ -55,7 +55,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     L1(20, "Level 1"),
     RESET(0, "Reset"),
     ALGAE_HIGH(44.85, "Algae High"),
-    ALGAE_LOW(0, "Algae Low");
+    ALGAE_LOW(7.92, "Algae Low");
 
     private double m_heightInches;
     private String m_name;
