@@ -138,7 +138,7 @@ public class RobotContainer {
       );
     m_driverController.b().toggleOnTrue(
       m_elevatorSubsystem.goToAlgaePosition()
-        .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
+        .handleInterrupt(() -> m_elevatorSubsystem.resetPosition().schedule())
     );
 
     // Coral

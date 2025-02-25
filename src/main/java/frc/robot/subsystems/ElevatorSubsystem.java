@@ -35,7 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private DigitalInput m_switch = new DigitalInput(0);
 
   private ElevatorPosition m_position = ElevatorPosition.L1;
-  private ElevatorPosition m_algaePosition = ElevatorPosition.ALGAE_HIGH;
+  private ElevatorPosition m_algaePosition = ElevatorPosition.ALGAE_LOW;
 
   private static final double k_deadzoneInches = 0.5;
 
