@@ -30,7 +30,7 @@ public class AlgaeSubsystem extends SubsystemBase {
   private enum RollerStates {
     INTAKE(-.5),
     OUTTAKE(.5),
-    HOLD(0);
+    HOLD(.2);
 
     private double m_power;
 
