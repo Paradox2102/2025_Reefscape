@@ -129,12 +129,17 @@ public class RobotContainer {
     m_algaeSubsystem.setDefaultCommand(new RunCommand(() -> m_algaeSubsystem.reset(), m_algaeSubsystem));
 
     // Algae
-    m_driverController.leftTrigger().toggleOnTrue(m_algaeSubsystem.intake());
-    m_driverController.leftBumper().whileTrue(m_algaeSubsystem.outtake());
-    // m_driverController.b().toggleOnTrue(
-    //   m_elevatorSubsystem.goToAlgaePosition()
-    //     .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
-    // );
+    m_driverController.leftTrigger().toggleOnTrue(m_algaeSubsystem.intake()
+      .alongWith(new RunCommand(() -> m_hopperSubsystem.runHopper(1), m_hopperSubsystem))
+    );
+    m_driverController.leftBumper().whileTrue(
+      m_algaeSubsystem.outtake()
+        .alongWith(new RunCommand(() -> m_hopperSubsystem.runHopper(-1), m_hopperSubsystem))
+      );
+    m_driverController.b().toggleOnTrue(
+      m_elevatorSubsystem.goToAlgaePosition()
+        .finallyDo(() -> m_elevatorSubsystem.resetPosition().schedule())
+    );
 
     // Coral
     m_driverController.rightTrigger().whileTrue(new AutoIntake(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX,m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
@@ -176,8 +181,8 @@ public class RobotContainer {
     //   new ProxyCommand(() -> new PrepareForClimbCommand(m_algaeSubsystem, m_climberSubsystem))
     //     .finallyDo(() -> m_climberSubsystem.setPosition(ClimberState.CLIMB).schedule())
     // );
-    m_driverController.a().whileTrue(m_climberSubsystem.runOut());
-    m_driverController.b().whileTrue(m_climberSubsystem.runIn());
+    // m_driverController.a().whileTrue(m_climberSubsystem.runOut());
+    // m_driverController.b().whileTrue(m_climberSubsystem.runIn());
 
     // Hopper Pivot
     m_driverController.y()
