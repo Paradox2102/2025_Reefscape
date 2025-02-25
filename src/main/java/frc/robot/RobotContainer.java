@@ -243,12 +243,10 @@ public class RobotContainer {
 
   private void updateAutoChooser() {
     m_autoSelect.addOption("Nothing", new InstantCommand());
-    m_autoSelect.addOption("Straight Auto", new PathPlannerAuto("Straight Auto"));
-    m_autoSelect.addOption("Curve Auto", new PathPlannerAuto("Curve Auto"));
     m_autoSelect.addOption("Left Basic", new PathPlannerAuto("Left Basic"));
-    m_autoSelect.addOption("Left 4 Complex", new InstantCommand());
     m_autoSelect.addOption("Right Basic", new PathPlannerAuto("Right Basic"));
     m_autoSelect.addOption("Center L4", new PathPlannerAuto("Center 1 Auto"));
+    m_autoSelect.addOption("Center Push", new PathPlannerAuto("Center Push L1"));
     m_autoSelect.addOption("Wheel Calibration", m_driveSubsystem.wheelRadiusCharacterization(m_driveSubsystem));
     SmartDashboard.putData(m_autoSelect);
   }
