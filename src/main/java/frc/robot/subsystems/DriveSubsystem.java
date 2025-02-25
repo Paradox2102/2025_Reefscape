@@ -320,7 +320,12 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getRotationalDistanceFromReef() {
-    return m_reefPosition.targetPose().minus(m_tracker.getPose2d()).getTranslation().getAngle();
+    // return m_reefPosition.targetPose().minus(m_tracker.getPose2d()).getTranslation().getAngle();
+    Pose2d targetPose = m_reefPosition.targetPose();
+    double xDist = targetPose.getX() - m_tracker.getPose2d().getX();
+    double yDist = targetPose.getY() - m_tracker.getPose2d().getY();
+    return Rotation2d.fromRadians(ParadoxField.normalizeAngle(
+       Math.atan2(yDist, xDist)));
   }
 
   /**
