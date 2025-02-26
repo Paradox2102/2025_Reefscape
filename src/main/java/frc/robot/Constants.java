@@ -323,22 +323,14 @@ public final class Constants {
         
         public static final class Algae {
           public static final SparkFlexConfig pivotConfig = new SparkFlexConfig();
-          public static final SparkFlexConfig rollerConfig = new SparkFlexConfig();
 
           public static SparkFlexConfig coastAlgaeConfig = new SparkFlexConfig();
-          public static SparkFlexConfig coastRoller = new SparkFlexConfig();
 
           static {
             pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(25);
             coastAlgaeConfig.apply(pivotConfig);
 
             coastAlgaeConfig.idleMode(IdleMode.kCoast);
-
-
-            rollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
-            coastRoller.apply(rollerConfig);
-      
-            coastRoller.idleMode(IdleMode.kCoast);
           }
 
     }

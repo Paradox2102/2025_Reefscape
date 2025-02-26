@@ -13,7 +13,7 @@ import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
 import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
-import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -49,7 +49,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem();
+  private PivotSubsystem m_pivotSubsystem = new PivotSubsystem();
   private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
   private ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
@@ -125,16 +125,14 @@ public class RobotContainer {
 
     m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.holdCoral());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
-    // m_elevatorSubsystem.setDefaultCommand(new RunCommand(() -> m_elevatorSubsystem.setPower(0.02), m_elevatorSubsystem));
     m_elevatorSubsystem.setDefaultCommand(m_elevatorSubsystem.resetPosition());
-    // m_algaeSubsystem.setDefaultCommand(new RunCommand(() -> m_algaeSubsystem.reset(), m_algaeSubsystem));
 
     // Algae
-    m_driverController.leftTrigger().whileTrue(m_algaeSubsystem.intake()
+    m_driverController.leftTrigger().whileTrue(m_pivotSubsystem.intake()
       .alongWith(m_hopperSubsystem.runHopper(0.75))
     );
     m_driverController.leftBumper().whileTrue(
-      m_algaeSubsystem.outtake()
+      m_pivotSubsystem.outtake()
         .alongWith(m_hopperSubsystem.runHopper(-1))
       );
     m_driverController.b().toggleOnTrue(
@@ -143,7 +141,7 @@ public class RobotContainer {
     );
 
     // Coral
-    m_driverController.rightTrigger().whileTrue(new AutoIntake(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX,m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_algaeSubsystem, m_hopperSubsystem));
+    m_driverController.rightTrigger().whileTrue(new AutoIntake(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX,m_driveSubsystem, m_coralOuttakeSubsystem, m_elevatorSubsystem, m_pivotSubsystem, m_hopperSubsystem));
     // m_driverController.rightBumper().toggleOnTrue(
     //   new ProxyCommand(() -> Commands.either(
     //     new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
@@ -175,7 +173,7 @@ public class RobotContainer {
         () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
       )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     );
-    m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
+    m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
 
     // Climb
     // m_driverController.a().toggleOnTrue(
@@ -187,9 +185,9 @@ public class RobotContainer {
 
     // Hopper Pivot
     m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_algaeSubsystem.setPivotPosition(false)))
+      .onTrue(m_pivotSubsystem.climb())
       .onFalse(
-        new InstantCommand(() -> m_algaeSubsystem.setPivotPosition(true))
+        new InstantCommand(() -> m_pivotSubsystem.reset())
           .alongWith(m_elevatorSubsystem.resetPosition())
           // .alongWith(m_climberSubsystem.setPosition(ClimberState.RESET))
       );
@@ -262,10 +260,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("Set L2", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
     NamedCommands.registerCommand("Set L3", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
     NamedCommands.registerCommand("Set L4", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
-    NamedCommands.registerCommand("Intake Coral", new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_algaeSubsystem));
+    NamedCommands.registerCommand("Intake Coral", new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
     NamedCommands.registerCommand("Score Coral", m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isL1));
-    NamedCommands.registerCommand("Intake Algae", m_algaeSubsystem.intake());
-    NamedCommands.registerCommand("Outtake Algae", m_algaeSubsystem.outtake());
+    NamedCommands.registerCommand("Intake Algae", m_pivotSubsystem.intake());
+    NamedCommands.registerCommand("Outtake Algae", m_pivotSubsystem.outtake());
     NamedCommands.registerCommand("Remove Algae", m_elevatorSubsystem.goToAlgaePosition());
     NamedCommands.registerCommand("Stop Coral", m_coralOuttakeSubsystem.stop().alongWith(m_hopperSubsystem.stop()));
   }

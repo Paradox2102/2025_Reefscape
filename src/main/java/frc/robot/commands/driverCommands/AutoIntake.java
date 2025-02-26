@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.Constants;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
-import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -22,7 +22,7 @@ import frc.robot.subsystems.HopperSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoIntake extends ParallelDeadlineGroup {
   /** Creates a new AutoIntake. */
-  public AutoIntake(DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, DriveSubsystem driveSubsystem, CoralOuttakeSubsystem coralOuttakeSubsystem, ElevatorSubsystem elevatorSubsystem, AlgaeSubsystem algaeSubsystem, HopperSubsystem hopperSubsystem) {
+  public AutoIntake(DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, DriveSubsystem driveSubsystem, CoralOuttakeSubsystem coralOuttakeSubsystem, ElevatorSubsystem elevatorSubsystem, PivotSubsystem algaeSubsystem, HopperSubsystem hopperSubsystem) {
     // Add the deadline command in the super() call. Add other commands using
     // addCommands().
     super(new IntakeCoral(coralOuttakeSubsystem, hopperSubsystem, elevatorSubsystem, algaeSubsystem));

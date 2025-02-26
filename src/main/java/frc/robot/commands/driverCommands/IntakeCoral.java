@@ -6,7 +6,7 @@ package frc.robot.commands.driverCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
@@ -17,7 +17,7 @@ public class IntakeCoral extends Command {
   CoralOuttakeSubsystem m_coSubsystem;
   HopperSubsystem m_hopperSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
-  AlgaeSubsystem m_algaeSubsystem;
+  PivotSubsystem m_algaeSubsystem;
 
   private Timer m_timer = new Timer();
   private static final double k_intakeCurrent = 50;
@@ -25,7 +25,7 @@ public class IntakeCoral extends Command {
   private static final double k_intakeSpeed = 5000;
 
 
-  public IntakeCoral(CoralOuttakeSubsystem COSubsystem, HopperSubsystem hopperSubsystem, ElevatorSubsystem elevatorSubsystem, AlgaeSubsystem algaeSubsystem) {
+  public IntakeCoral(CoralOuttakeSubsystem COSubsystem, HopperSubsystem hopperSubsystem, ElevatorSubsystem elevatorSubsystem, PivotSubsystem algaeSubsystem) {
     m_coSubsystem = COSubsystem;
     m_hopperSubsystem = hopperSubsystem;
     m_elevatorSubsystem = elevatorSubsystem;
@@ -38,7 +38,7 @@ public class IntakeCoral extends Command {
   @Override
   public void initialize() {
     m_elevatorSubsystem.resetPosition();
-    m_algaeSubsystem.setPivotPosition(true);
+    m_algaeSubsystem.reset();
     m_hopperSubsystem.intake();
     m_timer.reset();
     m_timer.start();
