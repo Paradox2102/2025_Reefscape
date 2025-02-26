@@ -21,16 +21,16 @@ public class AlgaeSubsystem extends SubsystemBase {
   private SparkFlex m_rollerMotor = new SparkFlex(Constants.AlgaeConstants.k_algaeMotor, MotorType.kBrushless);
 
   private static final double k_downPower = 1;
-  private static final double k_upPower = -.5;
+  private static final double k_upPower = -.25;
 
   private boolean m_retracted = true;
 
   private RollerStates m_rollerState = RollerStates.HOLD;
 
   private enum RollerStates {
-    INTAKE(-.5),
-    OUTTAKE(.5),
-    HOLD(.2);
+    INTAKE(-.1),
+    OUTTAKE(.1),
+    HOLD(.05);
 
     private double m_power;
 
@@ -66,8 +66,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     return Commands.run(() -> {
       m_rollerState = RollerStates.INTAKE;
       setPivotPosition(false);
-    }, this).handleInterrupt(() -> reset()
-    );
+    }, this);
   }
 
   public Command outtake() {

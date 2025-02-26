@@ -329,7 +329,7 @@ public final class Constants {
           public static SparkFlexConfig coastRoller = new SparkFlexConfig();
 
           static {
-            pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(35);
+            pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(25);
             coastAlgaeConfig.apply(pivotConfig);
 
             coastAlgaeConfig.idleMode(IdleMode.kCoast);

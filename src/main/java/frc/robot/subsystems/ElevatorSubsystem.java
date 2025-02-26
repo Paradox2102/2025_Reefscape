@@ -54,8 +54,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     L2(30.48, "Level 2"),
     L1(22, "Level 1"),
     RESET(0, "Reset"),
-    ALGAE_HIGH(44.85, "Algae High"),
-    ALGAE_LOW(7.92, "Algae Low");
+    ALGAE_HIGH(25.37, "Algae High"),
+    ALGAE_LOW(9.65, "Algae Low");
 
     private double m_heightInches;
     private String m_name;
@@ -110,7 +110,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public Command setTargetPos(ElevatorPosition pos) {
-    return Commands.runOnce(() -> {setPosition(pos);}, this);
+    return Commands.runOnce(() -> {setPosition(pos);});
   }
 
   public Command setAlgaePosition(ElevatorPosition pos) {
@@ -126,12 +126,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Command goToAlgaePosition() {
     return Commands.run(() -> {
       m_PID.setReference(m_algaePosition.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-    }, this).until(atPosition);
+    }, this);
   }
 
   public Command resetPosition() {
     return Commands.run(() -> {
-      m_PID.setReference(-0.25, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_PID.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this).until(() -> getPosition() < 0.25);
   }
 
