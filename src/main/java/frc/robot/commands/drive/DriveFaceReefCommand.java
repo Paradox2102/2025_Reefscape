@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.States;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveFaceReefCommand extends Command {
@@ -16,21 +17,23 @@ public class DriveFaceReefCommand extends Command {
   private DriveSubsystem m_subsystem;
   private DoubleSupplier m_getX;
   private DoubleSupplier m_getY;
+  private DoubleSupplier m_getRot;
   private boolean m_fieldRelative;
   private boolean m_slowMode = false;
   private final double m_slowModeCoefficient = .3;
 
-  public DriveFaceReefCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, boolean fieldRelative) {
+  public DriveFaceReefCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot, boolean fieldRelative) {
     m_subsystem = driveSubsystem;
     m_getX = getX;
     m_getY = getY;
+    m_getRot = getRot;
     m_fieldRelative = fieldRelative;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
 
-  public DriveFaceReefCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, boolean fieldRelative, boolean slowMode) {
-    this(driveSubsystem, getX, getY, fieldRelative); 
+  public DriveFaceReefCommand(DriveSubsystem driveSubsystem, DoubleSupplier getX, DoubleSupplier getY, DoubleSupplier getRot, boolean fieldRelative, boolean slowMode) {
+    this(driveSubsystem, getX, getY, getRot, fieldRelative); 
     m_slowMode = slowMode;
   }
   //
@@ -44,7 +47,7 @@ public class DriveFaceReefCommand extends Command {
 
     double x = -MathUtil.applyDeadband(m_getX.getAsDouble(), Constants.DriveConstants.k_driveDeadband);
     double y = -MathUtil.applyDeadband(m_getY.getAsDouble(), Constants.DriveConstants.k_driveDeadband);
-    double rot = m_subsystem.orientPID(m_subsystem.getRotationalDistanceFromReef());
+    double rot = States.m_autoAim ? m_subsystem.orientPID(m_subsystem.getRotationalDistanceFromReef()) : m_getRot.getAsDouble();
     m_subsystem.drive(
       m_slowMode ? m_slowModeCoefficient * y : y, 
       m_slowMode ? m_slowModeCoefficient * x : x, 
