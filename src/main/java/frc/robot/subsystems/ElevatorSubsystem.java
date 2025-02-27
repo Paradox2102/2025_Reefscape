@@ -54,8 +54,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     L2(30.48, "Level 2"),
     L1(22, "Level 1"),
     RESET(0, "Reset"),
-    ALGAE_HIGH(25.37, "Algae High"),
-    ALGAE_LOW(9.65, "Algae Low");
+    ALGAE_HIGH(33.48, "Algae High"),
+    ALGAE_LOW(23, "Algae Low");
 
     private double m_heightInches;
     private String m_name;
@@ -114,7 +114,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public Command setAlgaePosition(ElevatorPosition pos) {
-    return Commands.runOnce(() -> {m_algaePosition = pos;}, this);
+    return Commands.runOnce(() -> {m_algaePosition = pos;});
   }
 
   public Command goToPosition() {

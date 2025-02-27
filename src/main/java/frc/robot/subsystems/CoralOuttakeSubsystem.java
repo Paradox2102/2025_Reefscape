@@ -34,7 +34,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   private static final double k_outtakeSpeed = 2500;
   private static final double k_outtakeDeadband = 100;
-  private static final double k_l1Speed = 500;
+  private static final double k_l1Speed = 5000;
   private boolean m_isL1 = false;
 
   // I'm still unsure that testing against a current level is going to be reliable

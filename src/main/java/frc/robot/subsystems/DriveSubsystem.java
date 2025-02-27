@@ -52,6 +52,23 @@ public class DriveSubsystem extends SubsystemBase {
     k_pathConfig = RobotConfig.fromGUISettings();
   } catch (Exception e) {}}
 
+  FieldPosition[] m_reefList = {
+    FieldPosition.ONE,
+    FieldPosition.TWO,
+    FieldPosition.THREE,
+    FieldPosition.FOUR,
+    FieldPosition.FIVE,
+    FieldPosition.SIX,
+    FieldPosition.SEVEN,
+    FieldPosition.EIGHT,
+    FieldPosition.NINE,
+    FieldPosition.TEN,
+    FieldPosition.ELEVEN,
+    FieldPosition.TWELVE,
+  };
+
+  private int m_reefIndex = 0;
+
   public enum FieldPosition {
 
     // For facing reef
@@ -60,7 +77,7 @@ public class DriveSubsystem extends SubsystemBase {
     THREE(new Pose2d(new Translation2d(4.74, 3.27), Rotation2d.fromDegrees(-60)), true, "3", new Translation2d(4.92, 3.4)),
     FOUR(new Pose2d(new Translation2d(4.24, 3.27), Rotation2d.fromDegrees(-120)), false, "4", new Translation2d(4.16, 3.29)),
     FIVE(new Pose2d(new Translation2d(3.96, 3.43), Rotation2d.fromDegrees(-120)), true, "5", new Translation2d(4.16, 3.29)),
-    SIX(new Pose2d(new Translation2d(3.71, 3.86), Rotation2d.fromDegrees(180)), false, "6", new Translation2d(3.65, 3.94)),
+    SIX(new Pose2d(new Translation2d(3.71, 3.9), Rotation2d.fromDegrees(180)), false, "6", new Translation2d(3.65, 3.94)),
     SEVEN(new Pose2d(new Translation2d(3.71, 4.19), Rotation2d.fromDegrees(0)), true, "7", new Translation2d(3.65, 3.94)),
     EIGHT(new Pose2d(new Translation2d(3.96, 4.62), Rotation2d.fromDegrees(120)), false, "8", new Translation2d(4, 4.72)),
     NINE(new Pose2d(new Translation2d(4.24, 4.78), Rotation2d.fromDegrees(120)), true, "9", new Translation2d(4, 4.72)),
@@ -556,6 +573,18 @@ public class DriveSubsystem extends SubsystemBase {
     m_backLeft.resetEncoders();
     m_frontRight.resetEncoders();
     m_backRight.resetEncoders();
+  }
+
+  public Command incrementReefPosition(boolean increment) {
+    return Commands.runOnce(() -> {
+      m_reefIndex += increment ? 1 : -1;
+      if (m_reefIndex < 0) {
+        m_reefIndex = 11;
+      } else if (m_reefIndex > 11) {
+        m_reefIndex = 0;
+      }
+      m_reefPosition = m_reefList[m_reefIndex];
+    });
   }
 
   /**

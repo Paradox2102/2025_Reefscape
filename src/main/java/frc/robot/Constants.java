@@ -124,6 +124,7 @@ public final class Constants {
   public static final class AlgaeConstants {
     public static final int k_pivotMotor = 10;
     public static final int k_algaeMotor = 9;
+    public static final double k_ticksToDegrees = 45/17.68;
   }
   
   public static final class COConstants {
@@ -152,8 +153,8 @@ public final class Constants {
     public static final double k_i = 0.000001;
     public static final double k_d = 0.001;
 
-    public static final double k_downP = 0.02;
-    public static final double k_downI = 0.00001;
+    public static final double k_downP = 0.015;
+    public static final double k_downI = 0.000005;
 
     public static final double k_ticksToInches = 4.0/2.67;
   }
@@ -327,7 +328,10 @@ public final class Constants {
           public static SparkFlexConfig coastAlgaeConfig = new SparkFlexConfig();
 
           static {
-            pivotConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(25);
+            pivotConfig.idleMode(IdleMode.kCoast)
+              .smartCurrentLimit(25)
+            .encoder
+              .positionConversionFactor(AlgaeConstants.k_ticksToDegrees);
             coastAlgaeConfig.apply(pivotConfig);
 
             coastAlgaeConfig.idleMode(IdleMode.kCoast);

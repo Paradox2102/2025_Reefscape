@@ -77,7 +77,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public Command runIn(){
     return Commands.startEnd(() -> {
-      setPower(0.25);},
+      setPower(0.5);},
       () -> {
       setPower(0);},
      this);
@@ -85,7 +85,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public Command runOut(){
     return Commands.startEnd(() -> {
-      setPower(-0.25);},
+      setPower(-0.5);},
       () -> {
       setPower(0);},
      this);

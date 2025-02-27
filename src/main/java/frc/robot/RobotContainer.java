@@ -129,11 +129,11 @@ public class RobotContainer {
 
     // Algae
     m_driverController.leftTrigger().whileTrue(m_pivotSubsystem.intake()
-      .alongWith(m_hopperSubsystem.runHopper(0.75))
+      .alongWith(m_hopperSubsystem.runHopper(0.5))
     );
     m_driverController.leftBumper().whileTrue(
       m_pivotSubsystem.outtake()
-        .alongWith(m_hopperSubsystem.runHopper(-1))
+        .alongWith(m_hopperSubsystem.runHopper(-0.5))
       );
     m_driverController.b().toggleOnTrue(
       m_elevatorSubsystem.goToAlgaePosition()
@@ -201,13 +201,16 @@ public class RobotContainer {
 
     m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
     m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
-    m_operatorController.button(8).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
+    m_operatorController.button(8).toggleOnTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
 
     m_operatorController.button(7).onTrue(m_elevatorSubsystem.setAlgaePosition(ElevatorPosition.ALGAE_HIGH));
     m_operatorController.button(9).onTrue(m_elevatorSubsystem.setAlgaePosition(ElevatorPosition.ALGAE_LOW));
 
     m_operatorController.button(11).whileTrue(m_climberSubsystem.runOut());
     m_operatorController.button(12).whileTrue(m_climberSubsystem.runIn());
+
+    m_operatorController.povRight().onTrue(m_driveSubsystem.incrementReefPosition(true));
+    m_operatorController.povLeft().onTrue(m_driveSubsystem.incrementReefPosition(false));
 
     // Operator UI Controls
 

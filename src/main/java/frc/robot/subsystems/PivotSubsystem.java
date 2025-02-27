@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,11 +27,11 @@ public class PivotSubsystem extends SubsystemBase {
 
   private PivotStates m_state = PivotStates.RESET;
 
-  private PIDController m_PID = new PIDController(0.01, 0, 0);
+  private PIDController m_PID = new PIDController(0.1, 0, 0);
 
   private enum PivotStates {
     RESET(0),
-    ALGAE(40),
+    ALGAE(67),
     CLIMB(60);
 
     private double m_angleDegrees;
@@ -85,5 +86,6 @@ public class PivotSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     m_pivotMotor.set(m_PID.calculate(getAngle(), m_state.position()) + k_f);
+    SmartDashboard.putNumber("Pivot Angle", getAngle());
   }
 }
