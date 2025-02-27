@@ -23,7 +23,7 @@ public class PivotSubsystem extends SubsystemBase {
   private SparkFlex m_pivotMotor = new SparkFlex(Constants.AlgaeConstants.k_pivotMotor, MotorType.kBrushless);
   private RelativeEncoder m_pivotEncoder = m_pivotMotor.getEncoder();
 
-  private static final double k_f = -.05;
+  private static final double k_f = -.25; // for 25 amps
 
   private PivotStates m_state = PivotStates.RESET;
 

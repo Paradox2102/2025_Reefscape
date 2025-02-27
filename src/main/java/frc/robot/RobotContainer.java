@@ -182,6 +182,9 @@ public class RobotContainer {
     // );
     // m_driverController.a().whileTrue(m_climberSubsystem.runOut());
     // m_driverController.b().whileTrue(m_climberSubsystem.runIn());
+    m_driverController.a().onTrue(
+      m_pivotSubsystem.climb()
+    );
 
     // Hopper Pivot
     m_driverController.y()
