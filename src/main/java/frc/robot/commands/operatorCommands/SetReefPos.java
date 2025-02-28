@@ -23,6 +23,7 @@ public class SetReefPos extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("SetReefPos: "+m_position.getName());
     m_subsystem.setReefPosition(m_position);
   }
 
