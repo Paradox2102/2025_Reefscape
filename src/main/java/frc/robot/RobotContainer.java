@@ -245,6 +245,10 @@ public class RobotContainer {
 
   private void updateAutoChooser() {
     m_autoSelect.addOption("Nothing", new InstantCommand());
+    m_autoSelect.addOption("Left Scuffed", new PathPlannerAuto("Left Scuffed"));
+    m_autoSelect.addOption("Right Scuffed", new PathPlannerAuto("Right Scuffed"));
+    m_autoSelect.addOption("399 Push Left", new PathPlannerAuto("399 Push Left"));
+    m_autoSelect.addOption("399 Push Right", new PathPlannerAuto("399 Push Right"));
     m_autoSelect.addOption("Left Basic", new PathPlannerAuto("Left Basic"));
     m_autoSelect.addOption("Right Basic", new PathPlannerAuto("Right Basic"));
     m_autoSelect.addOption("Center L4", new PathPlannerAuto("Center 1 Auto"));
@@ -266,6 +270,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Outtake Algae", m_pivotSubsystem.outtake());
     NamedCommands.registerCommand("Remove Algae", m_elevatorSubsystem.goToAlgaePosition());
     NamedCommands.registerCommand("Stop Coral", m_coralOuttakeSubsystem.stop().alongWith(m_hopperSubsystem.stop()));
+    NamedCommands.registerCommand("Back Up", new DriveCommand(m_driveSubsystem, () -> -.2, () -> 0, () -> 0, false));
   }
 
   /**

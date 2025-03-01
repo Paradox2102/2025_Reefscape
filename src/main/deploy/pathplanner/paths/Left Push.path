@@ -1,0 +1,109 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.06325,
+        "y": 7.554499999999999
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.822060967058148,
+        "y": 7.54084081897029
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.1175,
+        "y": 7.554499999999999
+      },
+      "prevControl": {
+        "x": 7.108531200404124,
+        "y": 7.8043390694703465
+      },
+      "nextControl": {
+        "x": 7.1420924938875565,
+        "y": 6.869440006949473
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.678749999999589,
+        "y": 6.286999999998569
+      },
+      "prevControl": {
+        "x": 6.88046209134199,
+        "y": 6.098735381412328
+      },
+      "nextControl": {
+        "x": 6.093749999999589,
+        "y": 6.832999999998569
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.079582809189619,
+        "y": 5.34472614870233
+      },
+      "prevControl": {
+        "x": 5.79149999999959,
+        "y": 6.60874999999857
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "10 oclock"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.0248818897637433,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 2.440629921259824,
+      "rotationDegrees": -122.47169036492828
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.3169064748201444,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.5,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -122.73522627210765
+  },
+  "reversed": false,
+  "folder": "PHR Scuffed",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

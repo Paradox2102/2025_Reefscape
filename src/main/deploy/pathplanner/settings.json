@@ -7,7 +7,7 @@
     "Center Auto Paths",
     "Complex 4 Paths",
     "Leave Paths",
-    "New Folder",
+    "PHR Scuffed",
     "Push Basic Paths",
     "Push Center Paths",
     "Push Complex Paths"
@@ -16,7 +16,7 @@
     "Basic",
     "Center",
     "Complex",
-    "New Folder"
+    "PHR scuffed"
   ],
   "defaultMaxVel": 4.5,
   "defaultMaxAccel": 6.0,
