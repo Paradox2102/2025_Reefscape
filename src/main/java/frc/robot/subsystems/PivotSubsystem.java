@@ -32,7 +32,7 @@ public class PivotSubsystem extends SubsystemBase {
   private enum PivotStates {
     RESET(0),
     ALGAE(67),
-    CLIMB(60);
+    CLIMB(75);
 
     private double m_angleDegrees;
 
@@ -77,9 +77,10 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public Command climb() {
-    return Commands.runOnce(() -> {
-      m_state = PivotStates.CLIMB;
-    }, this);
+    return Commands.startEnd(() -> {
+      m_state = PivotStates.CLIMB;},
+      ()->{m_state = PivotStates.RESET;}
+      , this);
   }
 
   @Override
