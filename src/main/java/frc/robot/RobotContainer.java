@@ -187,13 +187,7 @@ public class RobotContainer {
     );
 
     // Hopper Pivot
-    m_driverController.y()
-      .onTrue(m_pivotSubsystem.climb())
-      .onFalse(
-        new InstantCommand(() -> m_pivotSubsystem.reset())
-          .alongWith(m_elevatorSubsystem.resetPosition())
-          // .alongWith(m_climberSubsystem.setPosition(ClimberState.RESET))
-      );
+    m_driverController.y().toggleOnTrue(m_pivotSubsystem.climb());
 
     //m_driverController.y().whileTrue(new DriveToPosition(m_driveSubsystem, true));
 
