@@ -183,7 +183,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   //Wheel Calibration
-  private static final double k_wheelRadiusMaxVelocity = 2; // Rad/Sec
+  private static final double k_wheelRadiusMaxVelocity = 0.5; // Rad/Sec
   private static final double k_wheelRadiusRampRate = 0.25; // Rad/Sec^2
   private final  MaxSwerveModule[] modules = new MaxSwerveModule[]{m_frontLeft, m_frontRight, m_backLeft, m_backRight};
 

@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.52,
-        "y": 0.74
+        "x": 1.2706967213114755,
+        "y": 0.6504610655737701
       },
       "prevControl": {
-        "x": 2.1218237704918033,
-        "y": 0.16495901639344457
+        "x": 1.8725204918032787,
+        "y": 0.07542008196721472
       },
       "nextControl": {
-        "x": 0.9504035130304447,
-        "y": 1.2842479014382386
+        "x": 0.7011002343419201,
+        "y": 1.1947089670120088
       },
       "isLocked": false,
       "linkedName": "red station"
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.78042271527372
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Complex 4 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 56.73311909573317
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

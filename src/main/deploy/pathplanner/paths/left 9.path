@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.52,
-        "y": 7.312
+        "x": 1.3785860655737705,
+        "y": 7.423514344262295
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.025027864232051,
-        "y": 5.293556871914916
+        "x": 3.883613929805821,
+        "y": 5.405071216177211
       },
       "isLocked": false,
       "linkedName": "blue station"
@@ -40,8 +40,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.52,
-        "y": 0.74
+        "x": 1.2706967213114755,
+        "y": 0.6504610655737701
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.202170159834139,
-        "y": 1.4280650959711005
+        "x": 1.9528668811456145,
+        "y": 1.3385261615448707
       },
       "isLocked": false,
       "linkedName": "red station"
@@ -41,7 +41,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 1.5,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
