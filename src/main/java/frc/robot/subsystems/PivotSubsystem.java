@@ -67,7 +67,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public Command outtake() {
-    return Commands.runOnce(() -> {
+    return Commands.run(() -> {
       m_state = PivotStates.ALGAE;
     }, this).finallyDo(() -> reset());
   }
