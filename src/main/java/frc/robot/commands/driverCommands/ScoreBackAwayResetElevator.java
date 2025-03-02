@@ -27,7 +27,7 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     System.out.println("yippee");
     addCommands(
-      COSubsystem.ejectCoral(elevatorSubsystem.isL1),
+      COSubsystem.ejectCoral(elevatorSubsystem.isLow),
       new ConditionalCommand(
         new ParallelDeadlineGroup(
           new WaitCommand(.3),

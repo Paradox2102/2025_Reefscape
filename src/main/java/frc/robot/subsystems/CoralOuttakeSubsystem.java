@@ -34,14 +34,14 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   private static final double k_outtakeSpeed = 2500;
   private static final double k_outtakeDeadband = 100;
-  private static final double k_l1Speed = 1250;
-  private boolean m_isL1 = false;
+  private static final double k_lowSpeed = 1250;
+  private boolean m_isLow = false;
 
   // I'm still unsure that testing against a current level is going to be reliable
   // here. Also, consider using distance travelled instead of a time. We can talk
   // about how to do that in a Trigger. -Gavin
   public final Trigger ejectedCoral = new Trigger(
-      () -> getCurrentDraw() < k_ejectedCurrent && getSpeedMotorRPM() >= (m_isL1 ? k_l1Speed : k_outtakeSpeed) - k_outtakeDeadband)
+      () -> getCurrentDraw() < k_ejectedCurrent && getSpeedMotorRPM() >= (m_isLow ? k_lowSpeed : k_outtakeSpeed) - k_outtakeDeadband)
       .debounce(.25, DebounceType.kRising);
 
   /** Creates a new RollerSubsystem. */
@@ -82,10 +82,10 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
     }, this);
   }
 
-  public Command ejectCoral(BooleanSupplier L1) {
-    m_isL1 = L1.getAsBoolean();
+  public Command ejectCoral(BooleanSupplier low) {
+    m_isLow = low.getAsBoolean();
     return Commands.run(() -> {
-      setSpeed(m_isL1 ? k_l1Speed : k_outtakeSpeed);
+      setSpeed(m_isLow ? k_lowSpeed : k_outtakeSpeed);
     }, this).until(ejectedCoral);
   }
 

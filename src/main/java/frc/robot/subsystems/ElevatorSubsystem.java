@@ -83,8 +83,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     
   }
 
-  public Trigger isL1 = new Trigger (
-    () -> m_position == ElevatorPosition.L1);
+  public Trigger isLow = new Trigger (
+    () -> m_position == ElevatorPosition.L1 || m_position == ElevatorPosition.L2);
 
   // FIXME: This should be a command factory. -Gavin
   public void setPosition(ElevatorPosition position) {
@@ -154,12 +154,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("elevator output", output);
     SmartDashboard.putNumber("elevator target height", m_targetPos);
     SmartDashboard.putString("Elevator Target", m_position.getName());
-    // if (!bottomLimit.getAsBoolean()){
-    //   m_elevatorEncoder.setPosition(0);
-    // } else if (pos > 73) {
-    //   setPower(0);
-    //   m_elevatorEncoder.setPosition(72.5); //if encoder is reading out number 0.5 inch above max travel, set height to max travel
-    // }
+    if (!bottomLimit.getAsBoolean()){
+      m_elevatorEncoder.setPosition(0);
+    }
     // This method will be called once per scheduler run
   } 
 }

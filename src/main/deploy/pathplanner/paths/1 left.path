@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.034,
-        "y": 4.181
+        "x": 7.144672131147541,
+        "y": 5.193801229508197
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.492315573770492,
-        "y": 4.162858606557377
+        "x": 6.269569672131147,
+        "y": 5.457530737704917
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.12725,
-        "y": 4.181
+        "x": 4.95092213114754,
+        "y": 5.085911885245901
       },
       "prevControl": {
-        "x": 7.130456909443391,
-        "y": 4.430979430617447
-      },
-      "nextControl": {
-        "x": 7.0967213114754095,
-        "y": 1.8012807377049187
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 5.190676229508196,
-        "y": 3.0480020491803272
-      },
-      "prevControl": {
-        "x": 6.347249999999999,
-        "y": 2.2984508196721314
+        "x": 5.814036885245902,
+        "y": 5.781198770491803
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "2 oclock"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "PHR Scuffed",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 178.9190758133393
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }

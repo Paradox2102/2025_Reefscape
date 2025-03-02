@@ -5,27 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Push"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Push 2"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Set L1"
+            "name": "Set L2"
           }
         },
         {
@@ -37,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Push 3"
+            "pathName": "1 right"
           }
         },
         {
@@ -45,17 +27,11 @@
           "data": {
             "name": "Score Coral"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Remove Algae"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Center",
+  "folder": "PHR scuffed",
   "choreoAuto": false
 }

@@ -249,10 +249,10 @@ public class RobotContainer {
     m_autoSelect.addOption("Right Scuffed", new PathPlannerAuto("Right Scuffed"));
     m_autoSelect.addOption("399 Push Left", new PathPlannerAuto("399 Push Left"));
     m_autoSelect.addOption("399 Push Right", new PathPlannerAuto("399 Push Right"));
-    m_autoSelect.addOption("Left Basic", new PathPlannerAuto("Left Basic"));
-    m_autoSelect.addOption("Right Basic", new PathPlannerAuto("Right Basic"));
     m_autoSelect.addOption("Center L4", new PathPlannerAuto("Center 1 Auto"));
     m_autoSelect.addOption("Center Push", new PathPlannerAuto("Center Push L1"));
+    m_autoSelect.addOption("Left L1", new PathPlannerAuto("left leave"));
+    m_autoSelect.addOption("Right L1", new PathPlannerAuto("right leave"));
     m_autoSelect.addOption("Wheel Calibration", m_driveSubsystem.wheelRadiusCharacterization(m_driveSubsystem));
     SmartDashboard.putData(m_autoSelect);
   }
@@ -265,7 +265,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Set L3", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
     NamedCommands.registerCommand("Set L4", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
     NamedCommands.registerCommand("Intake Coral", new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
-    NamedCommands.registerCommand("Score Coral", m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isL1));
+    NamedCommands.registerCommand("Score Coral", m_coralOuttakeSubsystem.ejectCoral(m_elevatorSubsystem.isLow));
     NamedCommands.registerCommand("Intake Algae", m_pivotSubsystem.intake());
     NamedCommands.registerCommand("Outtake Algae", m_pivotSubsystem.outtake());
     NamedCommands.registerCommand("Remove Algae", m_elevatorSubsystem.goToAlgaePosition());

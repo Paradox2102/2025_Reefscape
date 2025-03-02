@@ -32,7 +32,7 @@ public class PivotSubsystem extends SubsystemBase {
   private enum PivotStates {
     RESET(0),
     ALGAE(67),
-    CLIMB(75);
+    CLIMB(100);
 
     private double m_angleDegrees;
 
