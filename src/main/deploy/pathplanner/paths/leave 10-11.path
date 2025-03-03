@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6036720405190676,
-        "y": 2.4983994306144064
+        "x": 6.981,
+        "y": 7.2035
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6250403485262392,
-        "y": 2.9497097779885353
+        "x": 6.292831803477243,
+        "y": 6.477014772877266
       },
       "isLocked": false,
-      "linkedName": "side 4-5"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.65,
-        "y": 2.9
+        "x": 5.378977009401483,
+        "y": 5.474089231329449
       },
       "prevControl": {
-        "x": 3.637814334004738,
-        "y": 2.3863291183032507
+        "x": 6.439423851931425,
+        "y": 6.6164096095116
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "5 oclock"
+      "linkedName": "side 10-11"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -120.2483373281871
   },
   "reversed": false,
-  "folder": "Precision Align Paths",
+  "folder": "Utah Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 60.61792665529878
+    "rotation": -128.65980825409008
   },
   "useDefaultConstraints": false
 }

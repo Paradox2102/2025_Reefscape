@@ -25,19 +25,19 @@
       },
       "nextControl": {
         "x": 7.0967213114754095,
-        "y": 1.8012807377049187
+        "y": 1.8012807377049191
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.190676229508196,
-        "y": 3.0480020491803272
+        "x": 5.3,
+        "y": 2.8744999999999994
       },
       "prevControl": {
-        "x": 6.347249999999999,
-        "y": 2.2984508196721314
+        "x": 6.4565737704918025,
+        "y": 2.1249487704918035
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "PHR Scuffed",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 178.9190758133393

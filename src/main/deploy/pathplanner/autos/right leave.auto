@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 right"
+            "pathName": null
           }
         },
         {
@@ -32,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "PHR scuffed",
+  "folder": null,
   "choreoAuto": false
 }

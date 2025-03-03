@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3785860655737705,
-        "y": 7.423514344262295
+        "x": 1.56,
+        "y": 7.301
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.563586418198323,
-        "y": 5.283959907224913
+        "x": 3.7450003526245528,
+        "y": 5.161445562962618
       },
       "isLocked": false,
       "linkedName": "blue station"
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.50016676655257
+    "rotation": -61.16249909013904
   },
   "reversed": false,
   "folder": "Basic 4 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -51.49934627965452
+    "rotation": -54.90418321297388
   },
   "useDefaultConstraints": false
 }

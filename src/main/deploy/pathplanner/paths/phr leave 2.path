@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.190676229508196,
-        "y": 3.0480020491803272
+        "x": 5.3,
+        "y": 2.8744999999999994
       },
       "prevControl": {
-        "x": 5.880264485168335,
-        "y": 2.132243763753424
+        "x": 5.989588255660139,
+        "y": 1.958741714573096
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,7 +59,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "PHR Scuffed",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 121.75948008481267
