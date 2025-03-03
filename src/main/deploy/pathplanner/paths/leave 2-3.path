@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.132684426229508,
-        "y": 2.8561987704918033
+        "x": 6.980861857786017,
+        "y": 0.8380300748146192
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.945901639344262,
-        "y": 2.4606045081967203
+        "x": 6.184546646666078,
+        "y": 1.6217768181567545
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.1786885245901635,
-        "y": 3.0480020491803272
+        "x": 5.378977009401483,
+        "y": 2.4983994306144064
       },
       "prevControl": {
-        "x": 5.865881147540984,
-        "y": 2.4096311475409826
+        "x": 5.763809291795272,
+        "y": 2.0661051290975174
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "side 2-3"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 120.83571444781003
   },
   "reversed": false,
-  "folder": "PHR Scuffed",
+  "folder": "Utah Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 131.6226216957891
   },
   "useDefaultConstraints": false
 }
