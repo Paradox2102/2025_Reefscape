@@ -86,6 +86,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Trigger isLow = new Trigger (
     () -> m_position == ElevatorPosition.L1 || m_position == ElevatorPosition.L2);
 
+  private boolean m_manual = false;
+
+  public Trigger manual = new Trigger(
+    () -> m_manual
+  );
+
   // FIXME: This should be a command factory. -Gavin
   public void setPosition(ElevatorPosition position) {
     m_position = position;
@@ -119,27 +125,37 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public Command goToPosition() {
     return Commands.run(() -> {
+      m_manual = false;
       m_PID.setReference(m_position.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }, this).until(atPosition);
   }
 
   public Command goToAlgaePosition() {
     return Commands.run(() -> {
+      m_manual = false;
       m_PID.setReference(m_algaePosition.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }, this);
   }
 
   public Command resetPosition() {
     return Commands.run(() -> {
+      m_manual = false;
       m_PID.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }, this).until(() -> getPosition() < 0.25);
   }
 
   public Command manualMove(DoubleSupplier up) {
     return Commands.run(() -> {
+      m_manual = true;
       double direction = -up.getAsDouble();
       m_elevatorMotor.set(direction > 0 ? .2 : -.2);
     }, this);
+  }
+
+  public Command setManual(boolean manual) {
+    return Commands.runOnce(() -> {
+      m_manual = manual;
+    });
   }
 
 

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2706967213114755,
-        "y": 0.6504610655737701
+        "x": 1.52,
+        "y": 0.74
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.258301918429014,
-        "y": 1.464497864575605
+        "x": 2.5076051971175386,
+        "y": 1.554036799001835
       },
       "isLocked": false,
       "linkedName": "red station"
     },
     {
       "anchor": {
-        "x": 3.92925,
-        "y": 2.6892499999999995
+        "x": 3.937730899099576,
+        "y": 2.6811151019597457
       },
       "prevControl": {
-        "x": 3.2165430266836488,
-        "y": 2.0870824485478994
+        "x": 3.2250239257832245,
+        "y": 2.0789475505076456
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,21 +29,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8615107913669064,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
@@ -54,8 +40,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

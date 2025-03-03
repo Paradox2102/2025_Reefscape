@@ -9,6 +9,7 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.SemiAutoPlaceOnReef;
 import frc.robot.commands.driverCommands.AutoIntake;
+import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
 import frc.robot.commands.operatorCommands.SetReefPos;
@@ -125,7 +126,7 @@ public class RobotContainer {
 
     m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.holdCoral());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
-    m_elevatorSubsystem.setDefaultCommand(m_elevatorSubsystem.resetPosition());
+    m_elevatorSubsystem.setDefaultCommand(m_elevatorSubsystem.resetPosition().unless(m_elevatorSubsystem.manual));
 
     // Algae
     m_driverController.leftTrigger().whileTrue(m_pivotSubsystem.intake()
@@ -168,8 +169,8 @@ public class RobotContainer {
       //         m_driverController::getRightX))
       // );
       new ProxyCommand(() -> Commands.either(
-        // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem), // on true
-        new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
+        new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on true
+        // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
         new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
         () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
       )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
@@ -250,7 +251,7 @@ public class RobotContainer {
     m_autoSelect.addOption("Right Scuffed", new PathPlannerAuto("Right Scuffed"));
     m_autoSelect.addOption("399 Push Left", new PathPlannerAuto("399 Push Left"));
     m_autoSelect.addOption("399 Push Right", new PathPlannerAuto("399 Push Right"));
-    m_autoSelect.addOption("Center L4", new PathPlannerAuto("Center 1 Auto"));
+    m_autoSelect.addOption("4201 Center 12", new PathPlannerAuto("4201 Center 12"));
     m_autoSelect.addOption("Center Push", new PathPlannerAuto("Center Push L1"));
     m_autoSelect.addOption("Left L1", new PathPlannerAuto("left leave"));
     m_autoSelect.addOption("Right L1", new PathPlannerAuto("right leave"));
@@ -272,6 +273,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Remove Algae", m_elevatorSubsystem.goToAlgaePosition());
     NamedCommands.registerCommand("Stop Coral", m_coralOuttakeSubsystem.stop().alongWith(m_hopperSubsystem.stop()));
     NamedCommands.registerCommand("Back Up", new DriveCommand(m_driveSubsystem, () -> -.2, () -> 0, () -> 0, false));
+    NamedCommands.registerCommand("Turn On Manual So We Don't Slam Our Elevator", m_elevatorSubsystem.setManual(true));
   }
 
   /**

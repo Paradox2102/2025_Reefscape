@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.15,
-        "y": 2.9
+        "x": 5.378977009401483,
+        "y": 5.474089231329449
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.5455,
-        "y": 2.01275
+        "x": 5.28834921775083,
+        "y": 5.09615269061791
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "side 10-11"
     },
     {
       "anchor": {
-        "x": 5.055133573887712,
-        "y": 2.727641270524364
+        "x": 5.3,
+        "y": 5.177067333156779
       },
       "prevControl": {
-        "x": 5.610883573887712,
-        "y": 2.084141270524365
+        "x": 5.363047626597027,
+        "y": 5.4189867345707246
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "3 oclock"
+      "linkedName": "11 oclock"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -117.57414914475983
   },
   "reversed": false,
-  "folder": "Basic 4 Paths",
+  "folder": "Precision Align Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -118.18338229888104
   },
   "useDefaultConstraints": false
 }

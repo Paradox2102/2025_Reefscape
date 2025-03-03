@@ -17,9 +17,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Turn On Manual So We Don't Slam Our Elevator"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Towards Path"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 7.0
           }
         },
         {
