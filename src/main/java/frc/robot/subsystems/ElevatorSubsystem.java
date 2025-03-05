@@ -93,6 +93,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   );
 
   // FIXME: This should be a command factory. -Gavin
+  //we put this function into command factories that handle the specific use cases that we use it as a command - Paul
   public void setPosition(ElevatorPosition position) {
     m_position = position;
   }

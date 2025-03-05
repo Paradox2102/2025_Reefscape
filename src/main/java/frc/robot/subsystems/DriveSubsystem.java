@@ -11,6 +11,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.MathUtil;
 // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.pathplanner.lib.util.PIDConstants;
@@ -42,6 +43,7 @@ import frc.utils.SwerveUtils;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -106,9 +108,8 @@ public class DriveSubsystem extends SubsystemBase {
     private boolean m_left;
     private Translation2d m_algaePos = new Translation2d();
 
-    // You can get these from AprilTagFieldLayout.getFieldLength() and getFieldWidth(). -Gavin
-    private double fieldX = 17.548;
-    private double fieldY = 8.052;
+    private double fieldX = PositionTrackerPose.k_apriltags.getFieldWidth();
+    private double fieldY = PositionTrackerPose.k_apriltags.getFieldWidth();
 
     FieldPosition(Pose2d bluePose, boolean left, String name) {
       m_bluePose = bluePose;
@@ -259,15 +260,14 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   // FIXME: This might be better bundled as a method that takes rotation supplier and returns a double supplier. That way it can have its own PIDController. - Gavin
-  public double orientPID(Rotation2d targetRot) {
-    double setpointDegrees = targetRot.getDegrees();
-    double heading = getHeadingInDegrees();
-    double rot = m_orientPID.calculate(heading, setpointDegrees);
+  //fixed?? idk if i did this right - Paul
+  public DoubleSupplier orientPID(DoubleSupplier targetRot) {
+    double setpointDegrees = targetRot.getAsDouble();
+    double heading = getHeading().getDegrees();
+    double rot = MathUtil.clamp(m_orientPID.calculate(heading, setpointDegrees), -Constants.DriveConstants.k_maxRotInput,
+    Constants.DriveConstants.k_maxRotInput);
     SmartDashboard.putNumber("Target Rot", setpointDegrees);
-
-    rot = MathUtil.clamp(rot, -Constants.DriveConstants.k_maxRotInput,
-        Constants.DriveConstants.k_maxRotInput);
-    return rot;
+    return () -> rot;
   }
 
   public Pose2d getEstimatedFuturePos() {
@@ -286,7 +286,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_targetsVisible = true;
       }
     }
-    SmartDashboard.putNumber("Heading", getHeadingInDegrees());
+    SmartDashboard.putNumber("Heading", getHeading().getDegrees());
     SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
     SmartDashboard.putString("Source Position", m_source.getName());
     SmartDashboard.putBoolean("Do we see a target", m_targetsVisible);
@@ -315,11 +315,6 @@ public class DriveSubsystem extends SubsystemBase {
     //m_tracker.displayRobotPosWithCamera();
 
     // double yaw = ParadoxField.normalizeAngle(m_gyro.getYaw().getValueAsDouble());
-    // if (m_setGyroZero) {
-    //   // FIXME: I think this calculation is wrong becauuse it neglects that fact that yaw is clockwise positive. Also, we shouldn't be trying to zero the gyro ourselves, as the PoseEstimator already takes care of this. And it's unsed.  - Gavin
-    //   m_gyroZero = ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw);
-    //   m_setGyroZero = false;
-    // }
     // SmartDashboard.putNumber("Gyro offset",
     //     ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw - m_gyroZero));
     // SmartDashboard.putNumber("Gyro Zero", m_gyroZero);
@@ -517,21 +512,21 @@ public class DriveSubsystem extends SubsystemBase {
     m_backRight.setBrakeMode(brake);
   }
 
-  // FIXME: Consider having a stop() method. - Gavin
+  public void stop(){
+    drive(0, 0, 0, false, false);
+  }
 
-  /**
-   * Sets the wheels into an X formation to prevent movement.
-   */
-  // FIXME: This should be a command factory. -Gavin
-  public void setX() {
-    m_frontLeft.setDesiredState(
+  public Command setX() {
+    return Commands.run(() -> {
+      m_frontLeft.setDesiredState(
         new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-    m_frontRight.setDesiredState(
+      m_frontRight.setDesiredState(
         new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    m_backLeft.setDesiredState(
+      m_backLeft.setDesiredState(
         new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    m_backRight.setDesiredState(
+      m_backRight.setDesiredState(
         new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    }, this);
   }
 
   public void spinAllModules() {
@@ -567,6 +562,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Resets the drive encoders to currently read a position of 0. */
   // FIXME: This is a bad idea. We should not offer this method. Also, it is unused. - Gavin
+  // we will never use this so i am not going to comment this out or delete it for now - Paul
   public void resetEncoders() {
     m_frontLeft.resetEncoders();
     m_backLeft.resetEncoders();
@@ -591,10 +587,9 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
-  // FIXME: This should return a Rotation2d. - Gavin
-  public double getHeadingInDegrees() {
+  public Rotation2d getHeading() {
     double angle = m_tracker.getPose2d().getRotation().getDegrees();
-    return ParadoxField.normalizeAngle(angle);
+    return Rotation2d.fromDegrees(ParadoxField.normalizeAngle(angle));
   }
 
   public Command wheelRadiusCharacterization(DriveSubsystem drive) {

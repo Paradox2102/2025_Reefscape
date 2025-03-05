@@ -112,6 +112,7 @@ public class MaxSwerveModule {
 
   /** Zeroes all the SwerveModule encoders. */
   // FIXME: This is a bad idea. We should not offer this method. -Gavin
+  // we will never use this so i am not going to comment this out or delete it for now - Paul
   public void resetEncoders() {
     m_driveEncoder.setPosition(0);
   }

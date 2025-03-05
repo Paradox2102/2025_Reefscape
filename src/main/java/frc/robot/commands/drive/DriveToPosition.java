@@ -66,7 +66,7 @@ public class DriveToPosition extends Command {
 
     double xVelocity = m_xPID.calculate(m_currentX);
     double yVelocity = m_yPID.calculate(m_currentY);
-    double rotVelocity = m_subsystem.orientPID(m_rotation);
+    double rotVelocity = m_subsystem.orientPID(() -> m_rotation.getDegrees()).getAsDouble();
 
     // xVelocity += k_f * Math.signum(xVelocity);
     // yVelocity += k_f * Math.signum(yVelocity);
