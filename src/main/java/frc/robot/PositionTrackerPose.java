@@ -33,6 +33,7 @@ public class PositionTrackerPose {
   private SwerveDrivePoseEstimator m_poseEstimator;
   private DriveSubsystem m_driveSubsystem;
   private static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  // This should be an array! - Gavin
   private PhotonCamera m_cameraFL;
   private PhotonCamera m_cameraFR;
   private PhotonCamera m_cameraBL;
@@ -41,6 +42,7 @@ public class PositionTrackerPose {
   private PhotonPoseEstimator m_photonFR;
   private PhotonPoseEstimator m_photonBL;
   private PhotonPoseEstimator m_photonBR;
+  // Where did these numbers come from? The default vision SDs are (0.9, 0.9, 0.9), so we've decided that we trust vision a lot. -Gavin
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.01, 0.01, 0.5); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
   private final Field2d m_testField = new Field2d();
@@ -183,6 +185,8 @@ public class PositionTrackerPose {
   // private boolean m_front = true;
 
   public void update() {
+    // FIXME: I'm not sure whether this is required for the strategy you have configured, but it's weird to only be doing it for two of the four cameras. You wouldn't have this sort of problem if you used arrays. -Gavin
+    // FIXME: You should call getPose2d only once here. -Gavin
     m_photonFL.setReferencePose(getPose2d());
     m_photonBR.setReferencePose(getPose2d());
 
