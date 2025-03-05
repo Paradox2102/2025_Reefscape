@@ -42,7 +42,7 @@ public class PositionTrackerPose {
   private PhotonPoseEstimator m_photonFR;
   private PhotonPoseEstimator m_photonBL;
   private PhotonPoseEstimator m_photonBR;
-  private PhotonPoseEstimator[] m_estimators = {m_photonFL, m_photonFR, m_photonBL, m_photonBR};
+  private ArrayList<PhotonPoseEstimator> m_estimators = new ArrayList<>();
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.9, 0.9, 0.9); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
   private final Field2d m_testField = new Field2d();
@@ -59,14 +59,18 @@ public class PositionTrackerPose {
     }
     m_photonFL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
         new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(0), Math.toRadians(0))));
+    m_estimators.add(m_photonFL);
     m_photonFR = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
       new Translation3d(0.267, -0.267, 0.223), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
+    m_estimators.add(m_photonFR);
     m_photonBL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
         new Translation3d(-0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(135))));
+    m_estimators.add(m_photonBL);
     m_photonBR = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
         new Translation3d(-0.267, -0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(225))));
-    for(int i = 0; i < m_estimators.length; i++){
-      m_estimators[i].setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    m_estimators.add(m_photonBR);
+    for(int i = 0; i < m_estimators.size(); i++){
+      m_estimators.get(i).setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
 
     m_poseEstimator = new SwerveDrivePoseEstimator(
@@ -97,7 +101,7 @@ public class PositionTrackerPose {
     for(int i = 0; i < m_cameras.length; i++){
       Optional<EstimatedRobotPose> est = Optional.empty();
       for (var change : m_cameras[i].getAllUnreadResults()) {
-        est = m_estimators[i].update(change);
+        est = m_estimators.get(i).update(change);
       }
       visionEsts.add(est);
     }
@@ -128,8 +132,8 @@ public class PositionTrackerPose {
   // private boolean m_front = true;
 
   public void update() {
-    for(int i = 0; i < m_estimators.length; i++){
-      m_estimators[i].setReferencePose(getPose2d());
+    for(int i = 0; i < m_estimators.size(); i++){
+      m_estimators.get(i).setReferencePose(getPose2d());
     }
 
     Rotation2d gyroRotation = m_driveSubsystem.getGyroRotation2d();

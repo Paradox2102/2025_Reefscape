@@ -54,6 +54,7 @@ public class IntakeCoral extends Command {
   @Override
   public void end(boolean interrupted) {
    m_timer.stop();
+   m_coSubsystem.stop();
   }
 
   // Returns true when the command should end.

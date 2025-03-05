@@ -103,7 +103,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   public Command holdCoral() {
     return Commands.run(() -> {
-      setPower(-0.05);
+      setPower(-0.03);
     }, this);
   }
 
