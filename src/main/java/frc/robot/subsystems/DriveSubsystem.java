@@ -106,6 +106,7 @@ public class DriveSubsystem extends SubsystemBase {
     private boolean m_left;
     private Translation2d m_algaePos = new Translation2d();
 
+    // You can get these from AprilTagFieldLayout.getFieldLength() and getFieldWidth(). -Gavin
     private double fieldX = 17.548;
     private double fieldY = 8.052;
 
@@ -231,7 +232,6 @@ public class DriveSubsystem extends SubsystemBase {
     return Commands.runOnce(() -> {m_reefPosition = position;}, this);
   }
 
-  // FIXME: This should be a command factory. -Gavin
   public Command setSource(FieldPosition source) {
     return Commands.runOnce(() -> {m_source = source;}, this);
   }
@@ -258,7 +258,6 @@ public class DriveSubsystem extends SubsystemBase {
         m_backLeft.getPosition(), m_backRight.getPosition() };
   }
 
-  // FIXME: Any interface that takes or receives an angle should be using Rotation2d. This protects us from confusing degrees and radians. - Gavin
   // FIXME: This might be better bundled as a method that takes rotation supplier and returns a double supplier. That way it can have its own PIDController. - Gavin
   public double orientPID(Rotation2d targetRot) {
     double setpointDegrees = targetRot.getDegrees();
