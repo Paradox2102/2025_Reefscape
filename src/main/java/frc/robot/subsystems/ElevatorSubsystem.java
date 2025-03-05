@@ -128,7 +128,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Commands.run(() -> {
       m_manual = false;
       m_PID.setReference(m_position.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-    }, this).until(atPosition);
+    }, this);//.until(atPosition.debounce(.1));
   }
 
   public Command goToAlgaePosition() {
@@ -150,12 +150,20 @@ public class ElevatorSubsystem extends SubsystemBase {
       m_manual = true;
       double direction = -up.getAsDouble();
       m_elevatorMotor.set(direction > 0 ? .2 : -.2);
-    }, this);
+    }, this).finallyDo(() -> {
+      m_elevatorMotor.set(.02);
+    });
   }
 
   public Command setManual(boolean manual) {
     return Commands.runOnce(() -> {
       m_manual = manual;
+    });
+  }
+
+  public Command resetReading() {
+    return Commands.runOnce(() -> {
+      m_elevatorEncoder.setPosition(0);
     });
   }
 
@@ -171,9 +179,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("elevator output", output);
     SmartDashboard.putNumber("elevator target height", m_targetPos);
     SmartDashboard.putString("Elevator Target", m_position.getName());
-    if (!bottomLimit.getAsBoolean()){
-      m_elevatorEncoder.setPosition(0);
-    }
+    // if (!bottomLimit.getAsBoolean()){
+    //   m_elevatorEncoder.setPosition(0);
+    // }
     // This method will be called once per scheduler run
   } 
 }
