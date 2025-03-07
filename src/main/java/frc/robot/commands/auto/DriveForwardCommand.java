@@ -11,7 +11,7 @@ import frc.robot.subsystems.DriveSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveForwardCommand extends Command {
   private DriveSubsystem m_subsystem;
-  private Timer m_timer;
+  private Timer m_timer = new Timer();
   private double m_time;
 
   /** Creates a new DriveForwardCommand. */
