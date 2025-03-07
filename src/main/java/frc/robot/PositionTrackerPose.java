@@ -15,12 +15,15 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -43,6 +46,13 @@ public class PositionTrackerPose {
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.9, 0.9, 0.9); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
   private final Field2d m_testField = new Field2d();
+
+  Pose3d m_flEst = new Pose3d();
+  Pose3d m_frEst = new Pose3d();
+  Pose3d m_brEst = new Pose3d();
+  Pose3d[] m_cameraPoses = {m_flEst, m_frEst, m_brEst};
+  StructArrayPublisher<Pose3d> m_cameraPublisher = NetworkTableInstance.getDefault()
+  .getStructArrayTopic("Camera Poses", Pose3d.struct).publish();
 
   public PositionTrackerPose(double x, double y,
       DriveSubsystem driveSubsystem, PhotonCamera[] cameras) {
@@ -97,6 +107,9 @@ public class PositionTrackerPose {
       for (var change : m_cameras[i].getAllUnreadResults()) {
         est = m_estimators.get(i).update(change);
       }
+      if(est.isPresent()){
+        m_cameraPoses[i] = est.get().estimatedPose;
+      }
       visionEsts.add(est);
     }
     return visionEsts;
@@ -142,5 +155,6 @@ public class PositionTrackerPose {
           }
         );
     }
+    m_cameraPublisher.set(m_cameraPoses);
   }
 }

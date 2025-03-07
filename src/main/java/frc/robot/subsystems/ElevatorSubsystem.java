@@ -92,10 +92,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     () -> m_manual
   );
 
-  // FIXME: This should be a command factory. -Gavin
-  //we put this function into command factories that handle the specific use cases that we use it as a command - Paul
-  // Then it should be private. -Gavin
-  public void setPosition(ElevatorPosition position) {
+  private void setPosition(ElevatorPosition position) {
     m_position = position;
   }
 

@@ -19,6 +19,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -26,6 +27,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -44,6 +47,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -189,6 +193,10 @@ public class DriveSubsystem extends SubsystemBase {
   private static final double k_wheelRadiusRampRate = 0.25; // Rad/Sec^2
   private final  MaxSwerveModule[] modules = new MaxSwerveModule[]{m_frontLeft, m_frontRight, m_backLeft, m_backRight};
 
+  //AScope Pose publisher
+  StructPublisher<Pose2d> m_posePublisher = NetworkTableInstance.getDefault()
+  .getStructTopic("Robot Pose", Pose2d.struct).publish();
+
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -259,16 +267,13 @@ public class DriveSubsystem extends SubsystemBase {
         m_backLeft.getPosition(), m_backRight.getPosition() };
   }
 
-  // FIXME: This might be better bundled as a method that takes rotation supplier and returns a double supplier. That way it can have its own PIDController. - Gavin
-  //fixed?? idk if i did this right - Paul
-  // I was hoping for Supplier<Rotation2d>. -Gavin
-  public DoubleSupplier orientPID(DoubleSupplier targetRot) {
+  public Supplier<Rotation2d> orientPID(DoubleSupplier targetRot) {
     double setpointDegrees = targetRot.getAsDouble();
     double heading = getHeading().getDegrees();
     double rot = MathUtil.clamp(m_orientPID.calculate(heading, setpointDegrees), -Constants.DriveConstants.k_maxRotInput,
     Constants.DriveConstants.k_maxRotInput);
     SmartDashboard.putNumber("Target Rot", setpointDegrees);
-    return () -> rot;
+    return () -> Rotation2d.fromDegrees(rot);
   }
 
   public Pose2d getEstimatedFuturePos() {
@@ -313,6 +318,7 @@ public class DriveSubsystem extends SubsystemBase {
     // twice. Maybe also currentPos. - Gavin
 
     Pose2d currentPos = m_tracker.getPose2d();
+    m_posePublisher.set(currentPos);
     //m_tracker.displayRobotPosWithCamera();
 
     // double yaw = ParadoxField.normalizeAngle(m_gyro.getYaw().getValueAsDouble());

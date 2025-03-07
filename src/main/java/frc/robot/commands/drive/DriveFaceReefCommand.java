@@ -47,7 +47,7 @@ public class DriveFaceReefCommand extends Command {
 
     double x = -MathUtil.applyDeadband(m_getX.getAsDouble(), Constants.DriveConstants.k_driveDeadband);
     double y = -MathUtil.applyDeadband(m_getY.getAsDouble(), Constants.DriveConstants.k_driveDeadband);
-    double rot = States.m_autoAim ? m_subsystem.orientPID(() -> m_subsystem.getRotationalDistanceFromReef().getDegrees()).getAsDouble() : m_getRot.getAsDouble();
+    double rot = States.m_autoAim ? m_subsystem.orientPID(() -> m_subsystem.getRotationalDistanceFromReef().getDegrees()).get().getDegrees() : m_getRot.getAsDouble();
     m_subsystem.drive(
       m_slowMode ? m_slowModeCoefficient * y : y, 
       m_slowMode ? m_slowModeCoefficient * x : x, 
