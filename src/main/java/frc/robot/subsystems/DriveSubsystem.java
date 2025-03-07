@@ -108,7 +108,7 @@ public class DriveSubsystem extends SubsystemBase {
     private boolean m_left;
     private Translation2d m_algaePos = new Translation2d();
 
-    private double fieldX = PositionTrackerPose.k_apriltags.getFieldWidth();
+    private double fieldX = PositionTrackerPose.k_apriltags.getFieldLength();
     private double fieldY = PositionTrackerPose.k_apriltags.getFieldWidth();
 
     FieldPosition(Pose2d bluePose, boolean left, String name) {
