@@ -108,7 +108,7 @@ public class DriveSubsystem extends SubsystemBase {
     private boolean m_left;
     private Translation2d m_algaePos = new Translation2d();
 
-    private double fieldX = PositionTrackerPose.k_apriltags.getFieldWidth();
+    private double fieldX = PositionTrackerPose.k_apriltags.getFieldLength();
     private double fieldY = PositionTrackerPose.k_apriltags.getFieldWidth();
 
     FieldPosition(Pose2d bluePose, boolean left, String name) {
@@ -261,6 +261,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // FIXME: This might be better bundled as a method that takes rotation supplier and returns a double supplier. That way it can have its own PIDController. - Gavin
   //fixed?? idk if i did this right - Paul
+  // I was hoping for Supplier<Rotation2d>. -Gavin
   public DoubleSupplier orientPID(DoubleSupplier targetRot) {
     double setpointDegrees = targetRot.getAsDouble();
     double heading = getHeading().getDegrees();

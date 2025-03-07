@@ -8,7 +8,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -35,12 +34,10 @@ public class PositionTrackerPose {
   public static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   private PhotonCamera m_cameraFL;
   private PhotonCamera m_cameraFR;
-  private PhotonCamera m_cameraBL;
   private PhotonCamera m_cameraBR;
-  private PhotonCamera[] m_cameras = {m_cameraFL, m_cameraFR, m_cameraBL, m_cameraBR};
+  private PhotonCamera[] m_cameras = {m_cameraFL, m_cameraFR, m_cameraBR};
   private PhotonPoseEstimator m_photonFL;
   private PhotonPoseEstimator m_photonFR;
-  private PhotonPoseEstimator m_photonBL;
   private PhotonPoseEstimator m_photonBR;
   private ArrayList<PhotonPoseEstimator> m_estimators = new ArrayList<>();
   public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.9, 0.9, 0.9); // Default vision standerd devations
@@ -63,9 +60,6 @@ public class PositionTrackerPose {
     m_photonFR = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
       new Translation3d(0.267, -0.267, 0.223), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));
     m_estimators.add(m_photonFR);
-    m_photonBL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
-        new Translation3d(-0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(135))));
-    m_estimators.add(m_photonBL);
     m_photonBR = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
         new Translation3d(-0.267, -0.267, 0.223), new Rotation3d(0, Math.toRadians(-20), Math.toRadians(225))));
     m_estimators.add(m_photonBR);
