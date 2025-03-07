@@ -99,6 +99,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Stop Intake"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [

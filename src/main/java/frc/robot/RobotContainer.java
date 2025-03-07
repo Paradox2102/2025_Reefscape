@@ -260,6 +260,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Coral", m_coralOuttakeSubsystem.stop().alongWith(m_hopperSubsystem.stop()));
     NamedCommands.registerCommand("Back Up", new DriveCommand(m_driveSubsystem, () -> -.2, () -> 0, () -> 0, false));
     NamedCommands.registerCommand("Turn On Manual So We Don't Slam Our Elevator", m_elevatorSubsystem.setManual(true));
+    NamedCommands.registerCommand("Stop Intake", m_coralOuttakeSubsystem.stop());
   }
 
   /**
