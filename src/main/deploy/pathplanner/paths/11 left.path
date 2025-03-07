@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 5.405520109953702,
-        "y": 7.443683534898777
+        "y": 7.443683534898776
       },
       "isLocked": false,
       "linkedName": "11 oclock"
@@ -48,7 +48,7 @@
   "folder": "Utah Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -117.57414914475983
+    "rotation": -120.02668138611078
   },
   "useDefaultConstraints": false
 }

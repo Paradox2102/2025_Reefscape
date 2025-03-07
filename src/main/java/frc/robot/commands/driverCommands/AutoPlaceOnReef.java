@@ -5,6 +5,9 @@
 package frc.robot.commands.driverCommands;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.drive.DriveCommand;
@@ -18,13 +21,14 @@ import frc.robot.subsystems.ElevatorSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoPlaceOnReef extends ParallelCommandGroup {
   /** Creates a new AutoPlaceOnReef. */
-  public AutoPlaceOnReef(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
+  public AutoPlaceOnReef(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, Supplier<String> position) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DriveToPosition(driveSubsystem, true),
-      elevatorSubsystem.goToPosition(),
-      new DriveCommand(driveSubsystem, x, y, rot, true, true)
+      // new PathPlannerAuto(position.get()),
+      elevatorSubsystem.goToPosition()
+      // new DriveCommand(driveSubsystem, x, y, rot, true, true)
     );
   }
 }
