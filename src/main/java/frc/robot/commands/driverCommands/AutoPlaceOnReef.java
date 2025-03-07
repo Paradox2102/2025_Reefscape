@@ -7,11 +7,15 @@ package frc.robot.commands.driverCommands;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import org.photonvision.PhotonCamera;
+
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
@@ -23,16 +27,20 @@ import frc.robot.subsystems.ElevatorSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoPlaceOnReef extends SequentialCommandGroup {
   /** Creates a new AutoPlaceOnReef. */
-  public AutoPlaceOnReef(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, Supplier<String> position) {
+  public AutoPlaceOnReef(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, PhotonCamera camera) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DriveToPosition(driveSubsystem, true),
       new ParallelDeadlineGroup(
-        new PathPlannerAuto(position.get()),
+        // new PathPlannerAuto("Pos "+position.get()),
+        new ApriltagAimCommand(camera, driveSubsystem),
         elevatorSubsystem.goToPosition()
       ),
-      new DriveCommand(driveSubsystem, x, y, rot, true, true)
+      new ParallelDeadlineGroup(
+        new WaitCommand(1), 
+        new DriveCommand(driveSubsystem, () -> 0, () -> .1, () -> 0, false, true)
+      )
     );
   }
 }

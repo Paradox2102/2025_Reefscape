@@ -5,6 +5,7 @@
 package frc.robot.commands.drive;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
@@ -26,28 +27,29 @@ public class ApriltagAimCommand extends Command {
   private static final double k_ldist = 0.132;
   private static final double k_rdist = 0.487;
   DoubleSupplier m_joystickLeftY = () -> 0;
+  BooleanSupplier m_left;
 
   /** Creates a new ApriltagAimCommand. */
-  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem, boolean left) {
+  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem) {
     m_camera = camera;
     m_subsystem =  subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    if(left){
-      m_pos = k_ldist;
-    } else {
-      m_pos = k_rdist;
-    }
     addRequirements(m_subsystem);
   }
 
   public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem, boolean left, DoubleSupplier joystickLeftY) {
-    this(camera, subsystem, left);
+    this(camera, subsystem);
     m_joystickLeftY = joystickLeftY;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if(m_subsystem.getReefPosition().isLeft()){
+      m_pos = k_ldist;
+    } else {
+      m_pos = k_rdist;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -51,7 +51,7 @@ import java.util.function.Supplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private FieldPosition m_reefPosition = FieldPosition.THREE;
+  private FieldPosition m_reefPosition = FieldPosition.NINE;
   private FieldPosition m_source = FieldPosition.SOURCE_RIGHT;
   public static RobotConfig k_pathConfig;{
   try {
@@ -99,8 +99,8 @@ public class DriveSubsystem extends SubsystemBase {
     FIVE(new Pose2d(new Translation2d(3.604, 2.498), Rotation2d.fromDegrees(-120)), true, "5"),
     SIX(new Pose2d(new Translation2d(2.766, 4.004), Rotation2d.fromDegrees(180)), false, "6"),
     SEVEN(new Pose2d(new Translation2d(2.766, 4.004), Rotation2d.fromDegrees(0)), true, "7"),
-    EIGHT(new Pose2d(new Translation2d(3.604, 5.588), Rotation2d.fromDegrees(120)), false, "8"),
-    NINE(new Pose2d(new Translation2d(3.604, 5.588), Rotation2d.fromDegrees(120)), true, "9"),
+    EIGHT(new Pose2d(new Translation2d(3.604, 5.588), Rotation2d.fromDegrees(-60)), false, "8"),
+    NINE(new Pose2d(new Translation2d(3.604, 5.588), Rotation2d.fromDegrees(-60)), true, "9"),
     TEN(new Pose2d(new Translation2d(5.379, 5.474), Rotation2d.fromDegrees(-120)), false, "10"),
     ELEVEN(new Pose2d(new Translation2d(5.379, 5.474), Rotation2d.fromDegrees(60)), true, "11"),
     TWELVE(new Pose2d(new Translation2d(6.21, 4.004), Rotation2d.fromDegrees(0)), false, "12"),
@@ -139,7 +139,7 @@ public class DriveSubsystem extends SubsystemBase {
       return m_name;
     }
 
-    public Boolean leftRight() {
+    public boolean isLeft() {
       return m_left;
     }
   }
