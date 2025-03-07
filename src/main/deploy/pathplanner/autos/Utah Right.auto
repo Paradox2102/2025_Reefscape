@@ -113,6 +113,12 @@
                 "data": {
                   "name": "Deploy Elevator"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
               }
             ]
           }

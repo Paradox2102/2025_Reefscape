@@ -43,7 +43,7 @@ public class PositionTrackerPose {
   private PhotonPoseEstimator m_photonFR;
   private PhotonPoseEstimator m_photonBR;
   private ArrayList<PhotonPoseEstimator> m_estimators = new ArrayList<>();
-  public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.9, 0.9, 0.9); // Default vision standerd devations
+  public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.3, 0.3, 0.3); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
   private final Field2d m_testField = new Field2d();
 

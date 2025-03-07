@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -99,9 +105,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Stop Intake"
+            "waitTime": 0.5
           }
         },
         {
@@ -118,6 +124,12 @@
                 "type": "named",
                 "data": {
                   "name": "Deploy Elevator"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
                 }
               }
             ]
