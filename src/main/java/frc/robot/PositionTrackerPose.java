@@ -24,6 +24,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveSubsystem;
@@ -33,6 +34,7 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class PositionTrackerPose {
   private SwerveDrivePoseEstimator m_poseEstimator;
+  private SwerveDrivePoseEstimator m_odomEstimator;
   private DriveSubsystem m_driveSubsystem;
   public static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   private PhotonCamera m_cameraFL;
@@ -53,6 +55,8 @@ public class PositionTrackerPose {
   Pose3d[] m_cameraPoses = {m_flEst, m_frEst, m_brEst};
   StructArrayPublisher<Pose3d> m_cameraPublisher = NetworkTableInstance.getDefault()
   .getStructArrayTopic("Camera Poses", Pose3d.struct).publish();
+  StructPublisher<Pose2d> m_odomPublisher = NetworkTableInstance.getDefault()
+  .getStructTopic("Odometry Pose", Pose2d.struct).publish();
 
   public PositionTrackerPose(double x, double y,
       DriveSubsystem driveSubsystem, PhotonCamera[] cameras) {
@@ -82,6 +86,11 @@ public class PositionTrackerPose {
         m_driveSubsystem.getModulePosition(),
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
         k_odometrySD, k_visionSD6mm);
+    m_odomEstimator = new SwerveDrivePoseEstimator(
+        m_driveSubsystem.getSwerve(), m_driveSubsystem.getGyroRotation2d(),
+        m_driveSubsystem.getModulePosition(),
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+        k_odometrySD, k_visionSD6mm);
 
     // m_posServer = new PositionServer();
     // m_posServer.start();
@@ -94,6 +103,10 @@ public class PositionTrackerPose {
 
   public void setPose(Pose2d pose) {
     m_poseEstimator.resetPosition(
+        m_driveSubsystem.getGyro().getRotation2d(),
+        m_driveSubsystem.getModulePosition(),
+        new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
+    m_odomEstimator.resetPosition(
         m_driveSubsystem.getGyro().getRotation2d(),
         m_driveSubsystem.getModulePosition(),
         new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
@@ -146,6 +159,7 @@ public class PositionTrackerPose {
     Rotation2d gyroRotation = m_driveSubsystem.getGyroRotation2d();
     SwerveModulePosition[] modules = m_driveSubsystem.getModulePosition();
     m_poseEstimator.update(gyroRotation, modules);
+    m_odomEstimator.update(gyroRotation, modules);
 
     var visionEst = getEstimatedGlobalPose();
     for (var result : visionEst) {
@@ -156,5 +170,6 @@ public class PositionTrackerPose {
         );
     }
     m_cameraPublisher.set(m_cameraPoses);
+    m_odomPublisher.set(m_odomEstimator.getEstimatedPosition());
   }
 }

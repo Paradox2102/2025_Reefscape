@@ -27,8 +27,10 @@ import frc.robot.robotControl.RobotControl;
 
 import org.photonvision.PhotonCamera;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -171,7 +173,7 @@ public class RobotContainer {
 
     // Hopper Pivot
     //m_driverController.y().toggleOnTrue(m_pivotSubsystem.climb());
-    m_driverController.y().onTrue(new ApriltagAimCommand(m_cameraFR, m_driveSubsystem, true, () -> m_driverController.getLeftX()));
+    m_driverController.y().onTrue(new ApriltagAimCommand(m_cameraFR, m_driveSubsystem));
 
     //m_driverController.y().whileTrue(new DriveToPosition(m_driveSubsystem, true));
 
@@ -269,7 +271,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     return m_autoSelect.getSelected();
   }
 }

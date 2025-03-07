@@ -26,7 +26,6 @@ public class ApriltagAimCommand extends Command {
   private double m_horizDist = 0;
   private static final double k_ldist = 0.132;
   private static final double k_rdist = 0.487;
-  DoubleSupplier m_joystickLeftY = () -> 0;
   BooleanSupplier m_left;
 
   /** Creates a new ApriltagAimCommand. */
@@ -35,11 +34,6 @@ public class ApriltagAimCommand extends Command {
     m_subsystem =  subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
-  }
-
-  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem, boolean left, DoubleSupplier joystickLeftY) {
-    this(camera, subsystem);
-    m_joystickLeftY = joystickLeftY;
   }
 
   // Called when the command is initially scheduled.
@@ -70,8 +64,7 @@ public class ApriltagAimCommand extends Command {
     }
     SmartDashboard.putNumber("tag x", x);
     SmartDashboard.putNumber("tag x dist", m_horizDist);
-    double move = -Math.sqrt(Math.pow(m_joystickLeftY.getAsDouble(), 2));
-    m_subsystem.drive(move, m_horizDist*2, 0, false, true);
+    m_subsystem.drive(0, m_horizDist*2, 0, false, true);
   }
 
   // Called once the command ends or is interrupted.
