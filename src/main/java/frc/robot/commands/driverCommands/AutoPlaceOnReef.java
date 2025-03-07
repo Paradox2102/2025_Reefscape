@@ -34,8 +34,8 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
       new DriveToPosition(driveSubsystem, true),
       new ParallelDeadlineGroup(
         // new PathPlannerAuto("Pos "+position.get()),
-        new ApriltagAimCommand(camera, driveSubsystem),
-        elevatorSubsystem.goToPosition()
+        new ApriltagAimCommand(camera, driveSubsystem)
+        // elevatorSubsystem.goToPosition()
       ),
       new ParallelDeadlineGroup(
         new WaitCommand(1), 
