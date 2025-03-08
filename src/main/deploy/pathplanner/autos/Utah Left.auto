@@ -195,7 +195,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "Utah",
   "choreoAuto": false
 }
