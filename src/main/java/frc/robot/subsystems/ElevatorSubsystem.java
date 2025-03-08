@@ -177,7 +177,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("elevator output", output);
     SmartDashboard.putNumber("elevator target height", m_targetPos);
     SmartDashboard.putString("Elevator Target", m_position.getName());
-    if (!bottomLimit.debounce(1).getAsBoolean()){
+    if (!bottomLimit.getAsBoolean()){
       m_elevatorEncoder.setPosition(0);
     }
     // This method will be called once per scheduler run

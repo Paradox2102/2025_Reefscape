@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
+import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -33,9 +34,9 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
     addCommands(
       new DriveToPosition(driveSubsystem, true),
       new ParallelDeadlineGroup(
-        // new PathPlannerAuto("Pos "+position.get()),
-        new ApriltagAimCommand(camera, driveSubsystem)
-        // elevatorSubsystem.goToPosition()
+        new PrecisionAlignOdometrey(driveSubsystem),
+        // new ApriltagAimCommand(camera, driveSubsystem),
+        elevatorSubsystem.goToPosition()
       ),
       new ParallelDeadlineGroup(
         new WaitCommand(1), 
