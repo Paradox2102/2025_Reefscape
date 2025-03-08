@@ -86,7 +86,7 @@ public class RobotContainer {
   private PhotonCamera m_cameraFL = new PhotonCamera("fl_camera");
   private PhotonCamera m_cameraBR = new PhotonCamera("br_camera");
   private PhotonCamera m_cameraFR = new PhotonCamera("fr_camera");
-  //private PhotonCamera m_alignCamera = new PhotonCamera("align_camera");
+  private PhotonCamera m_alignCamera = new PhotonCamera("align_camera");
   public PositionTrackerPose m_tracker = new PositionTrackerPose(0, 0, m_driveSubsystem, new PhotonCamera[]{m_cameraFL, m_cameraFR, m_cameraBR});
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -149,13 +149,13 @@ public class RobotContainer {
     //     () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
     //   )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     // );
-    m_driverController.rightBumper().onTrue(
+    m_driverController.rightBumper().toggleOnTrue(
       new ConditionalCommand(
         new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_cameraFR), // on true
         // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
         new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
         () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
-      )
+      ).handleInterrupt(() -> m_elevatorSubsystem.resetPosition())
     );
     m_driverController.rightTrigger().onTrue(new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
@@ -172,8 +172,8 @@ public class RobotContainer {
     );
 
     // Hopper Pivot
-    //m_driverController.y().toggleOnTrue(m_pivotSubsystem.climb());
-    m_driverController.y().onTrue(new ApriltagAimCommand(m_cameraFR, m_driveSubsystem));
+    m_driverController.y().toggleOnTrue(m_pivotSubsystem.climb());
+    //m_driverController.y().onTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));
 
     //m_driverController.y().whileTrue(new DriveToPosition(m_driveSubsystem, true));
 
@@ -183,7 +183,7 @@ public class RobotContainer {
     m_driverController.povRight().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
 
     m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
-    m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-1500)));
+    m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-250)));
     m_operatorController.button(8).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
 
     m_operatorController.button(7).onTrue(m_elevatorSubsystem.setAlgaePosition(ElevatorPosition.ALGAE_HIGH));

@@ -30,9 +30,9 @@ public class ClimberSubsystem extends SubsystemBase {
   private ClimberState m_state = ClimberState.RESET;
 
   public enum ClimberState {
-    RESET(0),
-    EXTEND(0),
-    CLIMB(0);
+    RESET(140),
+    EXTEND(50),
+    CLIMB(170);
 
     double position;
 

@@ -155,6 +155,7 @@ public final class Constants {
 
     public static final double k_downP = 0.015;
     public static final double k_downI = 0.000005;
+    public static final double k_downD = 0.0025;
 
     public static final double k_ticksToInches = 4.0/2.67;
   }
@@ -271,8 +272,7 @@ public final class Constants {
         leaderConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(ElevatorConstants.k_p, ElevatorConstants.k_i, ElevatorConstants.k_d, ClosedLoopSlot.kSlot0)
-            .p(ElevatorConstants.k_downP, ClosedLoopSlot.kSlot1)
-            .i(ElevatorConstants.k_downI, ClosedLoopSlot.kSlot1);
+            .pid(ElevatorConstants.k_downP, ElevatorConstants.k_downI, ElevatorConstants.k_downD, ClosedLoopSlot.kSlot1);
         leaderConfig.closedLoop.maxMotion
           .maxVelocity(6000)
           .maxAcceleration(12000)
@@ -328,7 +328,7 @@ public final class Constants {
           public static SparkFlexConfig coastAlgaeConfig = new SparkFlexConfig();
 
           static {
-            pivotConfig.idleMode(IdleMode.kCoast)
+            pivotConfig.idleMode(IdleMode.kBrake)
               .smartCurrentLimit(25)
             .encoder
               .positionConversionFactor(AlgaeConstants.k_ticksToDegrees);
