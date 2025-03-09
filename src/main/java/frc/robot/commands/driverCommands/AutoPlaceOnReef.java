@@ -8,12 +8,15 @@ import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
+import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -27,10 +30,11 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(
-        new DriveToPosition(driveSubsystem, true),
-        elevatorSubsystem.goToPosition()
-      ),
+      // new ParallelDeadlineGroup(
+      //   // new DriveToPosition(driveSubsystem, true),
+      //   new PrecisionAlignOdometrey(driveSubsystem),
+      //   elevatorSubsystem.goToPosition()
+      // ),
       new ApriltagAimCommand(camera, driveSubsystem)
     );
   }
