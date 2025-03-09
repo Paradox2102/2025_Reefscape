@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.980861857786017,
-        "y": 0.8380300748146192
+        "x": 7.107750000000001,
+        "y": 2.8939999999999997
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.184546646666078,
-        "y": 1.6217768181567545
+        "x": 5.980905737704918,
+        "y": 2.5583442622950816
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 2.523499999999999
       },
       "prevControl": {
-        "x": 5.737582282393788,
-        "y": 2.09120569848311
+        "x": 5.808282786885245,
+        "y": 2.4875368852458997
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -45,10 +45,10 @@
     "rotation": 120.17352002964441
   },
   "reversed": false,
-  "folder": "Utah Paths",
+  "folder": "The Awesomest Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 131.6226216957891
+    "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

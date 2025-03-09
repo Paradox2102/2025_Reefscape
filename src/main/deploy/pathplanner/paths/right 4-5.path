@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2706967213114755,
-        "y": 0.6504610655737701
+        "x": 1.3455000000000001,
+        "y": 0.5832499999999993
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8654464299818763,
-        "y": 1.1051700503465993
+        "x": 1.9402497086704005,
+        "y": 1.0379589847728283
       },
       "isLocked": false,
       "linkedName": "red station"
@@ -48,7 +48,7 @@
   "folder": "Utah Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 51.170175095029634
   },
   "useDefaultConstraints": false
 }

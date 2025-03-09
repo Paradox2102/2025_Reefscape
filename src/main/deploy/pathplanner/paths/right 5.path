@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2706967213114755,
-        "y": 0.6504610655737701
+        "x": 1.3455000000000001,
+        "y": 0.5832499999999993
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9528668811456145,
-        "y": 1.3385261615448707
+        "x": 2.0276701598341393,
+        "y": 1.2713150959711
       },
       "isLocked": false,
       "linkedName": "red station"
@@ -69,7 +69,7 @@
   "folder": "Basic 4 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 51.170175095029634
   },
   "useDefaultConstraints": false
 }
