@@ -5,11 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.auto.DriveForwardCommand;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
-import frc.robot.commands.driverCommands.SemiAutoPlaceOnReef;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
@@ -26,10 +24,8 @@ import frc.robot.robotControl.RobotControl;
 
 import org.photonvision.PhotonCamera;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -136,7 +132,8 @@ public class RobotContainer {
       );
 
     m_driverController.b().toggleOnTrue(
-      m_elevatorSubsystem.goToAlgaePosition()
+      new ApriltagAimCommand(m_alignCamera, m_driveSubsystem)
+      //m_elevatorSubsystem.goToAlgaePosition()
         // .finallyDo(() -> m_elevatorSubsystem.resetPosition())
     );
 

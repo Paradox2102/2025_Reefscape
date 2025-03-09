@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(65.44, "Level 4"), // 70.2
+    L4(66.44, "Level 4"), // 70.2
     L3(44.85, "Level 3"),
     L2(30.48, "Level 2"),
     L1(18, "Level 1"),
@@ -169,13 +169,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     //Shows data on SmartDashBoard
-    double pos = getPosition();
-    m_targetPos = m_position.heightInches();
-    double output = m_elevatorMotor.getAppliedOutput();
-    SmartDashboard.putNumber("Elevator Position", pos);
-    SmartDashboard.putNumber("elevator speed", m_elevatorEncoder.getVelocity());
-    SmartDashboard.putNumber("elevator output", output);
-    SmartDashboard.putNumber("elevator target height", m_targetPos);
+    SmartDashboard.putNumber("Elevator Position", getPosition());
     SmartDashboard.putString("Elevator Target", m_position.getName());
     if (!bottomLimit.getAsBoolean()){
       m_elevatorEncoder.setPosition(0);

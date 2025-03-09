@@ -5,20 +5,15 @@
 package frc.robot.commands.driverCommands;
 
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToPosition;
-import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
