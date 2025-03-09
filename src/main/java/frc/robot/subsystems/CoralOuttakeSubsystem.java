@@ -109,8 +109,6 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Coral Current", getCurrentDraw());
-    SmartDashboard.putNumber("coral speed rpm", getSpeedMotorRPM());
     // This method will be called once per scheduler run
   }
 }

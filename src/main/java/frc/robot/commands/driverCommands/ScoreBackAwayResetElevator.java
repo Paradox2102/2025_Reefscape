@@ -25,7 +25,6 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
   public ScoreBackAwayResetElevator(DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    System.out.println("yippee");
     addCommands(
       COSubsystem.ejectCoral(elevatorSubsystem.isLow),
       new ConditionalCommand(

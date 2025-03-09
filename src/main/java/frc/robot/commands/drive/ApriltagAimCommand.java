@@ -6,16 +6,13 @@ package frc.robot.commands.drive;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class ApriltagAimCommand extends Command {
@@ -24,14 +21,14 @@ public class ApriltagAimCommand extends Command {
   private PhotonPipelineResult m_result;
   private double m_pos = 0;
   private double m_horizDist = 0;
-  private static final double k_ldist = 0.132;
-  private static final double k_rdist = 0.487;
+  private static final double k_ldist = 0.677;
+  private static final double k_rdist = 0.15;
   BooleanSupplier m_left;
 
   /** Creates a new ApriltagAimCommand. */
-  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem subsystem) {
+  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem drive) {
     m_camera = camera;
-    m_subsystem =  subsystem;
+    m_subsystem = drive;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
@@ -62,15 +59,13 @@ public class ApriltagAimCommand extends Command {
       //find horizontal distance, where -0.5 is all the way to the left and 0.5 is all the way to the right
       m_horizDist = (x/1280)-m_pos;
     }
-    SmartDashboard.putNumber("tag x", x);
-    SmartDashboard.putNumber("tag x dist", m_horizDist);
-    m_subsystem.drive(0, m_horizDist*2, 0, false, true);
+    m_subsystem.drive(0, m_horizDist/2, 0, false, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    ;
+    m_subsystem.stop();
   }
 
   // Returns true when the command should end.
