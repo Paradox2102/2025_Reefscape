@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3455000000000001,
-        "y": 0.5832499999999993
+        "x": 1.346,
+        "y": 0.583
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9184979773733455,
-        "y": 1.0197993577268223
+        "x": 1.8614713114754107,
+        "y": 0.8587172131147529
       },
       "isLocked": false,
-      "linkedName": "red station"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6036720405190676,
-        "y": 2.4983994306144064
+        "x": 3.812090163934426,
+        "y": 2.9221311475409846
       },
       "prevControl": {
-        "x": 2.912576007365531,
-        "y": 1.967473706363644
+        "x": 2.928995901639344,
+        "y": 1.63065573770492
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "side 4-5"
+      "linkedName": "remove side 4-5"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.61792665529878
+    "rotation": 58.39249775375112
   },
   "reversed": false,
-  "folder": "The Awesomest Auto",
+  "folder": "autoalign",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 51.170175095029634
+    "rotation": 53.67317404787962
   },
   "useDefaultConstraints": true
 }
