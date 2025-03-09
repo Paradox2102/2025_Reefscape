@@ -13,7 +13,6 @@ import frc.robot.commands.driverCommands.SemiAutoPlaceOnReef;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
-import frc.robot.commands.operatorCommands.SetReefPos;
 import frc.robot.commands.operatorCommands.SetSourcePos;
 import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -206,18 +205,18 @@ public class RobotContainer {
     m_L4.onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L4));
 
     // Reef Position
-    m_reef1.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.ONE));
-    m_reef2.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TWO));
-    m_reef3.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.THREE));
-    m_reef4.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.FOUR));
-    m_reef5.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.FIVE));
-    m_reef6.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.SIX));
-    m_reef7.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.SEVEN));
-    m_reef8.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.EIGHT));
-    m_reef9.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.NINE));
-    m_reef10.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TEN));
-    m_reef11.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.ELEVEN));
-    m_reef12.onTrue(new SetReefPos(m_driveSubsystem, FieldPosition.TWELVE));
+    m_reef1.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.ONE));
+    m_reef2.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.TWO));
+    m_reef3.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.THREE));
+    m_reef4.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.FOUR));
+    m_reef5.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.FIVE));
+    m_reef6.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.SIX));
+    m_reef7.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.SEVEN));
+    m_reef8.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.EIGHT));
+    m_reef9.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.NINE));
+    m_reef10.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.TEN));
+    m_reef11.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.ELEVEN));
+    m_reef12.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.TWELVE));
 
     // Choose Source
     m_leftSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_LEFT));
