@@ -259,6 +259,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Back Up", new DriveCommand(m_driveSubsystem, () -> -.2, () -> 0, () -> 0, false));
     NamedCommands.registerCommand("Turn On Manual So We Don't Slam Our Elevator", m_elevatorSubsystem.setManual(true));
     NamedCommands.registerCommand("Stop Intake", m_coralOuttakeSubsystem.holdCoral());
+    NamedCommands.registerCommand("Align Left", m_driveSubsystem.setReefPosition(FieldPosition.ONE).andThen(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem)));
+    NamedCommands.registerCommand("Align Right", m_driveSubsystem.setReefPosition(FieldPosition.TWO).andThen(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem)));
   }
 
   /**
