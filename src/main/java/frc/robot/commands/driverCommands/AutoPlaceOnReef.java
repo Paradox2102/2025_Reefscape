@@ -30,11 +30,11 @@ public class AutoPlaceOnReef extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      // new ParallelDeadlineGroup(
-      //   // new DriveToPosition(driveSubsystem, true),
-      //   new PrecisionAlignOdometrey(driveSubsystem),
-      //   elevatorSubsystem.goToPosition()
-      // ),
+      new ParallelDeadlineGroup(
+        // new DriveToPosition(driveSubsystem, true),
+        new PrecisionAlignOdometrey(driveSubsystem)
+        // elevatorSubsystem.goToPosition()
+      ),
       new ApriltagAimCommand(camera, driveSubsystem)
     );
   }
