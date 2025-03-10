@@ -25,12 +25,19 @@ public class ApriltagAimCommand extends Command {
   private static final double k_rdist = 0.15;
   BooleanSupplier m_left;
 
+  boolean m_end = true;
+
   /** Creates a new ApriltagAimCommand. */
   public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem drive) {
     m_camera = camera;
     m_subsystem = drive;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
+  }
+
+  public ApriltagAimCommand(PhotonCamera camera, DriveSubsystem drive, boolean end) {
+    this(camera, drive);
+    m_end = end;
   }
 
   // Called when the command is initially scheduled.
@@ -71,6 +78,6 @@ public class ApriltagAimCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_horizDist) < 0.05;
+    return Math.abs(m_horizDist) < 0.05 && m_end;
   }
 }
