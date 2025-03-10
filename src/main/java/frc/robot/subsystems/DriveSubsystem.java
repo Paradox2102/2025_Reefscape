@@ -290,25 +290,27 @@ public class DriveSubsystem extends SubsystemBase {
         m_targetsVisible = true;
       }
     }
-    SmartDashboard.putNumber("Heading", getHeading().getDegrees());
-    SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
-    SmartDashboard.putString("Source Position", m_source.getName());
-    SmartDashboard.putBoolean("Do we see a target", m_targetsVisible);
+    // SmartDashboard.putNumber("Heading", getHeading().getDegrees());
+    // SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
+    // SmartDashboard.putString("Source Position", m_source.getName());
+    // SmartDashboard.putBoolean("Do we see a target", m_targetsVisible);
 
     // SmartDashboard.putNumber("Rotate Error",
     // getRotationDistanceFromTargetError());
     // // Update the odometry in the periodic block
-    SmartDashboard.putNumber("Turn FR Radians",
-        m_frontRight.getPosition().angle.getRadians());
-    SmartDashboard.putNumber(
-        "Turn FL Radians",
-        m_frontLeft.getPosition().angle.getRadians());
-    SmartDashboard.putNumber(
-        "Turn BR Radians",
-        m_backRight.getPosition().angle.getRadians());
-    SmartDashboard.putNumber(
-        "Turn BL Radians", m_backLeft.getPosition().angle.getRadians());
-    SmartDashboard.putNumber("Gyro Angle", ParadoxField.normalizeAngle(-m_gyro.getYaw().getValueAsDouble()));
+
+    // SmartDashboard.putNumber("Turn FR Radians",
+    //     m_frontRight.getPosition().angle.getRadians());
+    // SmartDashboard.putNumber(
+    //     "Turn FL Radians",
+    //     m_frontLeft.getPosition().angle.getRadians());
+    // SmartDashboard.putNumber(
+    //     "Turn BR Radians",
+    //     m_backRight.getPosition().angle.getRadians());
+    // SmartDashboard.putNumber(
+    //     "Turn BL Radians", m_backLeft.getPosition().angle.getRadians());
+    // SmartDashboard.putNumber("Gyro Angle", ParadoxField.normalizeAngle(-m_gyro.getYaw().getValueAsDouble()));
+
     // spin robot very fast for many rotations eventually back to the original
     // angle, look at the gyro angle and see the offset
 
@@ -326,8 +328,8 @@ public class DriveSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Gyro", yaw);
     // SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw));
     // SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
-    SmartDashboard.putNumber("Robot X", currentPos.getX());
-    SmartDashboard.putNumber("Robot Y", currentPos.getY());
+    // SmartDashboard.putNumber("Robot X", currentPos.getX());
+    // SmartDashboard.putNumber("Robot Y", currentPos.getY());
 
     // *********************************************************
 
