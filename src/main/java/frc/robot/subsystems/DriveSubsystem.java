@@ -284,12 +284,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_targetsVisible = false;
-    for(var result : m_tracker.getEstimatedGlobalPose()){
-      if (result.isPresent()){
-        m_targetsVisible = true;
-      }
-    }
+    // m_targetsVisible = false;
+    // for(var result : m_tracker.getEstimatedGlobalPose()){
+    //   if (result.isPresent()){
+    //     m_targetsVisible = true;
+    //   }
+    // }
     // SmartDashboard.putNumber("Heading", getHeading().getDegrees());
     // SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
     // SmartDashboard.putString("Source Position", m_source.getName());
