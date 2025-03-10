@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.auto.Leave4201Auto;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
@@ -233,7 +234,7 @@ public class RobotContainer {
     m_autoSelect.addOption("Right Scuffed", new PathPlannerAuto("Right Scuffed"));
     m_autoSelect.addOption("399 Push Left", new PathPlannerAuto("399 Push Left"));
     m_autoSelect.addOption("399 Push Right", new PathPlannerAuto("399 Push Right"));
-    m_autoSelect.addOption("4201 Center 12", new PathPlannerAuto("4201 Center 12"));
+    m_autoSelect.addOption("4201 Center 12", new Leave4201Auto(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem));
     m_autoSelect.addOption("Center Push", new PathPlannerAuto("Center Push L1"));
     m_autoSelect.addOption("Left L1", new PathPlannerAuto("left leave"));
     m_autoSelect.addOption("Right L1", new PathPlannerAuto("right leave"));

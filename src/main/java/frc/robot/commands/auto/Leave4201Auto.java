@@ -25,6 +25,6 @@ public class Leave4201Auto extends SequentialCommandGroup {
         elevator.goToPosition(),
         new DriveForwardCommand(drive, 6),
         new WaitCommand(4),
-        new ScoreBackAwayResetElevator(drive, elevator, coral, null, null, null));
+        new ScoreBackAwayResetElevator(drive, elevator, coral, () -> 0, () -> 0, () -> 0));
   }
 }
