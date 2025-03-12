@@ -20,6 +20,7 @@ public class DriveForwardCommand extends Command {
     m_time = time;
     m_timer.restart();
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.

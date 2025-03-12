@@ -4,8 +4,11 @@
 
 package frc.robot.commands.auto;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -17,7 +20,7 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Leave4201Auto extends SequentialCommandGroup {
   /** Creates a new Leave4201Auto. */
-  public Leave4201Auto(DriveSubsystem drive, ElevatorSubsystem elevator, CoralOuttakeSubsystem coral) {
+  public Leave4201Auto(DriveSubsystem drive, Trigger shouldAim, ElevatorSubsystem elevator, CoralOuttakeSubsystem coral, PhotonCamera alignCam) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -25,6 +28,6 @@ public class Leave4201Auto extends SequentialCommandGroup {
         elevator.goToPosition(),
         new DriveForwardCommand(drive, 6),
         new WaitCommand(4),
-        new ScoreBackAwayResetElevator(drive, elevator, coral, () -> 0, () -> 0, () -> 0));
+        new ScoreBackAwayResetElevator(alignCam, shouldAim, drive, elevator, coral, () -> 0, () -> 0, () -> 0));
   }
 }

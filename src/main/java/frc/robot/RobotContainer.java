@@ -74,8 +74,10 @@ public class RobotContainer {
   private final Trigger m_reef11 = new Trigger(()->m_robotControl.checkButton(15));
   private final Trigger m_reef12 = new Trigger(()->m_robotControl.checkButton(16));
 
-  private final Trigger m_leftSource = new Trigger(()->m_robotControl.checkButton(17));
-  private final Trigger m_rightSource = new Trigger(()->m_robotControl.checkButton(18));
+  // private final Trigger m_leftSource = new Trigger(()->m_robotControl.checkButton(17));
+  // private final Trigger m_rightSource = new Trigger(()->m_robotControl.checkButton(18));
+
+  Trigger m_shouldAutoAim = new Trigger(() -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1);
 
   // private final Trigger m_win = new Trigger(()->m_robotControl.checkButton(19));
 
@@ -121,7 +123,7 @@ public class RobotContainer {
 
     m_coralOuttakeSubsystem.setDefaultCommand(m_coralOuttakeSubsystem.holdCoral());
     m_hopperSubsystem.setDefaultCommand(m_hopperSubsystem.stop());
-    // m_elevatorSubsystem.setDefaultCommand(m_elevatorSubsystem.resetPosition().unless(m_elevatorSubsystem.manual));
+    m_elevatorSubsystem.setDefaultCommand(m_elevatorSubsystem.resetPosition().unless(m_elevatorSubsystem.manual));
 
     // Algae
     m_driverController.leftTrigger().whileTrue(m_pivotSubsystem.intake()
@@ -152,9 +154,9 @@ public class RobotContainer {
         // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
         new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
         () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
-      ).handleInterrupt(() -> m_elevatorSubsystem.resetPosition())
+      )//.handleInterrupt(() -> m_elevatorSubsystem.resetPosition())
     );
-    m_driverController.rightTrigger().onTrue(new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
+    m_driverController.rightTrigger().onTrue(new ScoreBackAwayResetElevator(m_alignCamera, m_shouldAutoAim, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
 
     // Climb
@@ -217,8 +219,8 @@ public class RobotContainer {
     m_reef12.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.TWELVE));
 
     // Choose Source
-    m_leftSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_LEFT));
-    m_rightSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_RIGHT));
+    // m_leftSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_LEFT));
+    // m_rightSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_RIGHT));
 
     // Win Button!!!
     // m_win.onTrue(new InstantCommand());
@@ -234,7 +236,7 @@ public class RobotContainer {
     m_autoSelect.addOption("Right Scuffed", new PathPlannerAuto("Right Scuffed"));
     m_autoSelect.addOption("399 Push Left", new PathPlannerAuto("399 Push Left"));
     m_autoSelect.addOption("399 Push Right", new PathPlannerAuto("399 Push Right"));
-    m_autoSelect.addOption("4201 Center 12", new Leave4201Auto(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem));
+    m_autoSelect.addOption("4201 Center 12", new Leave4201Auto(m_driveSubsystem, m_shouldAutoAim, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_alignCamera));
     m_autoSelect.addOption("Center Push", new PathPlannerAuto("Center Push L1"));
     m_autoSelect.addOption("Left L1", new PathPlannerAuto("left leave"));
     m_autoSelect.addOption("Right L1", new PathPlannerAuto("right leave"));
