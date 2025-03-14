@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.27503144862288,
-        "y": 3.001666363215042
+        "x": 5.694159836065573,
+        "y": 2.62843237704918
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.870579100407013,
-        "y": 3.2922903840354696
+        "x": 5.2897074878497055,
+        "y": 2.9190563978696074
       },
       "isLocked": false,
       "linkedName": "side 2-3"
@@ -48,7 +48,7 @@
   "folder": "Precision Align Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 120.17352002964441
+    "rotation": 119.74488129694222
   },
   "useDefaultConstraints": false
 }

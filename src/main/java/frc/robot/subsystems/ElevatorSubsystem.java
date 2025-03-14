@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(66.44, "Level 4"), // 70.2
+    L4(68.75, "Level 4"), // 70.2
     L3(44.85, "Level 3"),
     L2(30.48, "Level 2"),
     L1(18, "Level 1"),
@@ -147,7 +147,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Commands.run(() -> {
       m_manual = true;
       double direction = -up.getAsDouble();
-      m_elevatorMotor.set(direction > 0 ? .2 : -.2);
+      m_elevatorMotor.set(direction > 0 ? .1 : -.1);
     }, this).finallyDo(() -> {
       m_elevatorMotor.set(.02);
     });

@@ -37,8 +37,7 @@ public class PositionTrackerPose {
   public static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   private PhotonCamera m_cameraFL;
   private PhotonCamera m_cameraFR;
-  private PhotonCamera m_cameraBR;
-  private PhotonCamera[] m_cameras = {m_cameraFL, m_cameraFR, m_cameraBR};
+  private PhotonCamera[] m_cameras = {m_cameraFL, m_cameraFR};
   private PhotonPoseEstimator m_photonFL;
   private PhotonPoseEstimator m_photonFR;
   private PhotonPoseEstimator m_photonBR;
@@ -49,8 +48,8 @@ public class PositionTrackerPose {
 
   Pose3d m_flEst = new Pose3d();
   Pose3d m_frEst = new Pose3d();
-  Pose3d m_brEst = new Pose3d();
-  Pose3d[] m_cameraPoses = {m_flEst, m_frEst, m_brEst};
+  // Pose3d m_brEst = new Pose3d();
+  Pose3d[] m_cameraPoses = {m_flEst, m_frEst};
   StructArrayPublisher<Pose3d> m_cameraPublisher = NetworkTableInstance.getDefault()
   .getStructArrayTopic("Camera Poses", Pose3d.struct).publish();
 

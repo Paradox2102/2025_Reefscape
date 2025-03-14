@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,9 +29,9 @@ public class ClimberSubsystem extends SubsystemBase {
   private ClimberState m_state = ClimberState.RESET;
 
   public enum ClimberState {
-    RESET(140),
-    EXTEND(50),
-    CLIMB(170);
+    RESET(204),
+    EXTEND(130),
+    CLIMB(290);
 
     double position;
 
@@ -96,5 +97,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("climber angle", getAngle());
+  }
 }

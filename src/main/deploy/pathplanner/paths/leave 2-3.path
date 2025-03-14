@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.980861857786017,
-        "y": 0.8380300748146192
+        "x": 6.988831967213113,
+        "y": 0.7103995901639337
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.184546646666078,
-        "y": 1.6217768181567545
+        "x": 5.849999999999999,
+        "y": 1.8732069672131142
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.27503144862288,
-        "y": 3.001666363215042
+        "x": 5.694159836065573,
+        "y": 2.62843237704918
       },
       "prevControl": {
-        "x": 5.659863731016669,
-        "y": 2.5693720616981537
+        "x": 6.113729508196721,
+        "y": 2.0170594262295083
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 120.17352002964441
+    "velocity": 0.0,
+    "rotation": 119.74488129694222
   },
   "reversed": false,
   "folder": "Utah Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 131.6226216957891
+    "rotation": 139.3987053549955
   },
   "useDefaultConstraints": false
 }

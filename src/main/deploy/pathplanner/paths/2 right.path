@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.21625,
-        "y": 3.0890000000000004
+        "x": 5.226,
+        "y": 4.9415
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.271168032786885,
-        "y": 0.6835594262295088
+        "x": 3.367905737704919,
+        "y": 3.3711106557377044
       },
       "isLocked": false,
-      "linkedName": "2 oclock"
+      "linkedName": "11 oclock"
     },
     {
       "anchor": {
-        "x": 1.3455000000000001,
-        "y": 0.5832499999999993
+        "x": 1.8101434426229508,
+        "y": 1.3217725409836065
       },
       "prevControl": {
-        "x": 2.376442622950819,
-        "y": 1.2066106557377045
+        "x": 2.673258196721311,
+        "y": 2.976075819672129
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "red station"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
+    "maxVelocity": 2.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 51.170175095029634
+    "rotation": 45.37943670141898
   },
   "reversed": false,
   "folder": "Utah Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -120.02668138611078
   },
   "useDefaultConstraints": false
 }

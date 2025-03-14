@@ -52,9 +52,9 @@ public final class Constants {
     public static final double k_BLChassisAngularOffset = Math.PI;
     public static final double k_BRChassisAngularOffset = Math.PI / 2;
 
-    public static double k_FLOffset = 4.18 + k_FLChassisAngularOffset;
+    public static double k_FLOffset = 4.2 + k_FLChassisAngularOffset;
     public static double k_FROffset = .87 + k_FRChassisAngularOffset;
-    public static double k_BLOffset = 2.22 + k_BLChassisAngularOffset;
+    public static double k_BLOffset = 2.24 + k_BLChassisAngularOffset;
     public static double k_BROffset = 3.06 + k_BRChassisAngularOffset;
 
     // SPARK MAX CAN IDs
@@ -163,7 +163,7 @@ public final class Constants {
     public static final int k_climberMotor = 16;
     public static final int k_climberFollower = 17;
 
-    public static final double k_p = 0.005;
+    public static final double k_p = 0.02;
     public static final double k_i = 0;
     public static final double k_d = 0;
     public static final double k_f = 0;
@@ -237,6 +237,7 @@ public final class Constants {
       static {
 
         config.idleMode(IdleMode.kBrake).smartCurrentLimit(80);
+        config.inverted(true);
         config.absoluteEncoder
               .positionConversionFactor(ClimberConstants.k_ticksToDegrees)
               .zeroOffset(0);

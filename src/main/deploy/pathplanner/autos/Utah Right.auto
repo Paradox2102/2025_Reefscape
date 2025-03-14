@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "leave 2-3"
+            "pathName": null
           }
         },
         {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2 right"
+                  "pathName": null
                 }
               },
               {
@@ -95,7 +95,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right 4-5"
+            "pathName": null
           }
         },
         {

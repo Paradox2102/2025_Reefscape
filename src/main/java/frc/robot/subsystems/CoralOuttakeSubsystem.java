@@ -32,7 +32,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   private static final double k_ejectedCurrent = 30;
 
-  private static final double k_outtakeSpeed = 2500;
+  private static final double k_outtakeSpeed = 2000;
   private static final double k_outtakeDeadband = 100;
   private static final double k_lowSpeed = 1250;
   private boolean m_isLow = false;
@@ -103,7 +103,7 @@ public class CoralOuttakeSubsystem extends SubsystemBase {
 
   public Command holdCoral() {
     return Commands.run(() -> {
-      setPower(-0.03);
+      setPower(-0.025);
     }, this);
   }
 

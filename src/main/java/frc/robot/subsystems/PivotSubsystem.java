@@ -77,10 +77,8 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public Command climb() {
-    return Commands.startEnd(() -> {
-      m_state = PivotStates.CLIMB;},
-      ()->{m_state = PivotStates.RESET;}
-      , this);
+    return Commands.runOnce(() ->
+      m_state = PivotStates.CLIMB, this);
   }
 
   @Override

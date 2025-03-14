@@ -51,14 +51,11 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     Constants.States.m_autoAim = m_robotContainer.getThrottle();
-    SmartDashboard.putBoolean("Auto Aim", Constants.States.m_autoAim);
-    try {
-      Constants.States.m_alliance = DriverStation.getAlliance().get();
-    }
-    catch (Exception ex) {}
-    if(m_gcTimer.advanceIfElapsed(5)){
-      System.gc();
-    }
+    // Constants.States.m_autoAim = m_robotContainer.getThrottle();
+    // SmartDashboard.putBoolean("Auto Aim", Constants.States.m_autoAim);
+    // if(m_gcTimer.advanceIfElapsed(5)){
+    //   System.gc();
+    // }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -66,17 +63,27 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    try {
+      Constants.States.m_alliance = DriverStation.getAlliance().get();
+    }
+    catch (Exception ex) {}
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    Constants.States.m_autoAim = false;
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    try {
+      Constants.States.m_alliance = DriverStation.getAlliance().get();
+    }
+    catch (Exception ex) {}
   }
 
   /** This function is called periodically during autonomous. */
@@ -92,6 +99,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    try {
+      Constants.States.m_alliance = DriverStation.getAlliance().get();
+    }
+    catch (Exception ex) {}
   }
 
   /** This function is called periodically during operator control. */
