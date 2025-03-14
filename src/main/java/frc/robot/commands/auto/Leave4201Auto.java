@@ -6,6 +6,7 @@ package frc.robot.commands.auto;
 
 import org.photonvision.PhotonCamera;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,7 +26,10 @@ public class Leave4201Auto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         elevator.setTargetPos(ElevatorPosition.L4),
-        elevator.goToPosition(),
+        new ParallelDeadlineGroup(
+          new WaitCommand(2), 
+          elevator.goToPosition()
+        ),
         new DriveForwardCommand(drive, 6),
         new WaitCommand(4),
         new ScoreBackAwayResetElevator(alignCam, shouldAim, drive, elevator, coral, () -> 0, () -> 0, () -> 0));
