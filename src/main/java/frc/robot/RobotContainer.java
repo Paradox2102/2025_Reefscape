@@ -129,8 +129,11 @@ public class RobotContainer {
     m_elevatorSubsystem.setDefaultCommand(m_elevatorSubsystem.resetPosition().unless(m_elevatorSubsystem.manual));
 
     // Algae
-    m_driverController.leftTrigger().whileTrue(m_pivotSubsystem.intake()
+    m_driverController.leftTrigger().whileTrue(
+      m_pivotSubsystem.intake()
       .alongWith(m_hopperSubsystem.runHopper(0.6))
+      // .handleInterrupt(() -> m_pivotSubsystem.reset())
+      // m_hopperSubsystem.runHopper(0.6)
     );
     m_driverController.leftBumper().whileTrue(
       m_pivotSubsystem.outtake()
@@ -176,14 +179,14 @@ public class RobotContainer {
     // Hopper Pivot
     m_driverController.y().toggleOnTrue(m_pivotSubsystem
     .climb()
-    .alongWith(
-      new SequentialCommandGroup(
-        new WaitCommand(1), 
-        m_climberSubsystem.setPosition(ClimberState.EXTEND)
-      )
-    )
-    .handleInterrupt(() -> m_climberSubsystem.setPosition(ClimberState.RESET).schedule())
+    // .alongWith(
+    //   new SequentialCommandGroup(
+    //     new WaitCommand(1), 
+    //     m_climberSubsystem.setPosition(ClimberState.EXTEND)
+    //   )
     );
+    // .handleInterrupt(() -> m_climberSubsystem.setPosition(ClimberState.RESET).schedule())
+  
     //m_driverController.y().onTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));
 
     //m_driverController.y().whileTrue(new DriveToPosition(m_driveSubsystem, true));

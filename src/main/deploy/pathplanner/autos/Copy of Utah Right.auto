@@ -101,7 +101,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left 8-9"
+            "pathName": "right 4-5"
           }
         },
         {
@@ -117,7 +117,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Pos 9"
+                  "pathName": "Pos 4"
                 }
               },
               {
@@ -161,7 +161,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "9 left"
+                  "pathName": "4 right"
                 }
               },
               {

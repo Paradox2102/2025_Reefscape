@@ -27,11 +27,11 @@ public class PivotSubsystem extends SubsystemBase {
 
   private PivotStates m_state = PivotStates.RESET;
 
-  private PIDController m_PID = new PIDController(0.1, 0, 0);
+  private PIDController m_PID = new PIDController(0.04, 0, 0); // .1, 0, 0
 
   private enum PivotStates {
     RESET(0),
-    ALGAE(67),
+    ALGAE(73), // 67
     CLIMB(100);
 
     private double m_angleDegrees;

@@ -64,7 +64,7 @@ public class HopperSubsystem extends SubsystemBase {
 
   public Command stop() {
     return Commands.runOnce(() -> {
-      m_motor.set(.2);
+      m_motor.set(.4);
     }, this);
   }
 
