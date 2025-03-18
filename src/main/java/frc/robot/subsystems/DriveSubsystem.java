@@ -589,6 +589,16 @@ public class DriveSubsystem extends SubsystemBase {
     });
   }
 
+  public Command setReefLeftRight(boolean left) {
+    return Commands.runOnce(() -> {
+      if (left) {
+        m_reefPosition = FieldPosition.ONE;
+      } else {
+        m_reefPosition = FieldPosition.TWO;
+      }
+    });
+  }
+
   /**
    * Returns the heading of the robot.
    *
