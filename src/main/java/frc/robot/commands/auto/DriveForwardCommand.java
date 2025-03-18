@@ -13,12 +13,14 @@ public class DriveForwardCommand extends Command {
   private DriveSubsystem m_subsystem;
   private Timer m_timer = new Timer();
   private double m_time;
+  private double m_speed;
 
   /** Creates a new DriveForwardCommand. */
-  public DriveForwardCommand(DriveSubsystem subsystem, double time) {
+  public DriveForwardCommand(DriveSubsystem subsystem, double time, double speed) {
     m_subsystem = subsystem;
     m_time = time;
-    m_timer.restart();
+    m_timer.reset();
+    m_timer.stop();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
@@ -30,12 +32,14 @@ public class DriveForwardCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(-0.2, 0, 0, false, true);
+    m_subsystem.drive(m_speed, 0, 0, false, true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_subsystem.stop();
+  }
 
   // Returns true when the command should end.
   @Override

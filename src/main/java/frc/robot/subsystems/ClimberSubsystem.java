@@ -74,6 +74,10 @@ public class ClimberSubsystem extends SubsystemBase {
     }, this);
   }
 
+  public Command climb(boolean in){
+    return setPosition(in ? ClimberState.CLIMB : ClimberState.EXTEND);
+  }
+
   public Command runIn(){
     return Commands.startEnd(() -> {
       setPower(0.5);},
@@ -92,7 +96,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public Command stop() {
     return Commands.runOnce(() -> {
-      setPower(0);
+      setPosition(ClimberState.RESET);
     }, this);
   }
 

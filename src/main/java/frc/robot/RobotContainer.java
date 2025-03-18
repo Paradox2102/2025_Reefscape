@@ -141,9 +141,7 @@ public class RobotContainer {
       );
 
     m_driverController.b().toggleOnTrue(
-      // new ApriltagAimCommand(m_alignCamera, m_driveSubsystem)
-      m_elevatorSubsystem.goToAlgaePosition()
-        .finallyDo(() -> m_elevatorSubsystem.resetPosition())
+      m_elevatorSubsystem.goToAlgaePosition().finallyDo(() -> m_elevatorSubsystem.resetPosition())
     );
 
     // Coral
