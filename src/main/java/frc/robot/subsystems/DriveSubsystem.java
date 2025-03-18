@@ -236,7 +236,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Command setReefPosition(FieldPosition position) {
-    return Commands.runOnce(() -> {m_reefPosition = position;}, this);
+    return Commands.runOnce(() -> {m_reefPosition = position;});
   }
 
   public Command setSource(FieldPosition source) {

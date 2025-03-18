@@ -20,22 +20,21 @@ import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
-import frc.robot.Constants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
   /** Creates a new BackAwayResetElevator. */
-  public ScoreBackAwayResetElevator(PhotonCamera alignCam, DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
+  public ScoreBackAwayResetElevator(PhotonCamera alignCam, Trigger shouldAim, DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      // new ConditionalCommand(
-      //   new ApriltagAimCommand(alignCam, driveSubsystem), 
-      //   new InstantCommand(), 
-      //   () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1
-      // ),
+      new ConditionalCommand(
+        new ApriltagAimCommand(alignCam, driveSubsystem), 
+        new InstantCommand(), 
+        shouldAim
+      ),
       COSubsystem.ejectCoral(elevatorSubsystem.isLow),
       new ConditionalCommand(
         new ParallelDeadlineGroup(

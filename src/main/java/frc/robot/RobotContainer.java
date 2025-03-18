@@ -162,13 +162,7 @@ public class RobotContainer {
       //   () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
       // )//.handleInterrupt(() -> m_elevatorSubsystem.resetPosition())
     );
-    m_driverController.rightTrigger().onTrue(
-      new ConditionalCommand(
-        new ApriltagAimCommand(m_alignCamera, m_driveSubsystem), 
-        new InstantCommand(), 
-        m_shouldAutoAim
-      )).onFalse(new ScoreBackAwayResetElevator(m_alignCamera, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, 
-      m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
+    m_driverController.rightTrigger().toggleOnTrue(new ScoreBackAwayResetElevator(m_alignCamera, m_shouldAutoAim, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
 
     // Climb
@@ -283,7 +277,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Intake", m_coralOuttakeSubsystem.holdCoral());
     NamedCommands.registerCommand("Align Left", m_driveSubsystem.setReefPosition(FieldPosition.ONE).andThen(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem)));
     NamedCommands.registerCommand("Align Right", m_driveSubsystem.setReefPosition(FieldPosition.TWO).andThen(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem)));
-    NamedCommands.registerCommand("Score Back Up", new ScoreBackAwayResetElevator(m_alignCamera, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, () -> 0, () -> 0, () -> 0));
+    NamedCommands.registerCommand("Score Back Up", new ScoreBackAwayResetElevator(m_alignCamera, m_shouldAutoAim, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, () -> 0, () -> 0, () -> 0));
   }
 
   /**
