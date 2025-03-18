@@ -162,14 +162,13 @@ public class RobotContainer {
       //   () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
       // )//.handleInterrupt(() -> m_elevatorSubsystem.resetPosition())
     );
-    m_driverController.rightTrigger().toggleOnTrue(
+    m_driverController.rightTrigger().onTrue(
       new ConditionalCommand(
         new ApriltagAimCommand(m_alignCamera, m_driveSubsystem), 
         new InstantCommand(), 
         m_shouldAutoAim
-      ).handleInterrupt(
-        () -> new ScoreBackAwayResetElevator(m_alignCamera, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, 
-        m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX)));
+      )).onFalse(new ScoreBackAwayResetElevator(m_alignCamera, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, 
+      m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
 
     // Climb
