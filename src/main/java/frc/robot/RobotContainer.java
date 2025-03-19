@@ -245,8 +245,7 @@ public class RobotContainer {
 
   private void updateAutoChooser() {
     m_autoSelect.addOption("Nothing", new InstantCommand());
-    m_autoSelect.addOption("Left Scuffed", new PathPlannerAuto("Left Scuffed"));
-    m_autoSelect.addOption("Right Scuffed", new PathPlannerAuto("Right Scuffed"));
+    m_autoSelect.addOption("Christopher the Best Person Ever", new PathPlannerAuto("SDR Left"));
     m_autoSelect.addOption("399 Push Left", new PathPlannerAuto("399 Push Left"));
     m_autoSelect.addOption("399 Push Right", new PathPlannerAuto("399 Push Right"));
     m_autoSelect.addOption("4201 Center 12", new Leave4201Auto(m_driveSubsystem, m_shouldAutoAim, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_alignCamera));
@@ -275,9 +274,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Back Up", new DriveCommand(m_driveSubsystem, () -> -.2, () -> 0, () -> 0, false));
     NamedCommands.registerCommand("Turn On Manual So We Don't Slam Our Elevator", m_elevatorSubsystem.setManual(true));
     NamedCommands.registerCommand("Stop Intake", m_coralOuttakeSubsystem.holdCoral());
-    NamedCommands.registerCommand("Align Left", m_driveSubsystem.setReefPosition(FieldPosition.ONE).andThen(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem)));
-    NamedCommands.registerCommand("Align Right", m_driveSubsystem.setReefPosition(FieldPosition.TWO).andThen(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem)));
-    NamedCommands.registerCommand("Score Back Up", new ScoreBackAwayResetElevator(m_alignCamera, m_shouldAutoAim, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, () -> 0, () -> 0, () -> 0));
+    NamedCommands.registerCommand("Align Left", m_driveSubsystem.setReefPosition(FieldPosition.ONE));
+    NamedCommands.registerCommand("Align Right", m_driveSubsystem.setReefPosition(FieldPosition.TWO));
+    NamedCommands.registerCommand("Score Back Up", new ScoreBackAwayResetElevator(m_alignCamera, new Trigger(() -> true), m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, () -> 0, () -> 0, () -> 0));
   }
 
   /**

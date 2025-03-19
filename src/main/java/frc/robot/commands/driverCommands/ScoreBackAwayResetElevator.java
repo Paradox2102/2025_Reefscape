@@ -4,6 +4,7 @@
 
 package frc.robot.commands.driverCommands;
 
+import java.util.concurrent.locks.Condition;
 import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
@@ -35,7 +36,14 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
         new InstantCommand(), 
         shouldAim
       ),
-      COSubsystem.ejectCoral(elevatorSubsystem.isLow),
+      new ParallelDeadlineGroup(
+         COSubsystem.ejectCoral(elevatorSubsystem.isLow),
+         new ConditionalCommand(
+          elevatorSubsystem.manualMove(() -> 1),
+          new InstantCommand(),
+          () -> elevatorSubsystem.getPreset() == ElevatorPosition.L1
+         )
+      ),
       new ConditionalCommand(
         new ParallelDeadlineGroup(
           new WaitCommand(.3),

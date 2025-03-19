@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6752307581018508,
+        "y": 7.38324291087963
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4911201533564804,
+        "y": 6.646898509837963
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.9378956886574064,
+        "y": 5.010169994212962
+      },
+      "prevControl": {
+        "x": 3.429937427662036,
+        "y": 5.587075014467593
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7816263496677739,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 6.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Deploy Elevator",
+      "waypointRelativePos": 0.8491486710963455,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.999583197528054
+  },
+  "reversed": false,
+  "folder": "3 Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -53.417846710313896
+  },
+  "useDefaultConstraints": false
+}

@@ -7,20 +7,22 @@
     "Center Auto Paths",
     "Complex 4 Paths",
     "Leave Paths",
+    "3 Paths",
     "Precision Align Paths",
     "Push Basic Paths",
     "Push Center Paths",
     "Push Complex Paths",
-    "autoalign",
-    "Utah Paths"
+    "Utah Paths",
+    "autoalign"
   ],
   "autoFolders": [
     "Basic",
     "Center",
     "Complex",
+    "San Diego",
     "Precision Align Autos",
-    "autoalign",
-    "Utah"
+    "Utah",
+    "autoalign"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
