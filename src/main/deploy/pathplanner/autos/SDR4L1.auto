@@ -49,6 +49,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Stop Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Deploy Elevator"
           }
         },
@@ -79,6 +85,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Stop Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Deploy Elevator"
           }
         },
@@ -104,6 +116,12 @@
           "type": "path",
           "data": {
             "pathName": "4l1 7"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Intake"
           }
         },
         {
