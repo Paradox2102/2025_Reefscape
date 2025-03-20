@@ -208,8 +208,10 @@ public class RobotContainer {
     m_operatorController.button(12).whileTrue(m_climberSubsystem.runOut());
     m_operatorController.button(11).whileTrue(m_climberSubsystem.runIn());
 
-    m_operatorController.povRight().onTrue(m_driveSubsystem.setReefLeftRight(false));
-    m_operatorController.povLeft().onTrue(m_driveSubsystem.setReefLeftRight(true));
+    // m_operatorController.povRight().onTrue(m_driveSubsystem.setReefLeftRight(false));
+    // m_operatorController.povLeft().onTrue(m_driveSubsystem.setReefLeftRight(true));
+    m_operatorController.povRight().onTrue(m_driveSubsystem.incrementReefPosition(true));
+    m_operatorController.povLeft().onTrue(m_driveSubsystem.incrementReefPosition(false));
 
     // Operator UI Controls
 
