@@ -169,6 +169,12 @@
         {
           "type": "named",
           "data": {
+            "name": null
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Score Back Up"
           }
         },
@@ -176,6 +182,18 @@
           "type": "path",
           "data": {
             "pathName": "3 left 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         }
       ]

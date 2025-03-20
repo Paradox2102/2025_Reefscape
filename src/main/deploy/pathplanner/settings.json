@@ -3,11 +3,12 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "3 Paths",
     "Basic 4 Paths",
     "Center Auto Paths",
     "Complex 4 Paths",
     "Leave Paths",
-    "3 Paths",
+    "4 l1",
     "Precision Align Paths",
     "Push Basic Paths",
     "Push Center Paths",
