@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": null
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pos 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Deploy Elevator1"
+                }
+              }
+            ]
           }
         }
       ]

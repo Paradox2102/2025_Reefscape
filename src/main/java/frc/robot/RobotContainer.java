@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.auto.Leave4201Auto;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
@@ -131,13 +132,13 @@ public class RobotContainer {
     // Algae
     m_driverController.leftTrigger().whileTrue(
       m_pivotSubsystem.intake()
-      .alongWith(m_hopperSubsystem.runHopper(0.6))
+      .alongWith(m_hopperSubsystem.runHopper(0.6, true))
       // .handleInterrupt(() -> m_pivotSubsystem.reset())
       // m_hopperSubsystem.runHopper(0.6)
     );
     m_driverController.leftBumper().whileTrue(
       m_pivotSubsystem.outtake()
-        .alongWith(m_hopperSubsystem.runHopper(-0.6))
+        .alongWith(m_hopperSubsystem.runHopper(-0.6, false))
       );
 
     m_driverController.b().toggleOnTrue(
@@ -153,14 +154,15 @@ public class RobotContainer {
     //   )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     // );
     m_driverController.rightBumper().toggleOnTrue(
-      new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX)
-      // new ConditionalCommand(
-      //   new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX),
-      //   // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_alignCamera), // on true
-      //   // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
-      //   new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
-      //   () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
-      // )//.handleInterrupt(() -> m_elevatorSubsystem.resetPosition())
+      // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX)
+      new ConditionalCommand(
+        // new PrecisionAlignOdometrey(m_driveSubsystem),
+        // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX),
+        new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_alignCamera), // on true
+        // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
+        new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
+        () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
+      )//.handleInterrupt(() -> m_elevatorSubsystem.resetPosition())
     );
     m_driverController.rightTrigger().toggleOnTrue(new ScoreBackAwayResetElevator(m_alignCamera, m_shouldAutoAim, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
@@ -172,7 +174,7 @@ public class RobotContainer {
     // );
     // m_driverController.a().whileTrue(m_climberSubsystem.runOut());
     // m_driverController.b().whileTrue(m_climberSubsystem.runIn());
-    m_driverController.a().whileTrue(m_climberSubsystem.runIn().unless(() -> m_climberSubsystem.getAngle() > 290));//onTrue(m_climberSubsystem.setPosition(ClimberState.CLIMB));
+    m_driverController.a().whileTrue(m_climberSubsystem.runIn());//onTrue(m_climberSubsystem.setPosition(ClimberState.CLIMB));
 
     // Hopper Pivot
     m_driverController.y().toggleOnTrue(m_pivotSubsystem
@@ -194,8 +196,8 @@ public class RobotContainer {
     m_driverController.povLeft().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L3));
     m_driverController.povRight().onTrue(m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));
 
-    m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
-    m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1).alongWith(m_coralOuttakeSubsystem.runSpeed(-250)));
+    m_operatorController.button(1).whileTrue(m_hopperSubsystem.runHopper(-.1, false).alongWith(m_coralOuttakeSubsystem.runSpeed(1500)));
+    m_operatorController.button(2).whileTrue(m_hopperSubsystem.runHopper(.1, false).alongWith(m_coralOuttakeSubsystem.runSpeed(-250)));
     m_operatorController.button(8).whileTrue(m_elevatorSubsystem.manualMove(() -> m_operatorController.getY()));
 
     m_operatorController.button(7).onTrue(m_elevatorSubsystem.setAlgaePosition(ElevatorPosition.ALGAE_HIGH));
@@ -260,6 +262,7 @@ public class RobotContainer {
 
   private void addNamedCommands() {
     NamedCommands.registerCommand("Deploy Elevator", m_elevatorSubsystem.goToPosition());
+    NamedCommands.registerCommand("Deploy Elevator1", m_elevatorSubsystem.goToPosition(true));
     NamedCommands.registerCommand("Reset Elevator", m_elevatorSubsystem.resetPosition());
     NamedCommands.registerCommand("Set L1", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L1));
     NamedCommands.registerCommand("Set L2", m_elevatorSubsystem.setTargetPos(ElevatorPosition.L2));

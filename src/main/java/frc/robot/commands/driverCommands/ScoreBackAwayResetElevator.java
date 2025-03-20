@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -31,15 +32,16 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ConditionalCommand(
-        new ApriltagAimCommand(alignCam, driveSubsystem), 
-        new InstantCommand(), 
-        shouldAim
-      ),
+      // new ConditionalCommand(
+      //   // new ApriltagAimCommand(alignCam, driveSubsystem), 
+      //   new PrecisionAlignOdometrey(driveSubsystem),
+      //   new InstantCommand(), 
+      //   shouldAim
+      // ),
       new ParallelDeadlineGroup(
          COSubsystem.ejectCoral(elevatorSubsystem.isLow),
          new ConditionalCommand(
-          elevatorSubsystem.manualMove(() -> 1),
+          elevatorSubsystem.manualMove(() -> -1),
           new InstantCommand(),
           () -> elevatorSubsystem.getPreset() == ElevatorPosition.L1
          )

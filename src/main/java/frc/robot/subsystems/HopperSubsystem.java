@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorConfigs;
 
@@ -29,6 +30,10 @@ public class HopperSubsystem extends SubsystemBase {
   private SparkClosedLoopController m_PID = m_motor.getClosedLoopController();
 
   private static final double k_intakeRPM = 3000;
+
+  private boolean m_playingWithBalls = false;
+
+  // public Trigger playingWithBalls = new Trigger(() -> !m_playingWithBalls);
 
   //absoulte encoder
 
@@ -56,15 +61,20 @@ public class HopperSubsystem extends SubsystemBase {
     m_PID.setReference(k_intakeRPM, ControlType.kVelocity);
   }
 
-  public Command runHopper(double power) {
+  public Command runHopper(double power, boolean intake) {
     return Commands.run(() -> {
+      m_playingWithBalls = intake;
       m_motor.set(power);
     }, this);
   }
 
   public Command stop() {
     return Commands.runOnce(() -> {
-      m_motor.set(.4);
+      if (m_playingWithBalls) {
+        m_motor.set(.4);
+      } else {
+        m_motor.set(0);
+      }
     }, this);
   }
 

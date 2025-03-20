@@ -49,9 +49,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(68.25, "Level 4"), // 70.2
-    L3(44.85, "Level 3"),
-    L2(30.48, "Level 2"),
+    L4(68.2, "Level 4"), // 70.2
+    L3(43, "Level 3"),
+    L2(31.5, "Level 2"),
     L1(18, "Level 1"),
     RESET(0, "Reset"),
     ALGAE_HIGH(33.48, "Algae High"),
@@ -126,6 +126,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Commands.run(() -> {
       m_manual = false;
       m_PID.setReference(m_position.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    }, this);//.until(atPosition.debounce(.1));
+  }
+
+  public Command goToPosition(boolean manual) {
+    return Commands.run(() -> {
+      m_PID.setReference(m_position.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+      m_manual = manual;
     }, this);//.until(atPosition.debounce(.1));
   }
 

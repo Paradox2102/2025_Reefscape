@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Pos 7"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pos 7"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Deploy Elevator1"
+                }
+              }
+            ]
           }
         }
       ]
