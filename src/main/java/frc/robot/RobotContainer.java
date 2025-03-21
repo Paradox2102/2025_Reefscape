@@ -12,6 +12,7 @@ import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
+import frc.robot.commands.driverCommands.KillDrive;
 import frc.robot.commands.driverCommands.ManualPlaceOnReef;
 import frc.robot.commands.operatorCommands.SetSourcePos;
 import frc.robot.subsystems.PivotSubsystem;
@@ -204,6 +205,8 @@ public class RobotContainer {
     m_operatorController.button(9).onTrue(m_elevatorSubsystem.setAlgaePosition(ElevatorPosition.ALGAE_LOW));
 
     m_operatorController.button(6).onTrue(m_elevatorSubsystem.resetReading());
+
+    m_operatorController.button(10).onTrue(new KillDrive(m_driveSubsystem));
 
     m_operatorController.button(12).whileTrue(m_climberSubsystem.runOut());
     m_operatorController.button(11).whileTrue(m_climberSubsystem.runIn());

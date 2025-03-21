@@ -148,9 +148,9 @@ public final class Constants {
     public static final int k_elevatorMotor = 11;
     public static final int k_elevatorFollower = 12;
 
-    public static final double k_p = 0.8;
-    public static final double k_i = 0.0001;
-    public static final double k_d = 0.001;
+    public static final double k_p = 0.95;
+    public static final double k_i = 0.000001;
+    public static final double k_d = 0.005;
 
     public static final double k_downP = 0.015;
     public static final double k_downI = 0.000005;
