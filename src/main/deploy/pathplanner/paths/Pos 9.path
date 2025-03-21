@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.06575,
-        "y": 5.097499999999999
+        "x": 4.00389344262295,
+        "y": 5.061936475409836
       },
       "prevControl": {
-        "x": 3.9199795081967217,
-        "y": 5.313678278688524
+        "x": 3.8461352459016385,
+        "y": 5.3740163934426235
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -61.16249909013904
+    "rotation": -59.53445508054021
   },
   "reversed": false,
   "folder": "Precision Align Paths",

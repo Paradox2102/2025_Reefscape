@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.06575,
-        "y": 5.097499999999999
+        "x": 4.00389344262295,
+        "y": 5.061936475409836
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5765646452732218,
-        "y": 7.148307791229857
+        "x": 1.5147080878961718,
+        "y": 7.112744266639694
       },
       "isLocked": false,
       "linkedName": "9 oclock"
@@ -55,7 +55,7 @@
   "folder": "Basic 4 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -61.16249909013904
+    "rotation": -59.53445508054021
   },
   "useDefaultConstraints": false
 }

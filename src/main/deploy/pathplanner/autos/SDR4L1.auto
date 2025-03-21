@@ -11,15 +11,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "4l1 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Deploy Elevator"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4l1 1"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Deploy Elevator"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -41,21 +61,41 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "4l1 3"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Stop Intake"
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "Deploy Elevator"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4l1 3"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Deploy Elevator"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -77,21 +117,41 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "4l1 5"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Stop Intake"
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "Deploy Elevator"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4l1 5"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Deploy Elevator"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -113,21 +173,41 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "4l1 7"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Stop Intake"
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "Deploy Elevator"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4l1 7"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Deploy Elevator"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
