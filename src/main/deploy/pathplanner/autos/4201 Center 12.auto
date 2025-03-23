@@ -11,9 +11,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "Deploy Elevator"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Deploy Elevator"
+                }
+              }
+            ]
           }
         },
         {
@@ -43,7 +56,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "Center",
   "choreoAuto": false
 }

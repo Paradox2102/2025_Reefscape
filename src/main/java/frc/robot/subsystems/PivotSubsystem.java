@@ -32,6 +32,7 @@ public class PivotSubsystem extends SubsystemBase {
   private enum PivotStates {
     RESET(0),
     ALGAE(73), // 67
+    ELEVATOR(20),
     CLIMB(100);
 
     private double m_angleDegrees;
@@ -58,6 +59,12 @@ public class PivotSubsystem extends SubsystemBase {
 
   public double getAngle() {
     return m_pivotEncoder.getPosition();
+  }
+
+  public Command goToElevatorRaisePos() {
+    return Commands.runOnce(() -> {
+      m_state = PivotStates.ELEVATOR;
+    }, this);
   }
 
   public Command intake() {

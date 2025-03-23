@@ -12,6 +12,7 @@ import org.photonvision.PhotonCamera;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,6 +22,7 @@ import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -28,7 +30,7 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorPosition;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
   /** Creates a new BackAwayResetElevator. */
-  public ScoreBackAwayResetElevator(PhotonCamera alignCam, Trigger shouldAim, DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
+  public ScoreBackAwayResetElevator(PivotSubsystem pivotSubsystem, PhotonCamera alignCam, Trigger shouldAim, DriveSubsystem driveSubsystem, ElevatorSubsystem elevatorSubsystem, CoralOuttakeSubsystem COSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -38,6 +40,7 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
       //   new InstantCommand(), 
       //   shouldAim
       // ),
+      new PrintCommand("ScoreBackAwayResetElevator YAYYYY"),
       new ParallelDeadlineGroup(
          COSubsystem.ejectCoral(elevatorSubsystem.isLow),
          new ConditionalCommand(
@@ -56,6 +59,7 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(
         elevatorSubsystem.resetPosition(),
+        new InstantCommand(() -> pivotSubsystem.reset()),
         new DriveCommand(driveSubsystem, x, y, rot, true)
       )
     );

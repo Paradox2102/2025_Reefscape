@@ -38,6 +38,12 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
               }
             ]
           }
@@ -58,12 +64,6 @@
           "type": "named",
           "data": {
             "name": "Intake Coral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Intake"
           }
         },
         {
@@ -94,6 +94,12 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
               }
             ]
           }
@@ -114,12 +120,6 @@
           "type": "named",
           "data": {
             "name": "Intake Coral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Intake"
           }
         },
         {
@@ -150,6 +150,12 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
               }
             ]
           }
@@ -170,12 +176,6 @@
           "type": "named",
           "data": {
             "name": "Intake Coral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Intake"
           }
         },
         {
@@ -206,6 +206,12 @@
                     }
                   ]
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
               }
             ]
           }
@@ -219,7 +225,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "San Diego",
   "choreoAuto": false
 }

@@ -31,7 +31,7 @@ public class ClimberSubsystem extends SubsystemBase {
   public enum ClimberState {
     RESET(204),
     EXTEND(130),
-    CLIMB(250); // 293
+    CLIMB(260); // 293
 
     double position;
 
@@ -79,9 +79,9 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
 
-  public Command runIn() {
+  public Command runIn(boolean observeSetpoint) {
     return Commands.startEnd(() -> {
-      if (getAngle() < ClimberState.CLIMB.position()) {
+      if (getAngle() < ClimberState.CLIMB.position() || !observeSetpoint) {
         setPower(.5);
       } else {
         setPower(0);

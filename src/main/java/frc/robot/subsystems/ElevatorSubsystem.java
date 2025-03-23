@@ -49,11 +49,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(66.4, "Level 4"), // 70.2
+    L4(67, "Level 4"), // 70.2
     L3(43.1, "Level 3"),
     L2(30.5, "Level 2"),
     L1(18, "Level 1"),
-    RESET(0, "Reset"),
+    RESET(.2, "Reset"),
     ALGAE_HIGH(33.48, "Algae High"),
     ALGAE_LOW(18, "Algae Low");
 
@@ -154,7 +154,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Commands.run(() -> {
       m_manual = true;
       double direction = -up.getAsDouble();
-      m_elevatorMotor.set(direction > 0 ? .1 : -.1);
+      m_elevatorMotor.set(direction > 0 ? .1 : -.2);
     }, this).finallyDo(() -> {
       m_elevatorMotor.set(.02);
     });
@@ -178,6 +178,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     //Shows data on SmartDashBoard
     SmartDashboard.putNumber("Elevator Position", getPosition());
     SmartDashboard.putString("Elevator Target", m_position.getName());
+    // SmartDashboard.putBoolean("Elevator Limit", !bottomLimit.getAsBoolean());
     if (!bottomLimit.getAsBoolean()){
       m_elevatorEncoder.setPosition(0);
     }
