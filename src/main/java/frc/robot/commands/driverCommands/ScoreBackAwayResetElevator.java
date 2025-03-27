@@ -4,7 +4,7 @@
 
 package frc.robot.commands.driverCommands;
 
-import java.util.concurrent.locks.Condition;
+//import java.util.concurrent.locks.Condition;
 import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.drive.ApriltagAimCommand;
+//import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.drive.PrecisionAlignOdometrey;
+//import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.subsystems.CoralOuttakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -43,6 +43,7 @@ public class ScoreBackAwayResetElevator extends SequentialCommandGroup {
       new PrintCommand("ScoreBackAwayResetElevator YAYYYY"),
       new ParallelDeadlineGroup(
          COSubsystem.ejectCoral(elevatorSubsystem.isLow),
+         new WaitCommand(0.25),
          new ConditionalCommand(
           elevatorSubsystem.manualMove(() -> -1),
           new InstantCommand(),

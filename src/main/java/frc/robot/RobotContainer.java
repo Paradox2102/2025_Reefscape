@@ -147,7 +147,7 @@ public class RobotContainer {
       );
 
     m_driverController.b().toggleOnTrue(
-      m_elevatorSubsystem.goToAlgaePosition().finallyDo(() -> m_elevatorSubsystem.resetPosition())
+      m_elevatorSubsystem.goToAlgaePosition().alongWith(m_pivotSubsystem.goToElevatorRaisePos()).finallyDo(() -> {m_elevatorSubsystem.resetPosition();m_pivotSubsystem.reset();})
     );
 
     // Coral
@@ -161,9 +161,9 @@ public class RobotContainer {
     m_driverController.rightBumper().toggleOnTrue(
       // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX)
       new ConditionalCommand(
-        // new PrecisionAlignOdometrey(m_driveSubsystem),
+        new PrecisionAlignOdometrey(m_driveSubsystem),
         // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX),
-        new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_alignCamera), // on true
+        // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_alignCamera), // on true
         // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
         new ManualPlaceOnReef(m_pivotSubsystem, m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
         () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition

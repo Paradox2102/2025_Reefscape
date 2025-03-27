@@ -299,17 +299,17 @@ public class DriveSubsystem extends SubsystemBase {
     // getRotationDistanceFromTargetError());
     // // Update the odometry in the periodic block
 
-    // SmartDashboard.putNumber("Turn FR Radians",
-    //     m_frontRight.getPosition().angle.getRadians());
-    // SmartDashboard.putNumber(
-    //     "Turn FL Radians",
-    //     m_frontLeft.getPosition().angle.getRadians());
-    // SmartDashboard.putNumber(
-    //     "Turn BR Radians",
-    //     m_backRight.getPosition().angle.getRadians());
-    // SmartDashboard.putNumber(
-    //     "Turn BL Radians", m_backLeft.getPosition().angle.getRadians());
-    // SmartDashboard.putNumber("Gyro Angle", ParadoxField.normalizeAngle(-m_gyro.getYaw().getValueAsDouble()));
+    SmartDashboard.putNumber("Turn FR Radians",
+        m_frontRight.getPosition().angle.getRadians());
+    SmartDashboard.putNumber(
+        "Turn FL Radians",
+        m_frontLeft.getPosition().angle.getRadians());
+    SmartDashboard.putNumber(
+        "Turn BR Radians",
+        m_backRight.getPosition().angle.getRadians());
+    SmartDashboard.putNumber(
+        "Turn BL Radians", m_backLeft.getPosition().angle.getRadians());
+    SmartDashboard.putNumber("Gyro Angle", ParadoxField.normalizeAngle(-m_gyro.getYaw().getValueAsDouble()));
 
     // spin robot very fast for many rotations eventually back to the original
     // angle, look at the gyro angle and see the offset
