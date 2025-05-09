@@ -90,7 +90,7 @@ public class PositionTrackerPose {
 
   public void setPose(Pose2d pose) {
     m_poseEstimator.resetPosition(
-        m_driveSubsystem.getGyro().getRotation2d(),
+        m_driveSubsystem.getGyroRotation2d(),
         m_driveSubsystem.getModulePosition(),
         new Pose2d(pose.getX(), pose.getY(), pose.getRotation()));
     System.out.println("pose2d " + getPose2d());

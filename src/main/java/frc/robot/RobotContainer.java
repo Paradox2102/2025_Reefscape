@@ -9,6 +9,7 @@ import frc.robot.commands.auto.Leave4201Auto;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.PrecisionAlignOdometrey;
+import frc.robot.commands.drive.TestGyroCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
 import frc.robot.commands.driverCommands.AutoPlaceOnReef;
 import frc.robot.commands.driverCommands.IntakeCoral;
@@ -51,7 +52,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // The  robot's subsystems and commands are defined here...
   private DriveSubsystem m_driveSubsystem = new DriveSubsystem();
   private PivotSubsystem m_pivotSubsystem = new PivotSubsystem();
   private CoralOuttakeSubsystem m_coralOuttakeSubsystem = new CoralOuttakeSubsystem();
@@ -82,12 +83,12 @@ public class RobotContainer {
   private final Trigger m_reef11 = new Trigger(()->m_robotControl.checkButton(15));
   private final Trigger m_reef12 = new Trigger(()->m_robotControl.checkButton(16));
 
-  // private final Trigger m_leftSource = new Trigger(()->m_robotControl.checkButton(17));
-  // private final Trigger m_rightSource = new Trigger(()->m_robotControl.checkButton(18));
+  private final Trigger m_leftSource = new Trigger(()->m_robotControl.checkButton(17));
+  private final Trigger m_rightSource = new Trigger(()->m_robotControl.checkButton(18));
 
   Trigger m_shouldAutoAim = new Trigger(() -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1);
 
-  // private final Trigger m_win = new Trigger(()->m_robotControl.checkButton(19));
+  private final Trigger m_win = new Trigger(()->m_robotControl.checkButton(19));
 
   private PhotonCamera m_cameraFL = new PhotonCamera("fl_camera");
   // private PhotonCamera m_cameraBR = new PhotonCamera("br_camera");
@@ -179,17 +180,17 @@ public class RobotContainer {
     // );
     // m_driverController.a().whileTrue(m_climberSubsystem.runOut());
     // m_driverController.b().whileTrue(m_climberSubsystem.runIn());
-    m_driverController.a().whileTrue(m_climberSubsystem.runIn(false));//onTrue(m_climberSubsystem.setPosition(ClimberState.CLIMB));
+    //m_driverController.a().whileTrue(m_climberSubsystem.runIn(false));//onTrue(m_climberSubsystem.setPosition(ClimberState.CLIMB));
 
     // Hopper Pivot
-    m_driverController.y().toggleOnTrue(m_pivotSubsystem
-    .climb()
-    // .alongWith(
-    //   new SequentialCommandGroup(
-    //     new WaitCommand(1), 
-    //     m_climberSubsystem.setPosition(ClimberState.EXTEND)
-    //   )
-    );
+    // m_driverController.y().toggleOnTrue(m_pivotSubsystem
+    // .climb()
+    // // .alongWith(
+    // //   new SequentialCommandGroup(
+    // //     new WaitCommand(1), 
+    // //     m_climberSubsystem.setPosition(ClimberState.EXTEND)
+    // //   )
+    // );
     // .handleInterrupt(() -> m_climberSubsystem.setPosition(ClimberState.RESET).schedule())
   
     //m_driverController.y().onTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));
@@ -220,6 +221,9 @@ public class RobotContainer {
     m_operatorController.povRight().onTrue(m_driveSubsystem.incrementReefPosition(true));
     m_operatorController.povLeft().onTrue(m_driveSubsystem.incrementReefPosition(false));
 
+    m_driverController.a().onTrue(new TestGyroCommand(m_driveSubsystem, 0.5));
+    m_driverController.y().onTrue(m_driveSubsystem.resetGyro());
+
     // Operator UI Controls
 
     // Elevator Position
@@ -242,12 +246,12 @@ public class RobotContainer {
     m_reef11.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.ELEVEN));
     m_reef12.onTrue(m_driveSubsystem.setReefPosition(FieldPosition.TWELVE));
 
-    // Choose Source
-    // m_leftSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_LEFT));
-    // m_rightSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_RIGHT));
+    //Choose Source
+    m_leftSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_LEFT));
+    m_rightSource.onTrue(new SetSourcePos(m_driveSubsystem, FieldPosition.SOURCE_RIGHT));
 
-    // Win Button!!!
-    // m_win.onTrue(new InstantCommand());
+    //Win Button!!!
+    m_win.onTrue(new InstantCommand());
   }
 
   public boolean getThrottle() {

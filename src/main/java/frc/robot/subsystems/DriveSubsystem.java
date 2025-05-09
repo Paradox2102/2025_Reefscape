@@ -177,6 +177,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = 0;
 
   private Pose2d m_futurePos = new Pose2d();
+  private double m_cameraAngle = 0;
 
   private final SwerveDriveKinematics m_swerve = new SwerveDriveKinematics(
       new Translation2d(.298, .298), new Translation2d(.298, -.298),
@@ -291,6 +292,13 @@ public class DriveSubsystem extends SubsystemBase {
     //   }
     // }
     // SmartDashboard.putNumber("Heading", getHeading().getDegrees());
+    var visionEst = m_tracker.getEstimatedGlobalPose();
+    for(var result : visionEst)
+      if(result.isPresent()){
+        m_cameraAngle = result.get().estimatedPose.toPose2d().getRotation().getDegrees();
+      };
+    SmartDashboard.putNumber("Camera Angle", m_cameraAngle);
+
     SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
     // SmartDashboard.putString("Source Position", m_source.getName());
     // SmartDashboard.putBoolean("Do we see a target", m_targetsVisible);
@@ -321,13 +329,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_posePublisher.set(currentPos);
     //m_tracker.displayRobotPosWithCamera();
 
-    // double yaw = ParadoxField.normalizeAngle(m_gyro.getYaw().getValueAsDouble());
+    double yaw = ParadoxField.normalizeAngle(getGyroRotation2d().getDegrees());
     // SmartDashboard.putNumber("Gyro offset",
     //     ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw - m_gyroZero));
     // SmartDashboard.putNumber("Gyro Zero", m_gyroZero);
-    // SmartDashboard.putNumber("Gyro", yaw);
-    // SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw));
-    // SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
+    SmartDashboard.putNumber("Gyro", yaw);
+    SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(m_cameraAngle - yaw));
+    SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
     // SmartDashboard.putNumber("Robot X", currentPos.getX());
     // SmartDashboard.putNumber("Robot Y", currentPos.getY());
 
@@ -390,6 +398,12 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_tracker.setPose(pose);
+  }
+
+  public Command resetGyro(){
+    return Commands.runOnce(() -> {
+        m_gyro.setYaw(m_cameraAngle);
+    });
   }
 
   /**
