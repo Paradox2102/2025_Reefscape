@@ -12,16 +12,17 @@ import frc.robot.subsystems.DriveSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TestGyroCommand extends Command {
   private DriveSubsystem m_subsystem;
-  private double m_angle = 0;
-  private double m_angleDiff = 0;
-  private double m_totalAngle = 0;
-  private Timer m_dwellTimer = new Timer();
   private double m_speed;
-  private boolean m_isFinished;
+  private double m_time;
+  private boolean m_return;
+  private Timer m_turnTimer;
+  private double m_initialAngle;
+  
   /** Creates a new TestGyroCommand. */
-  public TestGyroCommand(DriveSubsystem subsystem, double speed) {
+  public TestGyroCommand(DriveSubsystem subsystem, double speed, double time) {
     m_subsystem = subsystem;
     m_speed = speed;
+    m_time = time;
     addRequirements(m_subsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,25 +30,18 @@ public class TestGyroCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_totalAngle = 0;
-    m_dwellTimer.stop();
-    m_dwellTimer.reset();
-    m_isFinished = false;
+    m_initialAngle = m_subsystem.getCameraAngleDegrees();
+    m_return = false;
+    m_turnTimer.reset();
+    m_turnTimer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(0, 0, m_speed, true, true);
-    m_angleDiff = Math.abs(ParadoxField.normalizeAngle(m_angle - m_subsystem.getPose().getRotation().getDegrees()));
-    m_angle = ParadoxField.normalizeAngle(m_subsystem.getPose().getRotation().getDegrees());
-    m_totalAngle += m_angleDiff;
-    if (Math.abs(m_totalAngle) >= 400){
-      m_isFinished = true;
-    }
-    if(m_isFinished){
-      m_subsystem.stop();
-      m_dwellTimer.start();
+    m_subsystem.drive(0,0,m_return ? m_speed : -m_speed, false, true);
+    if(m_turnTimer.get() > m_time){
+      m_return = true;
     }
   }
 
@@ -59,6 +53,6 @@ public class TestGyroCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_dwellTimer.get() > 1;
+    return Math.abs(m_subsystem.getCameraAngleDegrees() - m_initialAngle) < 0.25 && m_return == true;
   }
 }

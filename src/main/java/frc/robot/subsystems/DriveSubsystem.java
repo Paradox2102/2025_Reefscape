@@ -282,6 +282,9 @@ public class DriveSubsystem extends SubsystemBase {
   public static boolean m_setGyroZero = true;
   public static double m_gyroZero = 0;
 
+  public double getCameraAngleDegrees(){
+    return m_cameraAngle;
+  }
 
   @Override
   public void periodic() {
@@ -336,6 +339,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro", yaw);
     SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(m_cameraAngle - yaw));
     SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
+    SmartDashboard.putNumber("Gyro Resets", m_gyro.getNoMotionCount().getValueAsDouble());
     // SmartDashboard.putNumber("Robot X", currentPos.getX());
     // SmartDashboard.putNumber("Robot Y", currentPos.getY());
 
@@ -402,7 +406,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command resetGyro(){
     return Commands.runOnce(() -> {
-        m_gyro.setYaw(m_cameraAngle);
+        m_gyro.setYaw(0);
     });
   }
 

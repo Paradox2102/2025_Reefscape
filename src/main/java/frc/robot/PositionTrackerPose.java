@@ -34,7 +34,7 @@ import frc.robot.subsystems.DriveSubsystem;
 public class PositionTrackerPose {
   private SwerveDrivePoseEstimator m_poseEstimator;
   private DriveSubsystem m_driveSubsystem;
-  public static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  public static final AprilTagFieldLayout k_apriltags = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
   private PhotonCamera m_cameraFL;
   private PhotonCamera m_cameraFR;
   private PhotonCamera[] m_cameras = {m_cameraFL, m_cameraFR};

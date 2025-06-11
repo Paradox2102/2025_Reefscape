@@ -221,7 +221,7 @@ public class RobotContainer {
     m_operatorController.povRight().onTrue(m_driveSubsystem.incrementReefPosition(true));
     m_operatorController.povLeft().onTrue(m_driveSubsystem.incrementReefPosition(false));
 
-    m_driverController.a().onTrue(new TestGyroCommand(m_driveSubsystem, 0.5));
+    m_driverController.a().onTrue(new TestGyroCommand(m_driveSubsystem, 0.25, 0.5));
     m_driverController.y().onTrue(m_driveSubsystem.resetGyro());
 
     // Operator UI Controls
