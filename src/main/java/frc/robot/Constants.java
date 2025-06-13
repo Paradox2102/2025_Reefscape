@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 public final class Constants {
   public static final class States {
     public static Alliance m_alliance = Alliance.Blue;
-    public static boolean m_autoAim = true;
+    public static boolean m_autoAim = false;
 
   }
   

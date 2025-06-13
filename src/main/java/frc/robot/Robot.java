@@ -50,9 +50,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    //Constants.States.m_autoAim = m_robotContainer.getThrottle();
-    // Constants.States.m_autoAim = m_robotContainer.getThrottle();
-    // SmartDashboard.putBoolean("Auto Aim", Constants.States.m_autoAim);
+    Constants.States.m_autoAim = m_robotContainer.getThrottle();
+    SmartDashboard.putBoolean("Auto Aim", Constants.States.m_autoAim);
     // if(m_gcTimer.advanceIfElapsed(5)){
     //   System.gc();
     // }

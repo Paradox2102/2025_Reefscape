@@ -159,17 +159,18 @@ public class RobotContainer {
     //     () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
     //   )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     // );
-    m_driverController.rightBumper().toggleOnTrue(
-      // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX)
-      new ConditionalCommand(
-        new PrecisionAlignOdometrey(m_driveSubsystem),
-        // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX),
-        // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_alignCamera), // on true
-        // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
-        new ManualPlaceOnReef(m_pivotSubsystem, m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
-        () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
-      )//.handleInterrupt(() -> m_ledSubsystem.setAllLEDs(Color.kGreen))
-    );
+    // m_driverController.rightBumper().toggleOnTrue(
+    //   // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX)
+    //   new ConditionalCommand(
+    //     new PrecisionAlignOdometrey(m_driveSubsystem),
+    //     // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX),
+    //     // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_alignCamera), // on true
+    //     // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
+    //     new ManualPlaceOnReef(m_pivotSubsystem, m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
+    //     () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
+    //   )//.handleInterrupt(() -> m_ledSubsystem.setAllLEDs(Color.kGreen))
+    // );
+    m_driverController.rightBumper().whileTrue(new PrecisionAlignOdometrey(m_driveSubsystem));
     m_driverController.rightTrigger().toggleOnTrue(new ScoreBackAwayResetElevator(m_pivotSubsystem, m_alignCamera, m_shouldAutoAim, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
 
@@ -180,18 +181,19 @@ public class RobotContainer {
     // );
     // m_driverController.a().whileTrue(m_climberSubsystem.runOut());
     // m_driverController.b().whileTrue(m_climberSubsystem.runIn());
+    m_driverController.a().onTrue(m_driveSubsystem.setReefPosition(FieldPosition.SIX));
     //m_driverController.a().whileTrue(m_climberSubsystem.runIn(false));//onTrue(m_climberSubsystem.setPosition(ClimberState.CLIMB));
 
     // Hopper Pivot
-    // m_driverController.y().toggleOnTrue(m_pivotSubsystem
-    // .climb()
-    // // .alongWith(
-    // //   new SequentialCommandGroup(
-    // //     new WaitCommand(1), 
-    // //     m_climberSubsystem.setPosition(ClimberState.EXTEND)
-    // //   )
-    // );
-    // .handleInterrupt(() -> m_climberSubsystem.setPosition(ClimberState.RESET).schedule())
+    m_driverController.y().toggleOnTrue(m_pivotSubsystem
+    .climb()
+    .alongWith(
+      new SequentialCommandGroup(
+        new WaitCommand(1), 
+        m_climberSubsystem.setPosition(ClimberState.EXTEND)
+      )
+    )
+    .handleInterrupt(() -> m_climberSubsystem.setPosition(ClimberState.RESET).schedule()));
   
     //m_driverController.y().onTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));
 
@@ -220,9 +222,6 @@ public class RobotContainer {
     // m_operatorController.povLeft().onTrue(m_driveSubsystem.setReefLeftRight(true));
     m_operatorController.povRight().onTrue(m_driveSubsystem.incrementReefPosition(true));
     m_operatorController.povLeft().onTrue(m_driveSubsystem.incrementReefPosition(false));
-
-    m_driverController.a().onTrue(new TestGyroCommand(m_driveSubsystem, 0.25, 0.5));
-    m_driverController.y().onTrue(m_driveSubsystem.resetGyro());
 
     // Operator UI Controls
 

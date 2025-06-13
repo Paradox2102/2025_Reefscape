@@ -13,12 +13,6 @@
                 "data": {
                   "pathName": "Pos 6"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Deploy Elevator1"
-                }
               }
             ]
           }
