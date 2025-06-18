@@ -37,7 +37,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorPosition m_position = ElevatorPosition.L4;
   private ElevatorPosition m_algaePosition = ElevatorPosition.ALGAE_LOW;
 
-  private static final double k_deadzoneInches = 0.5;
+  private static final double k_deadzoneInches = 0.25;
 
   private double m_targetPos = m_position.heightInches();
 
@@ -49,9 +49,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
   public enum ElevatorPosition {
-    L4(68, "Level 4"), // 70.2
-    L3(43.1, "Level 3"),
-    L2(30.5, "Level 2"),
+    L4(69, "Level 4"), // 70.2
+    L3(50, "Level 3"),
+    L2(33, "Level 2"),
     L1(18, "Level 1"),
     RESET(.2, "Reset"),
     ALGAE_HIGH(33.48, "Algae High"),
@@ -94,6 +94,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private void setPosition(ElevatorPosition position) {
     m_position = position;
+    m_targetPos = position.m_heightInches;
   }
 
   public void setBrakeMode(boolean brake) {
@@ -126,7 +127,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Commands.run(() -> {
       m_manual = false;
       m_PID.setReference(m_position.heightInches(), ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-    }, this);//.until(atPosition.debounce(.1));
+    }, this).until(atPosition.debounce(.1));
   }
 
   public Command goToPosition(boolean manual) {
@@ -147,6 +148,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     return Commands.run(() -> {
       m_manual = false;
       m_PID.setReference(0, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+      m_targetPos = 0;
     }, this).until(() -> getPosition() < 0.25);
   }
 
@@ -156,7 +158,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       double direction = -up.getAsDouble();
       m_elevatorMotor.set(direction > 0 ? .1 : -.2);
     }, this).finallyDo(() -> {
-      m_elevatorMotor.set(.02);
+      m_elevatorMotor.set(.03);
     });
   }
 
@@ -178,9 +180,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     //Shows data on SmartDashBoard
     SmartDashboard.putNumber("Elevator Position", getPosition());
     SmartDashboard.putString("Elevator Target", m_position.getName());
+    SmartDashboard.putNumber("Elev Current", m_elevatorMotor.getOutputCurrent());
+    SmartDashboard.putBoolean("bottom limit", bottomLimit.getAsBoolean());
     // SmartDashboard.putBoolean("Elevator Limit", !bottomLimit.getAsBoolean());
     if (!bottomLimit.getAsBoolean()){
       m_elevatorEncoder.setPosition(0);
+      if(m_targetPos == 0){
+        setPower(0);
+      }
     }
     // This method will be called once per scheduler run
   } 

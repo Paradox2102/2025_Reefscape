@@ -6,8 +6,10 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.auto.Leave4201Auto;
+import frc.robot.commands.auto.WaitForCameraCommand;
 import frc.robot.commands.drive.ApriltagAimCommand;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.drive.DriveToPosition;
 import frc.robot.commands.drive.PrecisionAlignOdometrey;
 import frc.robot.commands.drive.TestGyroCommand;
 import frc.robot.commands.driverCommands.ScoreBackAwayResetElevator;
@@ -159,18 +161,18 @@ public class RobotContainer {
     //     () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
     //   )).finallyDo(() -> new ScoreBackAwayResetElevator(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX).schedule())
     // );
-    // m_driverController.rightBumper().toggleOnTrue(
-    //   // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX)
-    //   new ConditionalCommand(
-    //     new PrecisionAlignOdometrey(m_driveSubsystem),
-    //     // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX),
-    //     // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_alignCamera), // on true
-    //     // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
-    //     new ManualPlaceOnReef(m_pivotSubsystem, m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
-    //     () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
-    //   )//.handleInterrupt(() -> m_ledSubsystem.setAllLEDs(Color.kGreen))
-    // );
-    m_driverController.rightBumper().whileTrue(new PrecisionAlignOdometrey(m_driveSubsystem));
+    m_driverController.rightBumper().toggleOnTrue(
+      // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX)
+      new ConditionalCommand(
+        new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem).andThen(new DriveCommand(m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, true)),
+        // new ManualPlaceOnReef(m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX),
+        // new AutoPlaceOnReef(m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_alignCamera), // on true
+        // new SemiAutoPlaceOnReef(m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem),
+        new ManualPlaceOnReef(m_pivotSubsystem, m_elevatorSubsystem, m_driveSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX), // on false
+        () -> Constants.States.m_autoAim && m_elevatorSubsystem.getPreset() != ElevatorPosition.L1 // condition
+      )//.handleInterrupt(() -> m_ledSubsystem.setAllLEDs(Color.kGreen))
+    );
+    //m_driverController.rightBumper().toggleOnTrue(new WaitForCameraCommand(m_driveSubsystem).andThen(new DriveToPosition(m_driveSubsystem)));
     m_driverController.rightTrigger().toggleOnTrue(new ScoreBackAwayResetElevator(m_pivotSubsystem, m_alignCamera, m_shouldAutoAim, m_driveSubsystem, m_elevatorSubsystem, m_coralOuttakeSubsystem, m_driverController::getLeftX, m_driverController::getLeftY, m_driverController::getRightX));
     m_driverController.x().whileTrue(new IntakeCoral(m_coralOuttakeSubsystem, m_hopperSubsystem, m_elevatorSubsystem, m_pivotSubsystem));
 
@@ -181,18 +183,17 @@ public class RobotContainer {
     // );
     // m_driverController.a().whileTrue(m_climberSubsystem.runOut());
     // m_driverController.b().whileTrue(m_climberSubsystem.runIn());
-    m_driverController.a().onTrue(m_driveSubsystem.setReefPosition(FieldPosition.SIX));
-    //m_driverController.a().whileTrue(m_climberSubsystem.runIn(false));//onTrue(m_climberSubsystem.setPosition(ClimberState.CLIMB));
+    m_driverController.a().whileTrue(m_climberSubsystem.runIn(false));//onTrue(m_climberSubsystem.setPosition(ClimberState.CLIMB));
 
     // Hopper Pivot
     m_driverController.y().toggleOnTrue(m_pivotSubsystem
     .climb()
-    .alongWith(
-      new SequentialCommandGroup(
-        new WaitCommand(1), 
-        m_climberSubsystem.setPosition(ClimberState.EXTEND)
-      )
-    )
+    // .alongWith(
+    //   new SequentialCommandGroup(
+    //     new WaitCommand(1), 
+    //     m_climberSubsystem.setPosition(ClimberState.EXTEND)
+    //   )
+    // )
     .handleInterrupt(() -> m_climberSubsystem.setPosition(ClimberState.RESET).schedule()));
   
     //m_driverController.y().onTrue(new ApriltagAimCommand(m_alignCamera, m_driveSubsystem));

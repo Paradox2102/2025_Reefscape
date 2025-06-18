@@ -71,11 +71,11 @@ public final class Constants {
     public static final double k_driveDeadband = 0.1;
 
     public static final double k_rotateF = 0;
-    public static final double k_rotateP = .016;
-    public static final double k_rotateI = .05;// .01;
+    public static final double k_rotateP = .015;
+    public static final double k_rotateI = .1;// .01;
     public static final double k_rotateD = .0008;
     public static final double k_rotateIZone = 20; // 70
-    public static final double k_rotateDeadzone = 2;
+    public static final double k_rotateDeadzone = 0.5;
     public static final double k_maxRotInput = .8;
 
     public static double k_maxSpeedMetersPerSecond = 4.92;
@@ -111,7 +111,7 @@ public final class Constants {
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double k_DrivingMotorFreeSpeedRps = 6784.0 / 60.0;
-    public static final double k_WheelDiameterMeters = 0.068;
+    public static final double k_WheelDiameterMeters = 0.074;
     public static final double k_WheelCircumferenceMeters = k_WheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
     // teeth on the bevel pinion

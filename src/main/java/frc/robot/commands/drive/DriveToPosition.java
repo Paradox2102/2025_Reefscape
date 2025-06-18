@@ -4,10 +4,12 @@
 
 package frc.robot.commands.drive;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.PositionTrackerPose;
@@ -28,23 +30,19 @@ public class DriveToPosition extends Command {
   double xVelocity = 0;
   double yVelocity = 0; 
 
-  private static final double k_p = .7;
-  private static final double k_i = .2;//.02;
+  private static final double k_p = 0.8;
+  private static final double k_i = .5;//.02;
   private static final double k_d = 0;//.02;
-  private static final double k_deadzoneMeters = .1;
+  private static final double k_deadzoneMeters = .01;
 
   PIDController m_xPID = new PIDController(k_p, k_i, k_d);
   PIDController m_yPID = new PIDController(k_p, k_i, k_d);
   double m_rot = 0;
-  boolean m_goToReef = true;
 
-  public DriveToPosition(DriveSubsystem driveSubsystem, boolean goToReef) {
+  public DriveToPosition(DriveSubsystem driveSubsystem) {
     m_xPID.setIZone(.15);
     m_yPID.setIZone(.15);
     m_subsystem = driveSubsystem;
-    m_goToReef = goToReef;
-    m_xPos = m_subsystem.getReefPosition().targetPose().getX();
-    m_yPos = m_subsystem.getReefPosition().targetPose().getY();
     m_tracker = m_subsystem.getTracker();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -53,10 +51,11 @@ public class DriveToPosition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d pose = m_goToReef ? m_subsystem.getReefPosition().targetPose() : m_subsystem.getSourcePosition();
-    m_xPID.setSetpoint(pose.getX());
-    m_yPID.setSetpoint(pose.getY());
-    m_rotation = pose.getRotation();
+    m_xPos = m_subsystem.getReefPosition().targetPose().getX();
+    m_yPos = m_subsystem.getReefPosition().targetPose().getY();
+    m_xPID.setSetpoint(m_xPos);
+    m_yPID.setSetpoint(m_yPos);
+    m_rotation = m_subsystem.getReefPosition().targetPose().getRotation();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -67,7 +66,7 @@ public class DriveToPosition extends Command {
     m_currentY = currentPose.getY();
     m_currentRot = currentPose.getRotation().getDegrees();
 
-    xVelocity = m_xPID.calculate(m_currentX);
+    xVelocity = Constants.States.m_alliance == Alliance.Blue ? m_xPID.calculate(m_currentX) : - m_xPID.calculate(m_currentX);
     yVelocity = m_yPID.calculate(m_currentY);
     double rotVelocity = m_subsystem.orientPID(() -> m_rotation.getDegrees()).get().getDegrees();
 
@@ -80,15 +79,20 @@ public class DriveToPosition extends Command {
 
     yVelocity *= Constants.States.m_alliance == Alliance.Blue ? -1 : 1;
 
-    // xVelocity = MathUtil.clamp(xVelocity, -0.1, 0.1);
-    // yVelocity = MathUtil.clamp(yVelocity, -0.1, 0.1);
+    xVelocity = MathUtil.clamp(xVelocity, -0.2, 0.2);
+    yVelocity = MathUtil.clamp(yVelocity, -0.2, 0.2);
     // rotVelocity = MathUtil.clamp(rotVelocity, -0.5, 0.5);
 
     // xVelocity = MathUtil.applyDeadband(xVelocity, .07);
     // yVelocity = MathUtil.applyDeadband(yVelocity, .07);
 
     m_subsystem.drive(xVelocity, -yVelocity, rotVelocity, true, true);
-    System.out.println(yVelocity);
+    SmartDashboard.putNumber("x dist", m_xPos - m_currentX);
+    SmartDashboard.putNumber("y dist", m_yPos - m_currentY);
+    SmartDashboard.putNumber("rot dist", m_rotation.getDegrees() - m_currentRot);
+    SmartDashboard.putNumber("x", m_currentX);
+    SmartDashboard.putNumber("y", m_currentY);
+    SmartDashboard.putNumber("rot", m_currentRot);
   }
 
   // Called once the command ends or is interrupted.
@@ -102,17 +106,12 @@ public class DriveToPosition extends Command {
   @Override
   public boolean isFinished() {
     return 
-      // (
-      //   Math.abs(m_xPos - m_currentX) < k_deadzoneMeters
-      //   && 
-      //   Math.abs(m_yPos - m_currentY) < k_deadzoneMeters
-      //   &&
-      //   Math.abs(m_rotation.getDegrees() - m_currentRot) < 100//UConstants.DriveConstants.k_rotateDeadzone
-      // );
       (
-        xVelocity == 0
+        Math.abs(m_xPos - m_currentX) < k_deadzoneMeters
+        && 
+        Math.abs(m_yPos - m_currentY) < k_deadzoneMeters
         &&
-        yVelocity == 0
+        Math.abs(m_rotation.getDegrees() - m_currentRot) < Constants.DriveConstants.k_rotateDeadzone
       );
   }
 }

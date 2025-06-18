@@ -42,7 +42,7 @@ public class PositionTrackerPose {
   private PhotonPoseEstimator m_photonFR;
   private PhotonPoseEstimator m_photonBR;
   private ArrayList<PhotonPoseEstimator> m_estimators = new ArrayList<>();
-  public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.3, 0.3, 0.3); // Default vision standerd devations
+  public static final Vector<N3> k_visionSD6mm = VecBuilder.fill(0.1, 0.1, 0.1); // Default vision standerd devations
   public static final Vector<N3> k_odometrySD = VecBuilder.fill(0.1, 0.1, 0.1); // Default odometry standard
   private final Field2d m_testField = new Field2d();
 
@@ -61,7 +61,7 @@ public class PositionTrackerPose {
       m_cameras[i] = cameras[i];
     }
     m_photonFL = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
-        new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(0), Math.toRadians(0))));
+        new Translation3d(0.267, 0.267, 0.223), new Rotation3d(0, Math.toRadians(0), Math.toRadians(3.5))));
     m_estimators.add(m_photonFL);
     m_photonFR = new PhotonPoseEstimator(k_apriltags, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(
       new Translation3d(0.267, -0.267, 0.223), new Rotation3d(Math.toRadians(0), Math.toRadians(0), Math.toRadians(0))));

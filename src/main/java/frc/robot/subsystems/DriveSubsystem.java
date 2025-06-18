@@ -90,28 +90,25 @@ public class DriveSubsystem extends SubsystemBase {
     // TWELVE(new Pose2d(new Translation2d(6.21, 4.004), Rotation2d.fromDegrees(0)), false, "12", new Translation2d(5.24, 4.08)),
 
     // For driving to reef
-    ONE(new Pose2d(new Translation2d(5.801, 4.025), Rotation2d.fromDegrees(0)), true, "1"),
-    TWO(new Pose2d(new Translation2d(5.158, 2.904), Rotation2d.fromDegrees(-60)), false, "2"),
-    THREE(new Pose2d(new Translation2d(5.158, 2.904), Rotation2d.fromDegrees(-60)), true, "3"),
-    FOUR(new Pose2d(new Translation2d(3.861, 2.972), Rotation2d.fromDegrees(60)), false, "4"),
-    FIVE(new Pose2d(new Translation2d(3.861, 2.972), Rotation2d.fromDegrees(60)), true, "5"),
-    SIX(new Pose2d(new Translation2d(3.188, 4.035), Rotation2d.fromDegrees(180)), false, "6"),
-    SEVEN(new Pose2d(new Translation2d(3.188, 4.035), Rotation2d.fromDegrees(0)), true, "7"),
-    EIGHT(new Pose2d(new Translation2d(3.812, 5.156), Rotation2d.fromDegrees(-60)), false, "8"),
-    NINE(new Pose2d(new Translation2d(3.812, 5.156), Rotation2d.fromDegrees(-60)), true, "9"),
-    TEN(new Pose2d(new Translation2d(5.148, 5.156), Rotation2d.fromDegrees(-120)), false, "10"),
-    ELEVEN(new Pose2d(new Translation2d(5.148, 5.156), Rotation2d.fromDegrees(60)), true, "11"),
-    TWELVE(new Pose2d(new Translation2d(5.801, 4.025), Rotation2d.fromDegrees(0)), false, "12"),
+    ONE(new Pose2d(new Translation2d(5.789, 3.86), Rotation2d.fromDegrees(180)), new Pose2d(new Translation2d(11.759, 4.182), Rotation2d.fromDegrees(0)), true, "1"),
+    TWO(new Pose2d(new Translation2d(5.291, 2.989), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(12.267, 5.062), Rotation2d.fromDegrees(-60)), false, "2"),
+    THREE(new Pose2d(new Translation2d(4.987, 2.823), Rotation2d.fromDegrees(120)), new Pose2d(new Translation2d(12.551, 5.235), Rotation2d.fromDegrees(-60)), true, "3"),
+    FOUR(new Pose2d(new Translation2d(3.972, 2.823), Rotation2d.fromDegrees(60)), new Pose2d(new Translation2d(13.57, 5.17), Rotation2d.fromDegrees(-120)), false, "4"),
+    FIVE(new Pose2d(new Translation2d(3.69, 2.98), Rotation2d.fromDegrees(60)), new Pose2d(new Translation2d(13.88, 5.06), Rotation2d.fromDegrees(-120)), true, "5"),
+    SIX(new Pose2d(new Translation2d(3.2, 3.85), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(14.358, 4.162), Rotation2d.fromDegrees(180)), false, "6"),
+    SEVEN(new Pose2d(new Translation2d(3.2, 4.19), Rotation2d.fromDegrees(0)), new Pose2d(new Translation2d(14.358, 3.85), Rotation2d.fromDegrees(180)), true, "7"),
+    EIGHT(new Pose2d(new Translation2d(3.688, 5.062), Rotation2d.fromDegrees(-60)), new Pose2d(new Translation2d(13.86, 2.987), Rotation2d.fromDegrees(120)), false, "8"),
+    NINE(new Pose2d(new Translation2d(4, 5.2), Rotation2d.fromDegrees(-60)), new Pose2d(new Translation2d(13.556, 2.832), Rotation2d.fromDegrees(120)), true, "9"),
+    TEN(new Pose2d(new Translation2d(4.987, 5.228), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(12.551, 2.837), Rotation2d.fromDegrees(60)), false, "10"),
+    ELEVEN(new Pose2d(new Translation2d(5.291, 5.062), Rotation2d.fromDegrees(-120)), new Pose2d(new Translation2d(12.267, 2.994), Rotation2d.fromDegrees(60)), true, "11"),
+    TWELVE(new Pose2d(new Translation2d(5.789, 4.19), Rotation2d.fromDegrees(180)), new Pose2d(new Translation2d(11.759, 3.86), Rotation2d.fromDegrees(0)), false, "12"),
     SOURCE_RIGHT(new Pose2d(new Translation2d(1.7, .65), Rotation2d.fromDegrees(52.5)), false, "Right"),
     SOURCE_LEFT(new Pose2d(new Translation2d(1.7, 7.38), Rotation2d.fromDegrees(52.5)), false, "Left");
 
     private Pose2d m_bluePose;
+    private Pose2d m_redPose;
     private String m_name;
     private boolean m_left;
-    private Translation2d m_algaePos = new Translation2d();
-
-    private double fieldX = PositionTrackerPose.k_apriltags.getFieldLength();
-    private double fieldY = PositionTrackerPose.k_apriltags.getFieldWidth();
 
     FieldPosition(Pose2d bluePose, boolean left, String name) {
       m_bluePose = bluePose;
@@ -119,18 +116,15 @@ public class DriveSubsystem extends SubsystemBase {
       m_left = left;
     }
 
-    FieldPosition(Pose2d bluePose, boolean left, String name, Translation2d algaePos) {
+    FieldPosition(Pose2d bluePose, Pose2d redPose, boolean left, String name) {
       this(bluePose, left, name);
-      m_algaePos = algaePos;
+      m_redPose = redPose;
     }
 
 
     public Pose2d targetPose() {
-      return Constants.States.m_alliance == Alliance.Blue ? m_bluePose : new Pose2d(new Translation2d(fieldX - m_bluePose.getX(), fieldY - m_bluePose.getY()), new Rotation2d());
-    }
-
-    public Translation2d algaePos() {
-      return Constants.States.m_alliance == Alliance.Blue ? m_algaePos : new Translation2d(fieldX - m_algaePos.getX(), fieldY - m_algaePos.getY());
+      new Rotation2d();
+      return Constants.States.m_alliance == Alliance.Blue ? m_bluePose : m_redPose;
     }
 
     public String getName() {
@@ -177,7 +171,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = 0;
 
   private Pose2d m_futurePos = new Pose2d();
-  private double m_cameraAngle = 0;
+  private Pose2d m_cameraPos = new Pose2d();
 
   private final SwerveDriveKinematics m_swerve = new SwerveDriveKinematics(
       new Translation2d(.298, .298), new Translation2d(.298, -.298),
@@ -282,8 +276,12 @@ public class DriveSubsystem extends SubsystemBase {
   public static boolean m_setGyroZero = true;
   public static double m_gyroZero = 0;
 
+  public Pose2d getCameraPose(){
+    return m_cameraPos;
+  }
+
   public double getCameraAngleDegrees(){
-    return m_cameraAngle;
+    return m_cameraPos.getRotation().getDegrees();
   }
 
   @Override
@@ -298,9 +296,10 @@ public class DriveSubsystem extends SubsystemBase {
     var visionEst = m_tracker.getEstimatedGlobalPose();
     for(var result : visionEst)
       if(result.isPresent()){
-        m_cameraAngle = result.get().estimatedPose.toPose2d().getRotation().getDegrees();
+        m_cameraPos = result.get().estimatedPose.toPose2d();
+
       };
-    SmartDashboard.putNumber("Camera Angle", m_cameraAngle);
+    SmartDashboard.putNumber("Camera Angle", getCameraAngleDegrees());
 
     SmartDashboard.putNumber("Reef Position", Integer.parseInt(m_reefPosition.getName()));
     // SmartDashboard.putString("Source Position", m_source.getName());
@@ -337,7 +336,7 @@ public class DriveSubsystem extends SubsystemBase {
     //     ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees() - yaw - m_gyroZero));
     // SmartDashboard.putNumber("Gyro Zero", m_gyroZero);
     SmartDashboard.putNumber("Gyro", yaw);
-    SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(m_cameraAngle - yaw));
+    SmartDashboard.putNumber("Gyro Diff", ParadoxField.normalizeAngle(getCameraAngleDegrees() - yaw));
     SmartDashboard.putNumber("Gyro Est Yaw", ParadoxField.normalizeAngle(currentPos.getRotation().getDegrees()));
     SmartDashboard.putNumber("Gyro Resets", m_gyro.getNoMotionCount().getValueAsDouble());
     // SmartDashboard.putNumber("Robot X", currentPos.getX());

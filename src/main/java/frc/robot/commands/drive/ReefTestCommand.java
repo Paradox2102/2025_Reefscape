@@ -19,7 +19,7 @@ public class ReefTestCommand extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       subsystem.setReefPosition(FieldPosition.TEN), // ID 20 (11 on other side)
-      new DriveToPosition(subsystem, true)
+      new DriveToPosition(subsystem)
     );
   }
 }

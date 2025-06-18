@@ -28,7 +28,7 @@ public class AutoIntake extends ParallelDeadlineGroup {
     super(new IntakeCoral(coralOuttakeSubsystem, hopperSubsystem, elevatorSubsystem, algaeSubsystem));
     addCommands(
       new ConditionalCommand(
-        new DriveToPosition(driveSubsystem, true),
+        new DriveToPosition(driveSubsystem),
         new DriveCommand(driveSubsystem, x, y, rot, true),
         () -> Constants.States.m_autoAim
       )
